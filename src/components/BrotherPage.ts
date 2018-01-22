@@ -1,11 +1,27 @@
-import Vue from 'vue';
-import Quasar from 'quasar';
-import Component from 'vue-class-component';
-import Brothers from '../Brothers'
+import Vue from "vue";
+import Quasar from "quasar";
+import Component from "vue-class-component";
+import Brothers from "../Brothers";
 import {
-    dom,
-    event,
-    openURL,
+  dom,
+  event,
+  openURL,
+  QLayout,
+  QToolbar,
+  QToolbarTitle,
+  QBtn,
+  QIcon,
+  QList,
+  QListHeader,
+  QItem,
+  QItemSide,
+  QItemMain,
+  TouchSwipe
+} from "quasar";
+
+@Component({
+  name: "brother-page",
+  components: {
     QLayout,
     QToolbar,
     QToolbarTitle,
@@ -16,38 +32,37 @@ import {
     QItem,
     QItemSide,
     QItemMain
-} from 'quasar';
-
-
-
-
-
-@Component({
-    name: 'brother-page',
-    components: {
-        QLayout,
-        QToolbar,
-        QToolbarTitle,
-        QBtn,
-        QIcon,
-        QList,
-        QListHeader,
-        QItem,
-        QItemSide,
-        QItemMain
-    }
+  },
+  directives: {
+    TouchSwipe
+  }
 })
 export default class Index extends Vue {
-
-    get Brother() {
-        return Brothers[(this as any).$route.params.scroll]
+  enterValue = "animated slideInRight";
+  leaveValue = "animated slideOutLeft";
+  get Brother() {
+    return Brothers[(this as any).$route.params.scroll];
+  }
+  swipeHandler(obj) {
+    if (obj.distance.x > 100) {
+      if (obj.direction === "right") {
+        console.log("true");
+        this.enterValue = "animated slideInRight";
+        this.leaveValue = "animated slideOutLeft";
+      } else {
+        console.log("false");
+        this.enterValue = "animated slideInLeft";
+        this.leaveValue = "animated slideOutRight";
+      }
+      this.$router.push({
+        path:
+          "/brother/" +
+          (+(this as any).$route.params.scroll +
+            (obj.direction === "right" ? -1 : 1))
+      });
     }
-
-    launch(url: string): void {
-        openURL(url);
-    }
-
-
-
-
+  }
+  launch(url: string): void {
+    openURL(url);
+  }
 }
