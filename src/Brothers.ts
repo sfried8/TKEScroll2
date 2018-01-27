@@ -22,8 +22,8 @@ export default {
       data.forEach(element => {
         this._brothers[+element.scroll] = element;
       });
+      console.log(this._brothers);
     }
-    console.log(this._brothers);
     return this._brothers;
   }
 };

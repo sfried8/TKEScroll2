@@ -6,6 +6,7 @@ import BrotherPage from "./components/BrotherPage.vue";
 import Scroll from "./components/Scroll.vue";
 import Search from "./components/SearchBrothers.vue";
 import MainView from "./components/MainView.vue";
+import BrotherPageContent from "./components/BrotherPageContent.vue";
 
 Vue.use(VueRouter);
 
@@ -16,7 +17,13 @@ export const AppRouter = new VueRouter({
       component: MainView,
       children: [
         { path: "", component: Hello },
-        { path: "/brother/:scroll", component: BrotherPage },
+        {
+          path: "/brother",
+          component: BrotherPage,
+          children: [
+            { path: "/brother/:scroll", component: BrotherPageContent }
+          ]
+        },
         { path: "/scroll", component: Scroll },
         { path: "/search", component: Search },
         { path: "/eboard", component: Hello },

@@ -1,14 +1,12 @@
 <template>
+<keep-alive>
       <transition :enter-active-class="enterValue"
     :leave-active-class="leaveValue">
-    <div class="layout-padding" v-touch-swipe.horizontal="swipeHandler">
-      <h3>{{Brother.fname}} {{Brother.lname}}</h3><br>
-      <h4>{{Brother.scroll}}</h4><br>
-      <h4>{{Brother.isZetaTau ? "Zeta Tau ":""}}{{Brother.pc}}</h4><br>
-      <h4>{{Brother.nickname}}</h4><br>
-      <h4 @click="$router.push('/brother/'+Big.scroll)">{{Big.fname}} {{Big.lname}}</h4><br>
+    <div v-touch-swipe.horizontal="swipeHandler">
+      <router-view :Brothers="Brothers" />
     </div>
-      </transition>
+    </transition>
+</keep-alive>
 </template>
 
 <script lang="ts">

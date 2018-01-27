@@ -2,6 +2,7 @@ import Vue from "vue";
 import Quasar from "quasar";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
+import FuzzySearch from "fuzzy-search";
 import {
   dom,
   event,
@@ -23,15 +24,16 @@ import {
   filter
 } from "quasar";
 
-function parseBrothers() {
+async function parseBrothers() {
   const result: any = [];
-  for (let scroll in Brothers) {
-    const brother = Brothers[scroll];
+  const brothers = await Brothers.getBrothers();
+  for (let scroll in brothers) {
+    const brother = brothers[scroll];
     result.push({
-      label: brother.Name,
-      sublabel: "",
+      label: `${brother.fname} ${brother.lname}`,
+      sublabel: `${brother.isZetaTau ? "Zeta Tau " : ""}PC ${brother.pc}`,
       icon: "chevron right",
-      value: brother.Scroll
+      value: brother.scroll
     });
   }
   return result;
@@ -57,18 +59,27 @@ function parseBrothers() {
   }
 })
 export default class Index extends Vue {
-  mybrothers = parseBrothers();
   terms = "";
+  mybrothers = [];
+  searcher = null;
+  mounted() {
+    parseBrothers().then(data => (this.mybrothers = data));
+  }
   search(terms, done) {
-    done(filter(terms, { field: "label", list: this.mybrothers }));
+    setTimeout(() => {
+      done(this.myFilter(terms, { field: "label", list: this.mybrothers }));
+    }, 50);
   }
   selected(item) {
     (this as any).$router.push({ path: `/brother/${item.value}` });
   }
   myFilter(terms, { field, list }) {
     const token = terms.toLowerCase();
-    console.log(token);
-    return list.filter(item => item[field].toLowerCase().indexOf(token) > -1);
+    this.searcher = new FuzzySearch(list, [field], {
+      caseSensitive: false,
+      sort: true
+    });
+    return this.searcher.search(token);
   }
   launch(url: string): void {
     openURL(url);

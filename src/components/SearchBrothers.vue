@@ -8,7 +8,7 @@
       -->
     <div class="layout-padding">
             <q-search v-model="terms" placeholder="Search for a brother by name">
-        <q-autocomplete :filter="myFilter" @search="search" @selected="selected" />
+        <q-autocomplete :filter="myFilter" :debounce="50" @search="search" @selected="selected" />
       </q-search>
     </div>
 </template>

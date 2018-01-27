@@ -2,6 +2,7 @@ import Vue from "vue";
 import Quasar from "quasar";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
+import BrotherPageContent from "./BrotherPageContent.vue";
 import {
   dom,
   event,
@@ -31,26 +32,20 @@ import {
     QListHeader,
     QItem,
     QItemSide,
-    QItemMain
+    QItemMain,
+    BrotherPageContent
   },
   directives: {
     TouchSwipe
   }
 })
 export default class Index extends Vue {
-  enterValue = "animated slideInRight";
+  enterValue = "";
   leaveValue = "animated slideOutLeft";
   Brothers = [];
   mounted() {
+    console.log("mounting brother page");
     Brothers.getBrothers().then(data => (this.Brothers = data));
-  }
-  get Brother() {
-    return this.Brothers[(this as any).$route.params.scroll];
-  }
-  get Big() {
-    return this.Brother && this.Brother.big
-      ? this.Brothers[this.Brother.big]
-      : {};
   }
   swipeHandler(obj) {
     if (obj.distance.x > 100) {
@@ -63,9 +58,9 @@ export default class Index extends Vue {
         this.enterValue = "animated slideInLeft";
         this.leaveValue = "animated slideOutRight";
       }
-      this.$router.push({
+      (this as any).$router.push({
         path:
-          "/brother/" +
+          "" +
           (+(this as any).$route.params.scroll +
             (obj.direction === "right" ? -1 : 1))
       });
