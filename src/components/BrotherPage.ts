@@ -40,8 +40,17 @@ import {
 export default class Index extends Vue {
   enterValue = "animated slideInRight";
   leaveValue = "animated slideOutLeft";
+  Brothers = [];
+  mounted() {
+    Brothers.getBrothers().then(data => (this.Brothers = data));
+  }
   get Brother() {
-    return Brothers[(this as any).$route.params.scroll];
+    return this.Brothers[(this as any).$route.params.scroll];
+  }
+  get Big() {
+    return this.Brother && this.Brother.big
+      ? this.Brothers[this.Brother.big]
+      : {};
   }
   swipeHandler(obj) {
     if (obj.distance.x > 100) {

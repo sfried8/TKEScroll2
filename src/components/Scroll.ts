@@ -34,7 +34,8 @@ import {
   }
 })
 export default class Index extends Vue {
-  get Brothers() {
-    return Brothers;
+  Brothers = [];
+  mounted() {
+    Brothers.getBrothers().then(data => (this.Brothers = data));
   }
 }
