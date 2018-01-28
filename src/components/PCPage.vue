@@ -2,9 +2,9 @@
     <div class="layout-padding">
       <div class="pc-page">
       <h4>{{isZT ? "Zeta Tau ":""}}Pledge Class {{pc}}</h4><br>
-        <ul>
-          <li class="pc-page-line brother-link" v-for="pb in PBros" @click="$router.push('/brother/'+pb.scroll)" :key="pb.scroll">{{pb.scroll}}. {{pb.fname}} {{pb.lname}}</li>
-        </ul>
+
+          <div class="pc-page-line brother-link" v-for="pb in PBros" @click="$router.push('/brother/'+pb.scroll)" :key="pb.scroll">{{pb.scroll}}. {{pb.fname}} {{pb.lname}}</div>
+
       </div>
     </div>
 
@@ -81,8 +81,10 @@ export default class Index extends Vue {
   margin-bottom 10px
   font-weight 300
 .brother-link
+  padding 3px
   background-color #eeeeee
   border-radius 4px
+  box-shadow 0px 2px 5px 0px #888888;
   div 
     width 95%
 

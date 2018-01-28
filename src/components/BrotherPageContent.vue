@@ -81,13 +81,15 @@ export default class Index extends Vue {
   height 200%
   padding 40px
   box-shadow 0px 4px 20px 0px #888888;
-  background-color white
+  background-color #eeeeee
 .brother-page-line
   margin-bottom 10px
   font-weight 300
 .brother-link
-  background-color #eeeeee
+  padding 3px
+  background-color #EEAAAA
   border-radius 4px
+  box-shadow 0px 2px 5px 0px #888888;
   div 
     width 95%
 
