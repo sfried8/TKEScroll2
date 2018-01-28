@@ -3,7 +3,7 @@
       <div class="brother-page">
       <h4>{{Brother.fname}} {{Brother.lname}}</h4><br>
       <div class="brother-page-line">{{Brother.scroll}}</div><br>
-      <div class="brother-page-line">{{Brother.isZetaTau ? "Zeta Tau ":""}}Pledge Class {{Brother.pc}}</div><br>
+      <div class="brother-page-line brother-link" @click="$router.push('/pc/'+(Brother.isZetaTau ? 'ZT':'')+Brother.pc)">{{Brother.isZetaTau ? "Zeta Tau ":""}}Pledge Class {{Brother.pc}}</div><br>
       <div class="brother-page-line">{{Brother.nickname}}</div><br>
       <div class="brother-page-line brother-link" @click="$router.push('/brother/'+Big.scroll)"><div>{{Big.fname}} {{Big.lname}}</div></div><br>
       <div v-show="Littles.length > 0">
