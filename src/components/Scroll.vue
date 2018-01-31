@@ -1,56 +1,49 @@
 <template>
 
     <div class="layout-padding">
-            <!-- <q-select
-      v-model="sortOption"
-      float-label="sort by"
-      radio
-     :options="sortOptions"
-    /> -->
-    <div>
-    <q-btn icon="sort" class="float-right" flat ref="target">
-SORT BY
-  <!-- Direct child of target -->
-  <q-popover ref="popover">
-    <!--
-      The DOM element(s) that make up the popup,
-      in this case a list:
-    -->
-    <q-list separator link>
-      <q-item @click="sortOption = 'scrollasc', $refs.popover.close()">
-        Scroll Asc
-      </q-item>
-            <q-item @click="sortOption = 'scrollsc', $refs.popover.close()">
-        Scroll Desc
-      </q-item>
-    </q-list>
+        <div>
+            <q-btn icon="sort" class="float-right" flat ref="target">
+                SORT BY
+                <q-popover ref="popover">
+                    <q-list separator link>
+                        <q-item @click="sortOption = 'scrollasc', $refs.popover.close()">
+                            Scroll Asc
+                        </q-item>
+                        <q-item @click="sortOption = 'scrollsc', $refs.popover.close()">
+                            Scroll Desc
+                        </q-item>
+                    </q-list>
 
-  </q-popover>
-</q-btn>
-<br>
-<br>
-    </div>
+                </q-popover>
+            </q-btn>
+
+        </div>
+        <q-input clearable v-model="currentFilter" type="text" float-label="filter"/>
         <q-list>
-          <q-item v-for="b in Brothers" :key="b.scroll" @click="$router.push({ path: `/brother/${b.scroll}` }) ">
-          <q-item-side>{{b.scroll}}</q-item-side>
-          <q-item-main :label="b.fname + ' ' + b.lname"></q-item-main>
-        </q-item>
-</q-list>
+            <q-item v-for="b in filteredBrothers" :key="b.original.scroll" @click="$router.push({ path: `/brother/${b.original.scroll}` }) ">
+                <q-item-side>{{b.original.scroll}}</q-item-side>
+                <q-item-main :label="b.string"></q-item-main>
+            </q-item>
+            <q-item v-if="filteredBrothers.length == 0">
+                <q-item-main label="No Results Found!"></q-item-main>
+            </q-item>
+        </q-list>
 
-<q-fixed-position corner="top-right" :offset="[18, 18]">
-  <q-btn
-    v-back-to-top.animate="{offset: 500, duration: 200}"
-    round
-    color="primary"
-    class="animate-pop"
-    style="animation-duration: .5s;"
-    icon="keyboard_arrow_up"
-  />
-</q-fixed-position>
+        <q-fixed-position corner="top-right" :offset="[18, 18]">
+            <q-btn
+                v-back-to-top.animate="{offset: 500, duration: 200}"
+                round
+                color="primary"
+                class="animate-pop"
+                style="animation-duration: .5s;"
+                icon="keyboard_arrow_up"
+            />
+        </q-fixed-position>
     </div>
 </template>
 
 <script lang="ts">
+import Fuzzy from "fuzzy";
 import Vue from "vue";
 import Quasar from "quasar";
 import Component from "vue-class-component";
@@ -72,6 +65,7 @@ import {
   BackToTop,
   QFixedPosition,
   QSelect,
+  QInput,
   QPopover
 } from "quasar";
 
@@ -90,6 +84,7 @@ import {
     QItemMain,
     QFixedPosition,
     QSelect,
+    QInput,
     QPopover
   },
   directives: {
@@ -111,7 +106,18 @@ export default class Index extends Vue {
     }
   ];
   sortOption = "scrollasc";
+  currentFilter = "";
 
+  get filteredBrothers() {
+    if (!this.Brothers) {
+      return [];
+    }
+    return Fuzzy.filter(this.currentFilter, this.Brothers, {
+      pre: "<b>",
+      post: "</b>",
+      extract: el => el.fname + " " + el.lname
+    });
+  }
   get Brothers() {
     return this.sortOption === "scrollasc"
       ? this._brothers
