@@ -42,7 +42,8 @@ SORT BY
     v-back-to-top.animate="{offset: 500, duration: 200}"
     round
     color="primary"
-    
+    class="animate-pop"
+    style="animation-duration: .5s;"
     icon="keyboard_arrow_up"
   />
 </q-fixed-position>
