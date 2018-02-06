@@ -19,8 +19,8 @@
 
         </div>
         <q-input clearable v-model="currentFilter" type="text" float-label="filter"/>
-        <q-list>
-            <q-item v-for="b in filteredBrothers" :key="b.original.scroll" @click="$router.push({ path: `/brother/${b.original.scroll}` }) ">
+        <q-list style="background:white" separator>
+            <q-item  v-for="b in filteredBrothers" :key="b.original.scroll" @click="$router.push({ path: `/brother/${b.original.scroll}` }) ">
                 <q-item-side>{{b.original.scroll}}</q-item-side>
                 <q-item-main :label="b.string"></q-item-main>
             </q-item>

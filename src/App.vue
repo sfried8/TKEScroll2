@@ -6,16 +6,16 @@
 </template>
 
 <script lang='ts'>
-import Vue from 'vue'
-import Component from 'vue-class-component'
+import Vue from "vue";
+import Component from "vue-class-component";
 
 /*
  * Root component, but defined as a typescript decorated class
  */
-@Component({
-})
-export default class App extends Vue {
-}
+@Component({})
+export default class App extends Vue {}
 </script>
 
-<style></style>
+<style>
+
+</style>

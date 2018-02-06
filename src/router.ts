@@ -17,13 +17,10 @@ export const AppRouter = new VueRouter({
       path: "/",
       component: MainView,
       children: [
-        { path: "", component: Hello },
+        { path: "", component: Scroll },
         {
-          path: "/brother",
-          component: BrotherPage,
-          children: [
-            { path: "/brother/:scroll", component: BrotherPageContent }
-          ]
+          path: "/brother/:scroll",
+          component: BrotherPage
         },
         { path: "/pc/:pc", component: PCPage },
         { path: "/scroll", component: Scroll },
@@ -32,7 +29,7 @@ export const AppRouter = new VueRouter({
         { path: "/tree", component: Hello }
       ]
     }, // Default
-    { path: "*", component: Error404 } // Not found
+    { path: "*", component: Scroll } // Not found
   ]
 });
 

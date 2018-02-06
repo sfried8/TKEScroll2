@@ -38,7 +38,7 @@
         <router-view /> component
         if using subRoutes
       -->
-    <div class="page-content">
+    <div class="page-content bg-red">
 
 
       <router-view  style="position:absolute; min-width:100%;" :key="$route.path"/>
@@ -107,6 +107,9 @@ export default class Index extends Vue {
 </script>
 
 <style lang="css">
+body{
+  background:#eee;
+}
 /* 
 .page-content {
   display: flex;
