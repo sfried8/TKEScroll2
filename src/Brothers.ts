@@ -27,8 +27,11 @@ export default {
 
         const data = await rawdata.json();
         this._brothers = [];
-        data.forEach(element => {
+        data.brothers.forEach(element => {
           this._brothers[+element.scroll] = element;
+        });
+        data.officers.forEach(element => {
+          this._brothers[+element.current].officer = element.title;
         });
         LocalStorage.set("brothers", this._brothers);
       } catch (error) {
@@ -39,9 +42,7 @@ export default {
         }
         console.log(error);
       }
-      setTimeout(() => {
-        Loading.hide();
-      }, 2000);
+      Loading.hide();
     }
     return this._brothers;
   }
