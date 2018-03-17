@@ -10,6 +10,7 @@ import BrotherPageContent from "./components/BrotherPageContent.vue";
 import PCPage from "./components/PCPage.vue";
 import HistorBase from "./components/HistorBase.vue";
 import HistorAddBrother from "./components/HistorAddBrother.vue";
+import Eboard from "./components/Eboard.vue";
 
 Vue.use(VueRouter);
 
@@ -29,14 +30,9 @@ export const AppRouter = new VueRouter({
         { path: "/search", component: Search },
         {
           path: "/histor",
-          component: HistorBase,
-          children: [
-            { path: "add", component: HistorAddBrother },
-            { path: "edit", component: Hello },
-            { path: "officers", component: Hello }
-          ]
+          component: HistorBase
         },
-        { path: "/eboard", component: Hello },
+        { path: "/eboard", component: Eboard },
         { path: "/tree", component: Hello }
       ]
     }, // Default

@@ -42,16 +42,16 @@ export default {
         this._brothers = LocalStorage.get.item("brothers");
       }
       try {
-        const rawdata = await fetch(awsGetUrl);
+        const rawdata = await fetch(url);
 
         const data = await rawdata.json();
         this._brothers = [];
-        data.forEach(element => {
+        data.brothers.forEach(element => {
           this._brothers[+element.scroll] = element;
         });
-        // data.officers.forEach(element => {
-        //   this._brothers[+element.current].officer = element.title;
-        // });
+        data.officers.forEach(element => {
+          this._brothers[+element.current].officer = element.title;
+        });
         LocalStorage.set("brothers", this._brothers);
       } catch (error) {
         if (this._brothers.length > 0) {

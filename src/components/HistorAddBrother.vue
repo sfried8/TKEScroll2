@@ -1,13 +1,10 @@
 <template>
-    <div class="layout-padding bg-white">
-        <div v-for="b in pendingBrothers" :key="b.scroll">
-            {{b.scroll}}. {{b.fname}} {{b.lname}} - {{b.nickname}}
-        </div>
+    <div class="layout-padding" @keyup.enter="submit">
         <q-field>
 
             <div class="row no-wrap">
 
-                <q-input v-model="scroll" float-label="Scroll" type="number" />
+                <q-input v-model="scroll" class="rightmargin" float-label="Scroll" type="number" />
                 <q-input v-model="pc" float-label="Pledge Class" type="number" />
             </div>
         </q-field>
@@ -15,7 +12,7 @@
 
             <div class="row no-wrap">
 
-                <q-input v-model="fname" float-label="First Name" />
+                <q-input v-model="fname" class="rightmargin" float-label="First Name" />
                 <q-input v-model="lname" float-label="Last Name" />
             </div>
         </q-field>
@@ -27,6 +24,9 @@
         <br/>
         <q-btn @click="submit" icon="add">Add Brother</q-btn>
         <br/><br/>
+        <div v-for="b in pendingBrothers" :key="b.scroll">
+            {{b.scroll}}. {{b.fname}} {{b.lname}} - {{b.nickname}}
+        </div>
         <q-btn @click="addAll" icon="add" :disable="pendingBrothers.length < 1">Add {{pendingBrothers.length}} brother{{pendingBrothers.length != 1 ? "s" : ""}}</q-btn>
     </div>
 </template>
@@ -173,6 +173,12 @@ export default class Index extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
+.rightmargin {
+    width: 48%;
+    margin-right: 4%;
+}
+</style>
+
 
 </style>

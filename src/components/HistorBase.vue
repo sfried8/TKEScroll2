@@ -1,20 +1,21 @@
 <template>
 
     <div class="page-content">
-        <q-tabs>
-            <q-route-tab icon="add" to="add" name="addbrother" slot="title" label="Add" />
-            <q-route-tab icon="edit" to="edit" name="edit" slot="title" label="Edit" />
-            <q-route-tab icon="gavel" to="updateofficers" name="updateofficers" slot="title" label="E-Board" />
-
-            <q-tab-pane keep-alive name="addbrother">
-                <histor-add-brother></histor-add-brother>
-            </q-tab-pane>
-            <q-tab-pane keep-alive name="edit">
-                <h1>TODO</h1>
-            </q-tab-pane>
-            <q-tab-pane keep-alive name="updateofficers">
-                <h1>TODO</h1>
-            </q-tab-pane>
+        <q-tabs inverted color="tertiary">
+            <q-tab default class="white" icon="add" name="addbrother" slot="title" label="Add" />
+            <q-tab class="white" icon="edit" name="edit" slot="title" label="Edit" />
+            <q-tab class="white" icon="gavel" name="updateofficers" slot="title" label="E-Board" />
+            <div class="panes">
+                <q-tab-pane keep-alive name="addbrother">
+                    <histor-add-brother></histor-add-brother>
+                </q-tab-pane>
+                <q-tab-pane keep-alive name="edit">
+                    <h1>TODO</h1>
+                </q-tab-pane>
+                <q-tab-pane keep-alive name="updateofficers">
+                    <h1>TODO</h1>
+                </q-tab-pane>
+            </div>
         </q-tabs>
     </div>
 </template>
@@ -45,7 +46,7 @@ import {
     QSearch,
     QSideLink,
     QTabs,
-    QRouteTab,
+    QTab,
     filter
 } from "quasar";
 import Hello from "../components/Hello.vue";
@@ -54,7 +55,7 @@ import HistorAddBrother from "../components/HistorAddBrother.vue";
     name: "main-view",
     components: {
         QLayout,
-        QRouteTab,
+        QTab,
         QToolbar,
         QTabs,
         QToolbarTitle,
@@ -88,9 +89,15 @@ export default class Index extends Vue {
 }
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 body {
+    background: #fff;
+}
+.panes {
     background: #eee;
+}
+.white {
+    background: #fff;
 }
 /* 
 .page-content {

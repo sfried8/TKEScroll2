@@ -26,7 +26,7 @@
           <q-item-side icon="line style"></q-item-side>
           <q-item-main label="Tree" sublabel="View the chapter family tree"></q-item-main>
         </q-side-link>
-        <q-side-link item to="/histor/add">
+        <q-side-link item to="/histor">
           <q-item-side icon="settings"></q-item-side>
           <q-item-main label="Histor Control Panel" sublabel="Add/Edit brothers and Officers"></q-item-main>
         </q-side-link>
@@ -105,21 +105,32 @@ export default class Index extends Vue {
 }
 </script>
 
-<style lang="css">
+<style lang="stylus">
 body {
-    background: #eee;
+  background: #eee;
 }
-/* 
-.page-content {
-  display: flex;
-  position: relative;
-  flex-direction: row;
-  width: 100%;
-  min-height: 60vh;
+
+.brother-link {
+  color: blue;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+
+  div {
+    width: 95%;
+  }
 }
-  .page-content > * {
-    position: relative;
-    min-width: 100%;
-    margin-right: -100%;
-} */
+
+/*
+   .page-content {
+   display: flex;
+   position: relative;
+   flex-direction: row;
+   width: 100%;
+   min-height: 60vh;
+   }
+   .page-content > * {
+   position: relative;
+   min-width: 100%;
+   margin-right: -100%;
+   } */
 </style>
