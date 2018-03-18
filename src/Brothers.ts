@@ -35,6 +35,23 @@ export default {
     const data = await rawdata.json();
     Loading.hide();
   },
+  getTreeString(scroll) {
+    const brother = this._brothers[scroll];
+    if (brother.treeString) {
+      return brother.treeString;
+    }
+    if (brother.big === 0) {
+      brother.treeString = "0." + brother.fname + " " + brother.lname;
+      return brother.treeString;
+    }
+    brother.treeString =
+      this.getTreeString(brother.big) +
+      "." +
+      brother.fname.replace(".", "") +
+      " " +
+      brother.lname.replace(".", "");
+    return brother.treeString;
+  },
   async getBrothers() {
     if (this._brothers == null) {
       Loading.show();
@@ -48,6 +65,18 @@ export default {
         this._brothers = [];
         data.brothers.forEach(element => {
           this._brothers[+element.scroll] = element;
+        });
+
+        this._brothers.forEach(element => {
+          if (!this._brothers[+element.big].littles) {
+            this._brothers[+element.big].littles = [];
+          }
+          if (element.scroll !== element.big)
+            this._brothers[+element.big].littles.push(element.scroll);
+        });
+        this._brothers.forEach(element => {
+          if (element.scroll !== element.big)
+            this.getTreeString(+element.scroll);
         });
         data.officers.forEach(element => {
           this._brothers[+element.current].officer = element.title;

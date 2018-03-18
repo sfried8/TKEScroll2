@@ -25,7 +25,8 @@
     "sw-precache-webpack-plugin": "^0.11.5",
     "uglify-es": "^3.3.10",
     "vue": "^2.5.0",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vued3tree": "^3.5.0"
   },
   "devDependencies": {
     "@types/chai": "^3.4.35",

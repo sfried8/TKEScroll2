@@ -11,6 +11,7 @@ import PCPage from "./components/PCPage.vue";
 import HistorBase from "./components/HistorBase.vue";
 import HistorAddBrother from "./components/HistorAddBrother.vue";
 import Eboard from "./components/Eboard.vue";
+import Tree from "./components/Tree.vue";
 
 Vue.use(VueRouter);
 
@@ -33,7 +34,7 @@ export const AppRouter = new VueRouter({
           component: HistorBase
         },
         { path: "/eboard", component: Eboard },
-        { path: "/tree", component: Hello }
+        { path: "/tree", component: Tree }
       ]
     }, // Default
     { path: "*", component: Scroll } // Not found
