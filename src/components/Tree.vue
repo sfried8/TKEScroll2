@@ -1,62 +1,16 @@
-
-
-
-
-
 <template>
     <div id="tree-container"></div>
-
 </template>
 
 <script lang="ts">
-import Fuzzy from "fuzzy";
 import Vue from "vue";
 import Quasar from "quasar";
 import Component from "vue-class-component";
 import Tree from "../Tree";
 import Brothers from "../Brothers";
-import {
-    dom,
-    event,
-    openURL,
-    QLayout,
-    QToolbar,
-    QToolbarTitle,
-    QBtn,
-    QIcon,
-    QList,
-    QListHeader,
-    QItem,
-    QItemSide,
-    QItemMain,
-    BackToTop,
-    QFixedPosition,
-    QSelect,
-    QInput,
-    QPopover
-} from "quasar";
 
 @Component({
-    name: "my-family-tree",
-    components: {
-        QLayout,
-        QToolbar,
-        QToolbarTitle,
-        QBtn,
-        QIcon,
-        QList,
-        QListHeader,
-        QItem,
-        QItemSide,
-        QItemMain,
-        QFixedPosition,
-        QSelect,
-        QInput,
-        QPopover
-    },
-    directives: {
-        BackToTop
-    }
+    name: "my-family-tree"
 })
 export default class Index extends Vue {
     mounted() {
