@@ -14,6 +14,10 @@
     <div slot="left">
       <q-list no-border link inset-delimiter>
         <q-list-header>Navigation</q-list-header>
+        <q-side-link item to="/">
+          <q-item-side icon="home"></q-item-side>
+          <q-item-main label="Home"></q-item-main>
+        </q-side-link>
         <q-side-link item to="/scroll">
           <q-item-side icon="group"></q-item-side>
           <q-item-main label="Scroll" sublabel="View all brothers"></q-item-main>

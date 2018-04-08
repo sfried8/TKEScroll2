@@ -21,7 +21,7 @@ export const AppRouter = new VueRouter({
       path: "/",
       component: MainView,
       children: [
-        { path: "", component: Scroll },
+        { path: "", component: Hello },
         {
           path: "/brother/:scroll",
           component: BrotherPage
