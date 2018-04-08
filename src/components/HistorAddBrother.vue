@@ -57,9 +57,11 @@ import {
     QFixedPosition,
     QSelect,
     QInput,
+    Loading,
     QToggle,
     QField,
     QAutocomplete,
+    Toast,
     QPopover
 } from "quasar";
 async function parseBrothers() {
@@ -113,8 +115,22 @@ export default class Index extends Vue {
     brothers = [];
     searcher = null;
     pendingBrothers = [];
-    addAll() {
-        alert(this.pendingBrothers.length);
+    async addAll() {
+        const totalToAdd = this.pendingBrothers.length;
+        let adding = 1;
+        for (const pb of this.pendingBrothers) {
+            Loading.show({
+                message: `Adding Brother ${adding++} of ${totalToAdd}`
+            });
+            await Brothers.addBrother(pb);
+        }
+        Loading.hide();
+        Toast.create(
+            `Successfully added ${totalToAdd} Brother${
+                totalToAdd > 1 ? "s" : ""
+            }!`
+        );
+
         this.pendingBrothers = [];
     }
     submit() {

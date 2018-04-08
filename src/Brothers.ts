@@ -9,14 +9,18 @@ interface Brother {
   isZetaTau: boolean;
 }
 
+const localUrl = "http://localhost:3000";
 const awsUrl = "https://91m1lypdhh.execute-api.us-east-1.amazonaws.com/dev";
-const awsGetUrl = awsUrl + "/brothers";
-const awsAddUrl = awsUrl + "/brothers/add";
+const awsGetUrl = localUrl + "/brothers";
+const awsAddUrl = localUrl + "/brothers/add";
 const url =
   "https://raw.githubusercontent.com/sfried8/BrotherAPI2/master/brothers.json";
 require("isomorphic-fetch");
 require("es6-promise").polyfill();
 import { LocalStorage, Toast, Loading } from "quasar";
+function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 export default {
   _brothers: null,
   async addBrother(brother) {
@@ -33,6 +37,7 @@ export default {
     });
 
     const data = await rawdata.json();
+    await timeout(500);
     Loading.hide();
   },
   getTreeString(scroll) {
@@ -59,7 +64,7 @@ export default {
         this._brothers = LocalStorage.get.item("brothers");
       }
       try {
-        const rawdata = await fetch(url);
+        const rawdata = await fetch(awsGetUrl);
 
         const data = await rawdata.json();
         this._brothers = [];
@@ -93,5 +98,8 @@ export default {
       Loading.hide();
     }
     return this._brothers;
+  },
+  clearCache() {
+    LocalStorage.remove("brothers");
   }
 };

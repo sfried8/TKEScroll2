@@ -30,6 +30,10 @@
           <q-item-side icon="settings"></q-item-side>
           <q-item-main label="Histor Control Panel" sublabel="Add/Edit brothers and Officers"></q-item-main>
         </q-side-link>
+        <q-item @click="clearCache">
+          <q-item-side icon="delete"></q-item-side>
+          <q-item-main label="Clear Cache"></q-item-main>
+        </q-item>
       </q-list>
     </div>
 
@@ -101,6 +105,9 @@ export default class Index extends Vue {
     }
     launch(url: string): void {
         openURL(url);
+    }
+    clearCache(): void {
+        Brothers.clearCache();
     }
 }
 </script>

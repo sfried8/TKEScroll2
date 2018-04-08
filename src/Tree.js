@@ -56,7 +56,7 @@ export default {
 
       // size of the diagram
       var viewerWidth = document.body.clientWidth;
-      var viewerHeight = document.body.clientHeight - 50;
+      var viewerHeight = document.body.clientHeight - 10;
 
       var tree = d3.layout.tree().size([viewerHeight, viewerWidth]);
 
