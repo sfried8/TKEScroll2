@@ -9,7 +9,6 @@ import MainView from "./components/MainView.vue";
 import BrotherPageContent from "./components/BrotherPageContent.vue";
 import PCPage from "./components/PCPage.vue";
 import HistorBase from "./components/HistorBase.vue";
-import HistorAddBrother from "./components/HistorAddBrother.vue";
 import Eboard from "./components/Eboard.vue";
 import Tree from "./components/Tree.vue";
 

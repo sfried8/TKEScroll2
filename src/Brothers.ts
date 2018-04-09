@@ -11,34 +11,49 @@ interface Brother {
 
 const localUrl = "http://localhost:3000";
 const awsUrl = "https://91m1lypdhh.execute-api.us-east-1.amazonaws.com/dev";
-const awsGetUrl = localUrl + "/brothers";
-const awsAddUrl = localUrl + "/brothers/add";
+const awsGetUrl = awsUrl + "/brothers";
+const awsAddUrl = awsUrl + "/brothers/add";
+const awsAddOfficerUrl = awsUrl + "/brothers/addOfficer";
 const url =
   "https://raw.githubusercontent.com/sfried8/BrotherAPI2/master/brothers.json";
 require("isomorphic-fetch");
 require("es6-promise").polyfill();
 import { LocalStorage, Toast, Loading } from "quasar";
-function timeout(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+import Util from "./Util";
 export default {
   _brothers: null,
   async addBrother(brother) {
-    Loading.show({
-      message: "Adding Brother"
-    });
-    const rawdata = await fetch(awsAddUrl, {
-      method: "POST", // *GET, PUT, DELETE, etc.
-      body: JSON.stringify(brother), // must match 'Content-Type' header
-      headers: new Headers({
-        Accept: "application/json",
-        "content-type": "application/json"
-      })
-    });
-
-    const data = await rawdata.json();
-    await timeout(500);
+    await Util.throttle(
+      fetch(awsAddUrl, {
+        method: "POST", // *GET, PUT, DELETE, etc.
+        body: JSON.stringify(brother), // must match 'Content-Type' header
+        headers: new Headers({
+          Accept: "application/json",
+          "content-type": "application/json"
+        })
+      }).then(rawdata => rawdata.json()),
+      500
+    );
+  },
+  async addBrothers(brothers: any[]) {
+    Loading.show();
+    for (const b of brothers) {
+      await this.addBrother(b);
+    }
     Loading.hide();
+  },
+  async addOfficer(officer) {
+    return Util.throttle(
+      fetch(awsAddOfficerUrl, {
+        method: "POST", // *GET, PUT, DELETE, etc.
+        body: JSON.stringify(officer), // must match 'Content-Type' header
+        headers: new Headers({
+          Accept: "application/json",
+          "content-type": "application/json"
+        })
+      }).then(rawdata => rawdata.json()),
+      500
+    );
   },
   getTreeString(scroll) {
     const brother = this._brothers[scroll];
@@ -88,12 +103,12 @@ export default {
         });
         LocalStorage.set("brothers", this._brothers);
       } catch (error) {
+        console.log(error);
         if (this._brothers.length > 0) {
           Toast.create("Error retrieving brothers. Falling back to cache");
         } else {
           Toast.create("Error retrieving brothers. Go online first.");
         }
-        console.log(error);
       }
       Loading.hide();
     }
