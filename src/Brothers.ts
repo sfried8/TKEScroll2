@@ -10,7 +10,7 @@ interface Brother {
 }
 
 const localUrl = "http://localhost:3000";
-const awsUrl = "https://91m1lypdhh.execute-api.us-east-1.amazonaws.com/dev";
+const awsUrl = "https://imm30g62kg.execute-api.us-east-1.amazonaws.com/dev";
 const awsGetUrl = awsUrl + "/brothers";
 const awsAddUrl = awsUrl + "/brothers/add";
 const awsAddOfficerUrl = awsUrl + "/brothers/addOfficer";
