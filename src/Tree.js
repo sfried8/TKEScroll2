@@ -56,7 +56,7 @@ export default {
 
       // size of the diagram
       var viewerWidth = document.body.clientWidth;
-      var viewerHeight = document.body.clientHeight - 10;
+      var viewerHeight = document.body.clientHeight - 50;
 
       var tree = d3.layout.tree().size([viewerHeight, viewerWidth]);
 
@@ -178,8 +178,8 @@ export default {
 
         svgGroup.selectAll("g.node").sort(function(a, b) {
           // select the parent and sort the path's
-          if (a.id != draggingNode.id)
-            return 1; // a is not the hovered element, send "a" to the back
+          if (a.id != draggingNode.id) return 1;
+          // a is not the hovered element, send "a" to the back
           else return -1; // a is the hovered element, bring "a" to the front
         });
         // if nodes has children, remove the links and nodes
@@ -439,7 +439,7 @@ export default {
           }
         };
         childCount(0, root);
-        var newHeight = d3.max(levelWidth) * 25; // 25 pixels per line
+        var newHeight = d3.max(levelWidth) * 45; // 25 pixels per line
         tree = tree.size([newHeight, viewerWidth]);
 
         // Compute the new tree layout.

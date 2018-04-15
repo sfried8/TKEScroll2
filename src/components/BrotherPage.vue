@@ -12,6 +12,10 @@
                         <p class="brother-page-line brother-link" @click="$router.push('/pc/'+(Brother.isZetaTau ? 'ZT':'')+Brother.pc)">{{Brother.isZetaTau ? "Zeta Tau ":""}}Pledge Class {{Brother.pc}}</p>
                         <p class="brother-page-line">{{Brother.nickname}}</p>
                         <p class="brother-page-line brother-link" @click="$refs.myCarousel.goToSlide(Brother.big)">{{Brothers[Brother.big].fname + " " + Brothers[Brother.big].lname}}</p>
+                        <p class="brother-page-line" v-if="Brother.littles">Littles:</p>
+                        <ul v-if="Brother.littles">
+                            <li class="brother-page-line brother-link" v-for="l in Brother.littles" :key="l" @click="$refs.myCarousel.goToSlide(l)">{{Brothers[l].fname + " " + Brothers[l].lname}}</li>
+                        </ul>
 
                     </q-card-main>
                 </q-card>

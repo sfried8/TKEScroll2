@@ -125,6 +125,7 @@ body {
   color: blue;
   text-decoration: underline;
   text-decoration-style: dotted;
+  cursor: pointer;
 
   div {
     width: 95%;

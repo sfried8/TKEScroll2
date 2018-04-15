@@ -17,7 +17,7 @@ import Quasar from "quasar";
 export default class Index extends Vue {}
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .logo-container {
   width: 255px;
   height: 242px;
@@ -37,5 +37,9 @@ export default class Index extends Vue {}
 .logo {
   position: absolute;
   transform-style: preserve-3d;
+}
+
+img {
+  width: 100%;
 }
 </style>
