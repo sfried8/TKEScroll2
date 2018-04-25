@@ -24,7 +24,6 @@ Vue.use(Quasar); // Install Quasar Framework
 if (__THEME === "mat") {
   require("quasar-extras/roboto-font");
 }
-Brothers.getBrothers();
 import "quasar-extras/material-icons";
 import Brothers from "./Brothers";
 // import 'quasar-extras/ionicons'

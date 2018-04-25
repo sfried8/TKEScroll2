@@ -16,7 +16,7 @@
                         <ul v-if="Brother.littles">
                             <li class="brother-page-line brother-link" v-for="l in Brother.littles" :key="l" @click="$refs.myCarousel.goToSlide(l)">{{Brothers[l].fname + " " + Brothers[l].lname}}</li>
                         </ul>
-
+                        <button @click="viewInTree(Brother)">View in tree</button>
                     </q-card-main>
                 </q-card>
                 <div v-if="showSwipe" leave-active-class="animated fadeOut" class="animated flash infinite" style="animation-duration:3s;margin:auto;text-align:center">
@@ -113,6 +113,9 @@ export default class Index extends Vue {
         this.currentSlides = this.Brothers.map(
             (el, i) => (i > index + 3 || i < index - 3 ? undefined : el)
         );
+    }
+    viewInTree(b) {
+        (this as any).$router.push("/tree?scroll=" + b.scroll);
     }
 }
 </script>

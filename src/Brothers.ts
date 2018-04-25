@@ -14,8 +14,9 @@ const awsUrl = "https://imm30g62kg.execute-api.us-east-1.amazonaws.com/dev";
 const awsGetUrl = awsUrl + "/brothers";
 const awsAddUrl = awsUrl + "/brothers/add";
 const awsAddOfficerUrl = awsUrl + "/brothers/addOfficer";
-const url =
-  "https://raw.githubusercontent.com/sfried8/BrotherAPI2/master/brothers.json";
+const authenticateUrl = awsUrl + "/authenticate";
+const fakeurl =
+  "https://raw.githubusercontent.com/sfried8/BrotherAPI2/master/fakebrothers.json";
 require("isomorphic-fetch");
 require("es6-promise").polyfill();
 import { LocalStorage, Toast, Loading } from "quasar";
@@ -79,9 +80,16 @@ export default {
         this._brothers = LocalStorage.get.item("brothers");
       }
       try {
-        const rawdata = await fetch(awsGetUrl);
+        const password = LocalStorage.get.item("brothersPassword");
+        const rawdata = await fetch(
+          password === "GUEST" ? fakeurl : awsGetUrl + "?password=" + password
+        );
 
         const data = await rawdata.json();
+        if (data.error) {
+          console.log(data);
+          throw "Invalid Password";
+        }
         this._brothers = [];
         data.brothers.forEach(element => {
           this._brothers[+element.scroll] = element;
@@ -101,9 +109,14 @@ export default {
         data.officers.forEach(element => {
           this._brothers[+element.current].officer = element.title;
         });
-        LocalStorage.set("brothers", this._brothers);
+        if (password !== "GUEST") {
+          LocalStorage.set("brothers", this._brothers);
+        }
       } catch (error) {
         console.log(error);
+        if (error === "Invalid Password") {
+          Toast.create("Invalid Password.");
+        }
         if (this._brothers.length > 0) {
           Toast.create("Error retrieving brothers. Falling back to cache");
         } else {
@@ -114,7 +127,14 @@ export default {
     }
     return this._brothers;
   },
+  authenticate(password) {
+    return fetch(authenticateUrl + "?password=" + password).then(data =>
+      data.json()
+    );
+  },
   clearCache() {
     LocalStorage.remove("brothers");
+    LocalStorage.remove("brothersPassword");
+    Toast.create("Deleted cache");
   }
 };

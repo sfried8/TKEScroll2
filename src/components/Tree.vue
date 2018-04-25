@@ -14,7 +14,9 @@ import Brothers from "../Brothers";
 })
 export default class Index extends Vue {
     mounted() {
-        Tree.render();
+        Tree.render(
+            (this as any).$route.query ? +(this as any).$route.query.scroll : 0
+        );
     }
 }
 </script>

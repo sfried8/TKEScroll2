@@ -11,16 +11,22 @@ import PCPage from "./components/PCPage.vue";
 import HistorBase from "./components/HistorBase.vue";
 import Eboard from "./components/Eboard.vue";
 import Tree from "./components/Tree.vue";
+import FirstTimeHere from "./components/FirstTimeHere.vue";
 
 Vue.use(VueRouter);
 
 export const AppRouter = new VueRouter({
   routes: [
     {
+      path: "/firsttime",
+      component: FirstTimeHere
+    },
+    {
       path: "/",
       component: MainView,
       children: [
         { path: "", component: Hello },
+
         {
           path: "/brother/:scroll",
           component: BrotherPage

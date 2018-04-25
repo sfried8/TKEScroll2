@@ -77,7 +77,8 @@ import {
     QInputFrame,
     QSearch,
     QSideLink,
-    filter
+    filter,
+    LocalStorage
 } from "quasar";
 
 @Component({
@@ -112,6 +113,11 @@ export default class Index extends Vue {
     }
     clearCache(): void {
         Brothers.clearCache();
+    }
+    beforeMount(): void {
+        if (!LocalStorage.has("brothersPassword")) {
+            this.$router.push("/firsttime");
+        }
     }
 }
 </script>
