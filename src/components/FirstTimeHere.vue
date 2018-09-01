@@ -1,7 +1,12 @@
 <template>
-    <div class="layout-padding">
-
-        <div>
+    <div>
+        <q-toolbar slot="header" class="">
+            <q-toolbar-title>
+                Tau Kappa Epsilon
+                <div slot="subtitle">Xi-Upsilon</div>
+            </q-toolbar-title>
+        </q-toolbar>
+        <div class="layout-padding">
             I am a...
             <q-btn @click="promptForPassword(false)">Brother or Sweetheart</q-btn>
             <q-btn @click="fakeData">Guest</q-btn>

@@ -139,16 +139,16 @@ body {
 }
 
 /*
-   .page-content {
-   display: flex;
-   position: relative;
-   flex-direction: row;
-   width: 100%;
-   min-height: 60vh;
-   }
-   .page-content > * {
-   position: relative;
-   min-width: 100%;
-   margin-right: -100%;
-   } */
+.page-content {
+display: flex;
+position: relative;
+flex-direction: row;
+width: 100%;
+min-height: 60vh;
+}
+.page-content > * {
+position: relative;
+min-width: 100%;
+margin-right: -100%;
+} */
 </style>
