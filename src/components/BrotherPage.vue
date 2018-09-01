@@ -12,7 +12,11 @@
                         <p class="brother-page-line brother-link" @click="$router.push('/pc/'+(Brother.isZetaTau ? 'ZT':'')+Brother.pc)">{{Brother.isZetaTau ? "Zeta Tau ":""}}Pledge Class {{Brother.pc}}</p>
                         <p class="brother-page-line">{{Brother.nickname}}</p>
                         <p class="brother-page-line brother-link" @click="$refs.myCarousel.goToSlide(Brother.big)">{{Brothers[Brother.big].fname + " " + Brothers[Brother.big].lname}}</p>
-
+                        <p class="brother-page-line" v-if="Brother.littles">Littles:</p>
+                        <ul v-if="Brother.littles">
+                            <li class="brother-page-line brother-link" v-for="l in Brother.littles" :key="l" @click="$refs.myCarousel.goToSlide(l)">{{Brothers[l].fname + " " + Brothers[l].lname}}</li>
+                        </ul>
+                        <button @click="viewInTree(Brother)">View in tree</button>
                     </q-card-main>
                 </q-card>
                 <div v-if="showSwipe" leave-active-class="animated fadeOut" class="animated flash infinite" style="animation-duration:3s;margin:auto;text-align:center">
@@ -109,6 +113,9 @@ export default class Index extends Vue {
         this.currentSlides = this.Brothers.map(
             (el, i) => (i > index + 3 || i < index - 3 ? undefined : el)
         );
+    }
+    viewInTree(b) {
+        (this as any).$router.push("/tree?scroll=" + b.scroll);
     }
 }
 </script>

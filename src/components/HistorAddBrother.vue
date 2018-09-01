@@ -1,25 +1,25 @@
 <template>
     <div class="layout-padding" @keyup.enter="submit">
         <q-field>
-
             <div class="row no-wrap">
-
                 <q-input v-model="scroll" class="rightmargin" float-label="Scroll" type="number" />
                 <q-input v-model="pc" float-label="Pledge Class" type="number" />
             </div>
         </q-field>
+
         <q-field>
-
             <div class="row no-wrap">
-
                 <q-input v-model="fname" class="rightmargin" float-label="First Name" />
                 <q-input v-model="lname" float-label="Last Name" />
             </div>
         </q-field>
+
         <q-input v-model="nickname" float-label="Nickname" />
+
         <q-input v-model="big" placeholder="Big Brother">
             <q-autocomplete @search="search" :filter="myfilter" @selected="selected" />
         </q-input>
+
         <q-toggle v-model="active" label="Active" />
         <br/>
         <q-btn @click="submit" icon="add">Add Brother</q-btn>
@@ -40,27 +40,13 @@ import Brothers from "../Brothers";
 import FuzzySearch from "fuzzy-search";
 
 import {
-    dom,
-    event,
-    openURL,
-    QLayout,
-    QToolbar,
-    QToolbarTitle,
     QBtn,
     QIcon,
-    QList,
-    QListHeader,
-    QItem,
-    QItemSide,
-    QItemMain,
-    BackToTop,
-    QFixedPosition,
-    QSelect,
     QInput,
     QToggle,
     QField,
     QAutocomplete,
-    QPopover
+    Toast
 } from "quasar";
 async function parseBrothers() {
     const result: any = [];
@@ -76,29 +62,16 @@ async function parseBrothers() {
     }
     return result;
 }
+const DEBUG = true;
 @Component({
     name: "histor-add-brother",
     components: {
-        QLayout,
-        QToolbar,
         QField,
-        QToolbarTitle,
         QBtn,
         QIcon,
-        QList,
-        QListHeader,
-        QItem,
         QAutocomplete,
-        QItemSide,
-        QItemMain,
-        QFixedPosition,
-        QSelect,
         QInput,
-        QToggle,
-        QPopover
-    },
-    directives: {
-        BackToTop
+        QToggle
     }
 })
 export default class Index extends Vue {
@@ -114,8 +87,14 @@ export default class Index extends Vue {
     searcher = null;
     pendingBrothers = [];
     addAll() {
-        alert(this.pendingBrothers.length);
-        this.pendingBrothers = [];
+        Brothers.addBrothers(this.pendingBrothers).then(() => {
+            Toast.create(
+                `Successfully added ${this.pendingBrothers.length} Brother${
+                    this.pendingBrothers.length > 1 ? "s" : ""
+                }!`
+            );
+            this.pendingBrothers = [];
+        });
     }
     submit() {
         const brother = {
@@ -130,9 +109,21 @@ export default class Index extends Vue {
         };
         this.pendingBrothers.push(brother);
         this.scroll++;
-        this.fname = "";
-        this.lname = "";
-        this.nickname = "";
+        this.fname = DEBUG
+            ? Math.random()
+                  .toString(36)
+                  .substring(7)
+            : "";
+        this.lname = DEBUG
+            ? Math.random()
+                  .toString(36)
+                  .substring(7)
+            : "";
+        this.nickname = DEBUG
+            ? Math.random()
+                  .toString(36)
+                  .substring(7)
+            : "";
         this.bigS = 0;
         this.big = "";
 
@@ -178,7 +169,4 @@ export default class Index extends Vue {
     width: 48%;
     margin-right: 4%;
 }
-</style>
-
-
 </style>

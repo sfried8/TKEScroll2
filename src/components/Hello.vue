@@ -1,17 +1,23 @@
 <template>
-    <div class="layout-padding logo-container non-selectable no-pointer-events">
-      <div class="logo" :style="position">
-        <img src="~assets/coatofarms.jpg" style="width:100%;">
-      </div>
+  <div class="layout-padding">
+    <div class="hello">
+      Welcome to the scroll website for the Xi-Upsilon Chapter of Tau Kappa Epsilon!
+      <img src="~assets/lem.png" />
     </div>
+  </div>
 </template>
 
 <script lang="ts">
-import Hello from "./Hello";
-export default Hello;
+import Component from "vue-class-component";
+import Vue from "vue";
+import Quasar from "quasar";
+@Component({
+    name: "hello-view"
+})
+export default class Index extends Vue {}
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .logo-container {
   width: 255px;
   height: 242px;
@@ -22,8 +28,18 @@ export default Hello;
   transform: translateX(-50%) translateY(-50%);
 }
 
+.hello {
+  text-align: center;
+  width: 80%;
+  margin: auto;
+}
+
 .logo {
   position: absolute;
   transform-style: preserve-3d;
+}
+
+img {
+  width: 100%;
 }
 </style>

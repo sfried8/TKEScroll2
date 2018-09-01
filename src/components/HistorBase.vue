@@ -10,10 +10,10 @@
                     <histor-add-brother></histor-add-brother>
                 </q-tab-pane>
                 <q-tab-pane keep-alive name="edit">
-                    <h1>TODO</h1>
+                    <histor-edit-brother></histor-edit-brother>
                 </q-tab-pane>
                 <q-tab-pane keep-alive name="updateofficers">
-                    <h1>TODO</h1>
+                    <histor-eboard></histor-eboard>
                 </q-tab-pane>
             </div>
         </q-tabs>
@@ -51,8 +51,10 @@ import {
 } from "quasar";
 import Hello from "../components/Hello.vue";
 import HistorAddBrother from "../components/HistorAddBrother.vue";
+import HistorEditBrother from "../components/HistorEditBrother.vue";
+import HistorEboard from "../components/HistorEBoard.vue";
 @Component({
-    name: "main-view",
+    name: "histor-base",
     components: {
         QLayout,
         QTab,
@@ -73,7 +75,9 @@ import HistorAddBrother from "../components/HistorAddBrother.vue";
         QSideLink,
         QItemMain,
         Hello,
-        HistorAddBrother
+        HistorAddBrother,
+        HistorEditBrother,
+        HistorEboard
     }
 })
 export default class Index extends Vue {

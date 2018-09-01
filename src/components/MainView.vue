@@ -14,6 +14,10 @@
     <div slot="left">
       <q-list no-border link inset-delimiter>
         <q-list-header>Navigation</q-list-header>
+        <q-side-link item to="/">
+          <q-item-side icon="home"></q-item-side>
+          <q-item-main label="Home"></q-item-main>
+        </q-side-link>
         <q-side-link item to="/scroll">
           <q-item-side icon="group"></q-item-side>
           <q-item-main label="Scroll" sublabel="View all brothers"></q-item-main>
@@ -30,6 +34,10 @@
           <q-item-side icon="settings"></q-item-side>
           <q-item-main label="Histor Control Panel" sublabel="Add/Edit brothers and Officers"></q-item-main>
         </q-side-link>
+        <q-item @click="clearCache">
+          <q-item-side icon="delete"></q-item-side>
+          <q-item-main label="Clear Cache"></q-item-main>
+        </q-item>
       </q-list>
     </div>
 
@@ -69,7 +77,8 @@ import {
     QInputFrame,
     QSearch,
     QSideLink,
-    filter
+    filter,
+    LocalStorage
 } from "quasar";
 
 @Component({
@@ -102,6 +111,14 @@ export default class Index extends Vue {
     launch(url: string): void {
         openURL(url);
     }
+    clearCache(): void {
+        Brothers.clearCache();
+    }
+    beforeMount(): void {
+        if (!LocalStorage.has("brothersPassword")) {
+            this.$router.push("/firsttime");
+        }
+    }
 }
 </script>
 
@@ -114,6 +131,7 @@ body {
   color: blue;
   text-decoration: underline;
   text-decoration-style: dotted;
+  cursor: pointer;
 
   div {
     width: 95%;
@@ -121,16 +139,16 @@ body {
 }
 
 /*
-   .page-content {
-   display: flex;
-   position: relative;
-   flex-direction: row;
-   width: 100%;
-   min-height: 60vh;
-   }
-   .page-content > * {
-   position: relative;
-   min-width: 100%;
-   margin-right: -100%;
-   } */
+.page-content {
+display: flex;
+position: relative;
+flex-direction: row;
+width: 100%;
+min-height: 60vh;
+}
+.page-content > * {
+position: relative;
+min-width: 100%;
+margin-right: -100%;
+} */
 </style>
