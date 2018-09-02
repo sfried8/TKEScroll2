@@ -31,10 +31,8 @@
     </div>
 </template>
 
-<script lang="ts">
-import Fuzzy from "fuzzy";
+<script lang="js">
 import Vue from "vue";
-import Quasar from "quasar";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import FuzzySearch from "fuzzy-search";
@@ -46,10 +44,10 @@ import {
     QToggle,
     QField,
     QAutocomplete,
-    Toast
+
 } from "quasar";
 async function parseBrothers() {
-    const result: any = [];
+    const result = [];
     const brothers = await Brothers.getBrothers();
     for (let scroll in brothers) {
         const brother = brothers[scroll];
@@ -88,7 +86,7 @@ export default class Index extends Vue {
     pendingBrothers = [];
     addAll() {
         Brothers.addBrothers(this.pendingBrothers).then(() => {
-            Toast.create(
+            this.$q.notify(
                 `Successfully added ${this.pendingBrothers.length} Brother${
                     this.pendingBrothers.length > 1 ? "s" : ""
                 }!`

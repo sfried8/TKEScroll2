@@ -19,9 +19,8 @@
 
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Vue from "vue";
-import Quasar from "quasar";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import {
@@ -60,9 +59,9 @@ import {
     }
 })
 export default class Index extends Vue {
-    Brothers: any[];
+    Brothers;
     get Brother() {
-        return this.Brothers[(this as any).$route.params.scroll] || {};
+        return this.Brothers[this.$route.params.scroll] || {};
     }
     get Big() {
         return this.Brother && this.Brother.big

@@ -2,9 +2,8 @@
     <div id="tree-container"></div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Vue from "vue";
-import Quasar from "quasar";
 import Component from "vue-class-component";
 import Tree from "../Tree";
 import Brothers from "../Brothers";
@@ -15,7 +14,7 @@ import Brothers from "../Brothers";
 export default class Index extends Vue {
     mounted() {
         Tree.render(
-            (this as any).$route.query ? +(this as any).$route.query.scroll : 0
+            this.$route.query ? +this.$route.query.scroll : 0
         );
     }
 }

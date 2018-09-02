@@ -20,9 +20,8 @@
     </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Vue from "vue";
-import Quasar from "quasar";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import {
@@ -44,15 +43,15 @@ import {
     QInputFrame,
     QTabPane,
     QSearch,
-    QSideLink,
+    
     QTabs,
     QTab,
     filter
 } from "quasar";
-import Hello from "../components/Hello.vue";
-import HistorAddBrother from "../components/HistorAddBrother.vue";
-import HistorEditBrother from "../components/HistorEditBrother.vue";
-import HistorEboard from "../components/HistorEBoard.vue";
+import Hello from "./Hello";
+import HistorAddBrother from "./HistorAddBrother";
+import HistorEditBrother from "./HistorEditBrother";
+import HistorEboard from "./HistorEBoard";
 @Component({
     name: "histor-base",
     components: {
@@ -72,7 +71,7 @@ import HistorEboard from "../components/HistorEBoard.vue";
         QTabPane,
         QInput,
         QInputFrame,
-        QSideLink,
+        
         QItemMain,
         Hello,
         HistorAddBrother,
@@ -81,13 +80,13 @@ import HistorEboard from "../components/HistorEBoard.vue";
     }
 })
 export default class Index extends Vue {
-    goTo(page: string): void {
+    goTo(page) {
         console.log("going to " + page);
-        (this.$refs.layout as any).toggleLeft(() => {
+        this.$refs.layout.toggleLeft(() => {
             this.$router.push({ path: `/${page}` });
         });
     }
-    launch(url: string): void {
+    launch(url) {
         openURL(url);
     }
 }

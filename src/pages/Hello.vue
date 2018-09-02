@@ -2,15 +2,14 @@
   <div class="layout-padding">
     <div class="hello">
       Welcome to the scroll website for the Xi-Upsilon Chapter of Tau Kappa Epsilon!
-      <img src="~assets/lem.png" />
+      <img src="~/assets/lem.png" />
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Component from "vue-class-component";
 import Vue from "vue";
-import Quasar from "quasar";
 @Component({
     name: "hello-view"
 })

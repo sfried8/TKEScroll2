@@ -32,16 +32,15 @@
             </q-item>
         </q-list>
 
-        <q-fixed-position corner="top-right" :offset="[18, 18]">
+        <!-- <q-fixed-position corner="top-right" :offset="[18, 18]">
             <q-btn v-back-to-top.animate="{offset: 500, duration: 200}" round color="primary" class="animate-pop" style="animation-duration: .5s;" icon="keyboard_arrow_up" />
-        </q-fixed-position>
+        </q-fixed-position> -->
     </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Fuzzy from "fuzzy";
 import Vue from "vue";
-import Quasar from "quasar";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import {
@@ -59,7 +58,6 @@ import {
     QItemSide,
     QItemMain,
     BackToTop,
-    QFixedPosition,
     QSelect,
     QInput,
     QPopover
@@ -78,7 +76,6 @@ import {
         QItem,
         QItemSide,
         QItemMain,
-        QFixedPosition,
         QSelect,
         QInput,
         QPopover

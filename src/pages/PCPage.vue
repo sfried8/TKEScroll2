@@ -1,18 +1,17 @@
 <template>
-    <div class="layout-padding">
- <div class="pc-page"> 
+  <div class="layout-padding">
+    <div class="pc-page">
       <h4>{{isZT ? "Zeta Tau ":""}}Pledge Class {{pc}}</h4><br>
 
-          <div class="pc-page-line brother-link" v-for="pb in PBros" @click="$router.push('/brother/'+pb.scroll)" :key="pb.scroll">{{pb.scroll}}. {{pb.fname}} {{pb.lname}}</div>
+      <div class="pc-page-line brother-link" v-for="pb in PBros" @click="$router.push('/brother/'+pb.scroll)" :key="pb.scroll">{{pb.scroll}}. {{pb.fname}} {{pb.lname}}</div>
 
-      </div>
     </div>
+  </div>
 
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Vue from "vue";
-import Quasar from "quasar";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import {
@@ -52,7 +51,7 @@ export default class Index extends Vue {
   pc = 0;
   isZT = false;
   mounted() {
-    const pcparam = (this as any).$route.params.pc;
+    const pcparam = this.$route.params.pc;
     this.isZT = pcparam.indexOf("ZT") === 0;
     if (this.isZT) {
       this.pc = +pcparam.slice(2);
@@ -71,21 +70,16 @@ export default class Index extends Vue {
 </script>
 
 <style lang="stylus" scoped>
-.pc-page
-  border-radius 4px
-  height 200%
-  padding 40px
-  box-shadow 0px 4px 20px 0px #888888;
-  background-color white
-.pc-page-line
-  margin-bottom 10px
-  font-weight 300
-// .brother-link
-//   padding 3px
-//   background-color #eeeeee
-//   border-radius 4px
-//   box-shadow 0px 2px 5px 0px #888888;
-//   div 
-//     width 95%
+.pc-page {
+  border-radius: 4px;
+  height: 200%;
+  padding: 40px;
+  box-shadow: 0px 4px 20px 0px #888888;
+  background-color: white;
+}
 
+.pc-page-line {
+  margin-bottom: 10px;
+  font-weight: 300;
+}
 </style>

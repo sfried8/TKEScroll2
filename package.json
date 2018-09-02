@@ -22,7 +22,7 @@
     "fuzzy-search": "^2.0.1",
     "isomorphic-fetch": "^2.2.1",
     "quasar-extras": "0.0.8",
-    "quasar-framework": "^0.14.9",
+    "quasar-framework": "0.17.12",
     "sw-precache-webpack-plugin": "^0.11.5",
     "uglify-es": "^3.3.10",
     "vue": "^2.5.0",

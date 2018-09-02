@@ -34,10 +34,8 @@
     </div>
 </template>
 
-<script lang="ts">
-import Fuzzy from "fuzzy";
+<script lang="js">
 import Vue from "vue";
-import Quasar from "quasar";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import FuzzySearch from "fuzzy-search";
@@ -57,18 +55,16 @@ import {
     QItemSide,
     QItemMain,
     BackToTop,
-    QFixedPosition,
     QSelect,
     QInput,
     Loading,
     QToggle,
     QField,
     QAutocomplete,
-    Toast,
     QPopover
 } from "quasar";
 async function parseBrothers() {
-    const result: any = [];
+    const result = [];
     const brothers = await Brothers.getBrothers();
     for (let scroll in brothers) {
         const brother = brothers[scroll];
@@ -96,7 +92,6 @@ async function parseBrothers() {
         QAutocomplete,
         QItemSide,
         QItemMain,
-        QFixedPosition,
         QSelect,
         QInput,
         QToggle,
@@ -131,7 +126,7 @@ export default class Index extends Vue {
             isZetaTau: this.pc < 0
         };
         Brothers.addBrother(brother).then(
-            Toast.create(
+            this.$q.notify(
                 `Successfully updated information for ${this.currentBrother}!`
             )
         );
@@ -196,5 +191,3 @@ h5 {
 }
 </style>
 
-
-</style>

@@ -33,9 +33,8 @@
     </keep-alive>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Vue from "vue";
-import Quasar from "quasar";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import BrotherPageContent from "./BrotherPageContent.vue";
@@ -93,14 +92,14 @@ export default class Index extends Vue {
         console.log("mounting brother page");
         Brothers.getBrothers().then(data => {
             this.Brothers = data;
-            const index = +((this as any).$route.params.scroll || 0);
+            const index = +(this.$route.params.scroll || 0);
             console.log(index);
             this.currentSlides = this.Brothers.map((el, i) => {
                 const ret = i > index + 3 || i < index - 3 ? undefined : el;
                 return ret;
             });
             this.$nextTick(() => {
-                (this as any).$refs.myCarousel.goToSlide(index);
+                this.$refs.myCarousel.goToSlide(index);
             });
         });
     }
@@ -115,7 +114,7 @@ export default class Index extends Vue {
         );
     }
     viewInTree(b) {
-        (this as any).$router.push("/tree?scroll=" + b.scroll);
+        this.$router.push("/tree?scroll=" + b.scroll);
     }
 }
 </script>

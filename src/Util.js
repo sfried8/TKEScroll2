@@ -1,5 +1,5 @@
 export default {
-  prettyJoinList: function(list: string[]): string {
+  prettyJoinList: function(list) {
     if (list.length < 1) {
       return "";
     }
@@ -11,10 +11,10 @@ export default {
     }
     return list.slice(0, -2).join(", ") + ", and " + list[list.length - 1];
   },
-  pause: function(millis: number): Promise<any> {
+  pause: function(millis) {
     return new Promise(resolve => setTimeout(resolve, millis));
   },
-  throttle: function(func: Promise<any>, minimumTimeInMillis: number) {
+  throttle: function(func, minimumTimeInMillis) {
     return Promise.all([func, this.pause(minimumTimeInMillis)]);
   }
 };

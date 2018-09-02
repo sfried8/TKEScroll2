@@ -1,14 +1,13 @@
 <template>
-    <div class="layout-padding">
-            <q-search v-model="terms" placeholder="Search for a brother by name">
-        <q-autocomplete :filter="myFilter" :debounce="50" @search="search" @selected="selected" />
-      </q-search>
-    </div>
+  <div class="layout-padding">
+    <q-search v-model="terms" placeholder="Search for a brother by name">
+      <q-autocomplete :filter="myFilter" :debounce="50" @search="search" @selected="selected" />
+    </q-search>
+  </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Vue from "vue";
-import Quasar from "quasar";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import FuzzySearch from "fuzzy-search";
@@ -34,7 +33,7 @@ import {
 } from "quasar";
 
 async function parseBrothers() {
-  const result: any = [];
+  const result = [];
   const brothers = await Brothers.getBrothers();
   for (let scroll in brothers) {
     const brother = brothers[scroll];
@@ -80,7 +79,7 @@ export default class Index extends Vue {
     }, 50);
   }
   selected(item) {
-    (this as any).$router.push({ path: `/brother/${item.value}` });
+    this.$router.push({ path: `/brother/${item.value}` });
   }
   myFilter(terms, { field, list }) {
     const token = terms.toLowerCase();
@@ -90,7 +89,7 @@ export default class Index extends Vue {
     });
     return this.searcher.search(token);
   }
-  launch(url: string): void {
+  launch(url) {
     openURL(url);
   }
 }

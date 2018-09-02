@@ -1,61 +1,61 @@
 <template>
-  <q-layout ref="layout" view="lHh Lpr fff" :left-class="{'bg-grey-2': true}">
-    <q-toolbar slot="header" class="">
-      <q-btn flat @click="$refs.layout.toggleLeft()">
-        <q-icon name="menu"></q-icon>
-      </q-btn>
+  <q-layout view="hHh Lpr fff" :left-class="{'bg-grey-2': true}">
+    <q-layout-header v-model="header" :reveal="true">
+      <q-toolbar>
+        <q-btn flat @click="left = !left">
+          <q-icon name="menu"></q-icon>
+        </q-btn>
 
-      <q-toolbar-title>
-        Tau Kappa Epsilon
-        <div slot="subtitle">Xi-Upsilon</div>
-      </q-toolbar-title>
-    </q-toolbar>
-
-    <div slot="left">
+        <q-toolbar-title>
+          Tau Kappa Epsilon
+          <div slot="subtitle">Xi-Upsilon</div>
+        </q-toolbar-title>
+      </q-toolbar>
+    </q-layout-header>
+    <q-layout-drawer side="left" v-model="left">
       <q-list no-border link inset-delimiter>
         <q-list-header>Navigation</q-list-header>
-        <q-side-link item to="/">
+        <q-item to="/">
           <q-item-side icon="home"></q-item-side>
           <q-item-main label="Home"></q-item-main>
-        </q-side-link>
-        <q-side-link item to="/scroll">
+        </q-item>
+        <q-item to="/scroll">
           <q-item-side icon="group"></q-item-side>
           <q-item-main label="Scroll" sublabel="View all brothers"></q-item-main>
-        </q-side-link>
-        <q-side-link item to="/eboard">
+        </q-item>
+        <q-item to="/eboard">
           <q-item-side icon="gavel"></q-item-side>
           <q-item-main label="E-Board" sublabel="View current officers"></q-item-main>
-        </q-side-link>
-        <q-side-link item to="/tree">
+        </q-item>
+        <q-item to="/tree">
           <q-item-side icon="line style"></q-item-side>
           <q-item-main label="Tree" sublabel="View the chapter family tree"></q-item-main>
-        </q-side-link>
-        <q-side-link item to="/histor">
+        </q-item>
+        <q-item to="/histor">
           <q-item-side icon="settings"></q-item-side>
           <q-item-main label="Histor Control Panel" sublabel="Add/Edit brothers and Officers"></q-item-main>
-        </q-side-link>
+        </q-item>
         <q-item @click="clearCache">
           <q-item-side icon="delete"></q-item-side>
           <q-item-main label="Clear Cache"></q-item-main>
         </q-item>
       </q-list>
-    </div>
+    </q-layout-drawer>
 
     <!--
-        Replace following <div> with
+        Replace following <> with
         <router-view /> component
         if using subRoutes
       -->
-    <div class="page-content bg-red">
+    <q-page-container>
 
       <router-view style="position:absolute; min-width:100%;" :key="$route.path" />
-    </div>
+    </q-page-container>
   </q-layout>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Vue from "vue";
-import Quasar from "quasar";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import {
@@ -63,6 +63,9 @@ import {
     event,
     openURL,
     QLayout,
+    QLayoutHeader,
+    QLayoutDrawer,
+    QPageContainer,
     QToolbar,
     QToolbarTitle,
     QBtn,
@@ -76,7 +79,7 @@ import {
     QInput,
     QInputFrame,
     QSearch,
-    QSideLink,
+    // QSideLink,
     filter,
     LocalStorage
 } from "quasar";
@@ -90,6 +93,9 @@ import {
         QBtn,
         QIcon,
         QList,
+        QLayoutHeader,
+        QLayoutDrawer,
+        QPageContainer,
         QListHeader,
         QItem,
         QItemSide,
@@ -97,24 +103,26 @@ import {
         QSearch,
         QInput,
         QInputFrame,
-        QSideLink,
+        // QSideLink,
         QItemMain
     }
 })
 export default class Index extends Vue {
-    goTo(page: string): void {
+    left = true;
+    header = true;
+    goTo(page) {
         console.log("going to " + page);
-        (this.$refs.layout as any).toggleLeft(() => {
+        this.$refs.layout.toggleLeft(() => {
             this.$router.push({ path: `/${page}` });
         });
     }
-    launch(url: string): void {
+    launch(url) {
         openURL(url);
     }
-    clearCache(): void {
+    clearCache() {
         Brothers.clearCache();
     }
-    beforeMount(): void {
+    beforeMount() {
         if (!LocalStorage.has("brothersPassword")) {
             this.$router.push("/firsttime");
         }

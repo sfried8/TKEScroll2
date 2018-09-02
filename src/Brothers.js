@@ -1,14 +1,3 @@
-interface Brother {
-  scroll: number;
-  fname: string;
-  lname: string;
-  pc: number;
-  nickname: string;
-  big: number;
-  active: boolean;
-  isZetaTau: boolean;
-}
-
 const localUrl = "http://localhost:3000";
 const awsUrl = "https://imm30g62kg.execute-api.us-east-1.amazonaws.com/dev";
 const awsGetUrl = awsUrl + "/brothers";
@@ -18,8 +7,8 @@ const authenticateUrl = awsUrl + "/authenticate";
 const fakeurl =
   "https://raw.githubusercontent.com/sfried8/BrotherAPI2/master/fakebrothers.json";
 require("isomorphic-fetch");
-require("es6-promise").polyfill();
-import { LocalStorage, Toast, Loading } from "quasar";
+// require("es6-promise").polyfill();
+import { LocalStorage, Notify, Loading } from "quasar";
 import Util from "./Util";
 export default {
   _brothers: null,
@@ -36,7 +25,7 @@ export default {
       500
     );
   },
-  async addBrothers(brothers: any[]) {
+  async addBrothers(brothers) {
     Loading.show();
     for (const b of brothers) {
       await this.addBrother(b);
@@ -115,12 +104,12 @@ export default {
       } catch (error) {
         console.log(error);
         if (error === "Invalid Password") {
-          Toast.create("Invalid Password.");
+          Notify.create("Invalid Password.");
         }
         if (this._brothers.length > 0) {
-          Toast.create("Error retrieving brothers. Falling back to cache");
+          Notify.create("Error retrieving brothers. Falling back to cache");
         } else {
-          Toast.create("Error retrieving brothers. Go online first.");
+          Notify.create("Error retrieving brothers. Go online first.");
         }
       }
       Loading.hide();
@@ -135,6 +124,6 @@ export default {
   clearCache() {
     LocalStorage.remove("brothers");
     LocalStorage.remove("brothersPassword");
-    Toast.create("Deleted cache");
+    Notify.create("Deleted cache");
   }
 };
