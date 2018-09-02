@@ -145,8 +145,7 @@ export default {
                 scale +
                 ")"
             );
-          d3
-            .select(domNode)
+          d3.select(domNode)
             .select("g.node")
             .attr(
               "transform",
@@ -268,8 +267,7 @@ export default {
         d3.selectAll(".ghostCircle").attr("class", "ghostCircle");
         d3.select(domNode).attr("class", "node");
         // now restore the mouseover event or we won't be able to drag a 2nd time
-        d3
-          .select(domNode)
+        d3.select(domNode)
           .select(".ghostCircle")
           .attr("pointer-events", "");
         updateTempConnector();
@@ -341,8 +339,7 @@ export default {
         y = -source.x0;
         x = x * scale + viewerWidth / 2;
         y = y * scale + viewerHeight / 2;
-        d3
-          .select("g")
+        d3.select("g")
           .transition()
           .duration(duration)
           .attr(
@@ -407,9 +404,11 @@ export default {
         });
 
         // Update the nodes…
-        node = svgGroup.selectAll("g.node").data(nodes, function(d) {
-          return d.id || (d.id = ++i);
-        });
+        node = svgGroup
+          .selectAll("g.node")
+          .data(nodes.filter(n => n.name !== "Unknown Unknown"), function(d) {
+            return d.id || (d.id = ++i);
+          });
 
         // Enter any new nodes at the parent's previous position.
         var nodeEnter = node
@@ -427,7 +426,7 @@ export default {
           .attr("class", "nodeCircle")
           .attr("r", 0)
           .style("fill", function(d) {
-            return d._children ? "lightsteelblue" : "#fff";
+            return d._children ? "#FF8987" : "#fff";
           });
 
         nodeEnter
@@ -478,7 +477,7 @@ export default {
           .select("circle.nodeCircle")
           .attr("r", 4.5)
           .style("fill", function(d) {
-            return d._children ? "lightsteelblue" : "#fff";
+            return d._children ? "#FF8987" : "#fff";
           });
 
         // Transition nodes to their new position.
@@ -506,6 +505,7 @@ export default {
 
         nodeExit.select("text").style("fill-opacity", 0);
 
+        links = links.filter(l => l.source.name !== "Unknown Unknown");
         // Update the links…
         var link = svgGroup.selectAll("path.link").data(links, function(d) {
           return d.target.id;

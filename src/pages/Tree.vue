@@ -31,7 +31,7 @@ export default class Index extends Vue {
 
 .node circle {
     fill: #fff;
-    stroke: steelblue;
+    stroke: #ad2624;
     stroke-width: 1.5px;
 }
 
