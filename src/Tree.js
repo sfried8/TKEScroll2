@@ -1,6 +1,8 @@
 // Calculate total nodes, max label length
 import Brothers from "./Brothers";
-export default {
+var tree;
+const FamilyTree = {
+  tree: tree,
   render: function(center) {
     Brothers.getBrothers().then(brothers => {
       /*
@@ -62,11 +64,12 @@ export default {
       var domNode;
       var dragStarted;
       var nodes;
+      FamilyTree.nodes = nodes;
       // size of the diagram
       var viewerWidth = document.body.clientWidth;
       var viewerHeight = document.body.clientHeight - 50;
 
-      var tree = d3.layout.tree().size([viewerHeight, viewerWidth]);
+      tree = d3.layout.tree().size([viewerHeight, viewerWidth]);
 
       // define a d3 diagonal projection for use by the node paths later on.
       var diagonal = d3.svg.diagonal().projection(function(d) {
@@ -192,6 +195,7 @@ export default {
           }
           dragStarted = true;
           nodes = tree.nodes(d);
+          FamilyTree.nodes = nodes;
           d3.event.sourceEvent.stopPropagation();
           // it's important that we suppress the mouseover event on the node being dragged. Otherwise it will absorb the mouseover event and the underlying node will not detect it d3.select(this).attr('pointer-events', 'none');
         })
@@ -273,7 +277,7 @@ export default {
         updateTempConnector();
         if (draggingNode !== null) {
           update(root);
-          centerNode(draggingNode);
+          FamilyTree.centerNode(draggingNode);
           draggingNode = null;
         }
       }
@@ -333,7 +337,7 @@ export default {
 
       // Function to center node when clicked/dropped so node doesn't get lost when collapsing/moving with large amount of children.
 
-      function centerNode(source) {
+      FamilyTree.centerNode = function(source) {
         scale = zoomListener.scale();
         x = -source.y0;
         y = -source.x0;
@@ -348,7 +352,7 @@ export default {
           );
         zoomListener.scale(scale);
         zoomListener.translate([x, y]);
-      }
+      };
 
       // Toggle children function
 
@@ -369,7 +373,7 @@ export default {
         if (d3.event.defaultPrevented) return; // click suppressed
         d = toggleChildren(d);
         update(d);
-        centerNode(d);
+        FamilyTree.centerNode(d);
       }
 
       function update(source) {
@@ -543,6 +547,7 @@ export default {
           d.x0 = d.x;
           d.y0 = d.y;
         });
+        FamilyTree.nodes = nodes;
       }
 
       // Append a group which holds all nodes and which the zoom Listener can act upon.
@@ -555,7 +560,8 @@ export default {
 
       // Layout the tree initially and center on the root node.
       update(root);
-      centerNode(initialCenterNode || root);
+      FamilyTree.centerNode(initialCenterNode || root);
     });
   }
 };
+export default FamilyTree;

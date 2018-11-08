@@ -31,6 +31,7 @@ export default class Index extends Vue {}
   text-align: center;
   width: 80%;
   margin: auto;
+  height: 100%;
 }
 
 .logo {
@@ -39,6 +40,7 @@ export default class Index extends Vue {}
 }
 
 img {
-  width: 100%;
+  max-width: 100vw;
+  max-height: 65vh;
 }
 </style>

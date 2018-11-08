@@ -2,7 +2,7 @@
     <keep-alive>
         <!-- <div class="layout-padding"> -->
         <q-carousel ref="myCarousel" @slide="slideHandler" style="max-width:90vw;height:100%;">
-            <div slot="slide" style="padding:0;height:100%;" v-for="(Brother,index) in currentSlides" v-if="Brother" :key="index">
+            <q-carousel-slide style="padding:0;height:100%;" v-for="(Brother,index) in currentSlides" v-if="Brother" :key="index">
                 <q-card style="margin-top:30px;background:white">
                     <q-card-title>{{Brother.fname}} {{Brother.lname}}
                         <span slot="subtitle" v-if="Brother.officer">{{Brother.officer}}</span>
@@ -24,7 +24,7 @@
                     <q-icon name="arrow forward" />
                 </div>
 
-            </div>
+            </q-carousel-slide>
             <div style="visibility:hidden" slot="slide" v-else>
             </div>
 
@@ -56,6 +56,7 @@ import {
     QCarousel,
     QCard,
     QCardTitle,
+    QCarouselSlide,
     QCardMain
 } from "quasar";
 
@@ -75,6 +76,7 @@ import {
         QCarousel,
         QCardTitle,
         QCard,
+        QCarouselSlide,
         QCardMain
     },
     directives: {
