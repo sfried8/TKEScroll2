@@ -40,7 +40,6 @@ import createApp from './app.js'
 
 
 Vue.config.devtools = true
-Vue.config.performance = true
 Vue.config.productionTip = false
 
 

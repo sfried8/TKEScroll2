@@ -1,135 +1,149 @@
 <template>
-    <keep-alive>
-        <!-- <div class="layout-padding"> -->
-        <q-carousel ref="myCarousel" @slide="slideHandler" style="max-width:90vw;height:100%;">
-            <q-carousel-slide style="padding:0;height:100%;" v-for="(Brother,index) in currentSlides" v-if="Brother" :key="index">
-                <q-card style="margin-top:30px;background:white">
-                    <q-card-title>{{Brother.fname}} {{Brother.lname}}
-                        <span slot="subtitle" v-if="Brother.officer">{{Brother.officer}}</span>
-                    </q-card-title>
-                    <q-card-main>
-                        <p class="brother-page-line">{{Brother.scroll}}</p>
-                        <p class="brother-page-line brother-link" @click="$router.push('/pc/'+(Brother.isZetaTau ? 'ZT':'')+Brother.pc)">{{Brother.isZetaTau ? "Zeta Tau ":""}}Pledge Class {{Brother.pc}}</p>
-                        <p class="brother-page-line">{{Brother.nickname}}</p>
-                        <p class="brother-page-line brother-link" @click="$refs.myCarousel.goToSlide(Brother.big)">{{Brothers[Brother.big].fname + " " + Brothers[Brother.big].lname}}</p>
-                        <p class="brother-page-line" v-if="Brother.littles">Littles:</p>
-                        <ul v-if="Brother.littles">
-                            <li class="brother-page-line brother-link" v-for="l in Brother.littles" :key="l" @click="$refs.myCarousel.goToSlide(l)">{{Brothers[l].fname + " " + Brothers[l].lname}}</li>
-                        </ul>
-                        <button @click="viewInTree(Brother)">View in tree</button>
-                    </q-card-main>
-                </q-card>
-                <div v-if="showSwipe" leave-active-class="animated fadeOut" class="animated flash infinite" style="animation-duration:3s;margin:auto;text-align:center">
-                    <q-icon name="arrow back" />Swipe to navigate
-                    <q-icon name="arrow forward" />
-                </div>
+  <div style="width:100vw;height:80vh;overflow:hidden;">
+    <div
+      id="nextBrotherContainer"
+      :class="cardClass"
+      v-if="nextBrother"
+    >
+      <brother-page-content
+        :brothers="Brothers"
+        :brother="nextBrother"
+      />
+    </div>
+    <div
+      id="draggableWrapper"
+      :class="cardClass"
+      :style="cardPositioning"
+      v-if="currentBrother"
+      v-touch-pan.mightPrevent="panHandler"
+    >
+      <brother-page-content
+        :brothers="Brothers"
+        :brother="currentBrother"
+      />
+    </div>
 
-            </q-carousel-slide>
-            <div style="visibility:hidden" slot="slide" v-else>
-            </div>
-
-        </q-carousel>
-        <!-- </div> -->
-    </keep-alive>
+  </div>
 </template>
 
-<script lang="js">
+<script>
 import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
-import BrotherPageContent from "./BrotherPageContent.vue";
+import BrotherPageContent from "./BrotherPageContent";
 import {
-    dom,
-    event,
-    openURL,
-    QLayout,
-    QToolbar,
-    QToolbarTitle,
-    QBtn,
-    QIcon,
-    QList,
-    QListHeader,
-    QItem,
-    QItemSide,
-    QItemMain,
-    TouchSwipe,
-    QCarousel,
-    QCard,
-    QCardTitle,
-    QCarouselSlide,
-    QCardMain
+  dom,
+  event,
+  openURL,
+  QLayout,
+  QBtn,
+  QIcon,
+  TouchPan,
+  QCard,
+  QCardTitle,
+  QCardMain
 } from "quasar";
 
 @Component({
-    name: "brother-page",
-    components: {
-        QLayout,
-        QToolbar,
-        QToolbarTitle,
-        QBtn,
-        QIcon,
-        QList,
-        QListHeader,
-        QItem,
-        QItemSide,
-        QItemMain,
-        QCarousel,
-        QCardTitle,
-        QCard,
-        QCarouselSlide,
-        QCardMain
-    },
-    directives: {
-        TouchSwipe
-    }
+  name: "brother-page",
+  components: {
+    QLayout,
+    QBtn,
+    QIcon,
+    QCardTitle,
+    QCard,
+    QCardMain,
+    BrotherPageContent
+  },
+  directives: {
+    TouchPan
+  }
 })
 export default class Index extends Vue {
-    enterValue = "";
-    leaveValue = "animated slideOutLeft";
-    Brothers = [];
-    currentSlides = [];
-    firstTransition = true;
-    showSwipe = true;
-    mounted() {
-        console.log("mounting brother page");
-        Brothers.getBrothers().then(data => {
-            this.Brothers = data;
-            const index = +(this.$route.params.scroll || 0);
-            console.log(index);
-            this.currentSlides = this.Brothers.map((el, i) => {
-                const ret = i > index + 3 || i < index - 3 ? undefined : el;
-                return ret;
-            });
-            this.$nextTick(() => {
-                this.$refs.myCarousel.goToSlide(index);
-            });
-        });
+  Brothers = [];
+  currentBrother = null;
+  showSwipe = true;
+  cardPositionX = 0;
+  cardPositionY = 0;
+  mounted() {
+    Brothers.getBrothers().then(data => {
+      this.Brothers = data;
+      const index = +(this.$route.params.scroll || 0);
+      this.currentBrother = this.Brothers[this.$route.params.scroll];
+    });
+  }
+  startingPosition = { top: 0, left: 0 };
+  isDragging = false;
+  panHandler(obj) {
+    this.isDragging = true;
+    if (+obj.distance.x > 30 || +obj.distance.y > 30) {
+      obj.evt.preventDefault();
     }
-    slideHandler(index, direction) {
-        if (this.firstTransition) {
-            this.firstTransition = false;
-        } else {
-            this.showSwipe = false;
-        }
-        this.currentSlides = this.Brothers.map(
-            (el, i) => (i > index + 3 || i < index - 3 ? undefined : el)
-        );
+    if (obj.isFirst) {
+      this.startingPosition = obj.position;
+    } else if (obj.isFinal) {
+      if (
+        Math.abs(this.cardPositionX) > 250 ||
+        (Math.abs(this.cardPositionX) > 100 && +obj.duration < 300)
+      ) {
+        this.$router.push("/brother/" + this.nextBrother.scroll);
+      } else {
+        this.isDragging = false;
+      }
+      this.cardPositionX = 0;
+      this.cardPositionY = 0;
+    } else {
+      this.cardPositionX = obj.position.left - this.startingPosition.left;
+      this.cardPositionY = obj.position.top - this.startingPosition.top;
     }
-    viewInTree(b) {
-        this.$router.push("/tree?scroll=" + b.scroll);
-    }
+  }
+  get cardPositioning() {
+    return {
+      transform: `translate(calc(0% + ${this.cardPositionX}px),${
+        this.cardPositionY
+      }px)`
+    };
+  }
+  get cardClass() {
+    return (this.isDragging ? "" : "return-to-origin") + " card-container";
+  }
+  get nextBrother() {
+    const direction = this.cardPositionX < 0 ? 1 : -1;
+    return this.currentBrother
+      ? this.Brothers[+this.currentBrother.scroll + direction]
+      : null;
+  }
 }
 </script>
 
 <style lang="stylus">
+.return-to-origin {
+  transition: all 100ms ease-out;
+}
+
 .brother-page {
-    border-radius: 4px;
-    padding: 40px;
-    box-shadow: 0px 4px 20px 0px #888888;
-    background-color: #ffaaaa;
+  position: absolute;
+  border-radius: 4px;
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  background: #eee;
+  border: 1px #bbb solid;
+}
+
+#nextBrotherContainer {
+  box-shadow: 0px 4px 20px 0px #888888;
+}
+
+.card-container {
+  position: absolute;
+  height: 80%;
+  top: 10%;
+  width: 80%;
+  left: 10%;
 }
 
 .brother-page-line {
-    font-weight: 300;
+  font-weight: 300;
 }
 </style>

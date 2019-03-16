@@ -6,7 +6,6 @@ import BrotherPage from "./components/BrotherPage.vue";
 import Scroll from "./components/Scroll.vue";
 import Search from "./components/SearchBrothers.vue";
 import MainView from "./components/MainView.vue";
-import BrotherPageContent from "./components/BrotherPageContent.vue";
 import PCPage from "./components/PCPage.vue";
 import HistorBase from "./components/HistorBase.vue";
 import Eboard from "./components/Eboard.vue";
