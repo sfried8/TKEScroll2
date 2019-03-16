@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100vw;height:80vh;overflow:hidden;">
+  <div class="layout-padding">
     <div
       id="nextBrotherContainer"
       :class="cardClass"
@@ -28,6 +28,7 @@
 
 <script>
 import Vue from "vue";
+import Util from "../Util";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import BrotherPageContent from "./BrotherPageContent";
@@ -76,7 +77,7 @@ export default class Index extends Vue {
   isDragging = false;
   panHandler(obj) {
     this.isDragging = true;
-    if (+obj.distance.x > 30 || +obj.distance.y > 30) {
+    if (+obj.distance.x > 30 || +obj.distance.y > 30 || +obj.duration > 500) {
       obj.evt.preventDefault();
     }
     if (obj.isFirst) {
@@ -94,7 +95,10 @@ export default class Index extends Vue {
       this.cardPositionY = 0;
     } else {
       this.cardPositionX = obj.position.left - this.startingPosition.left;
-      this.cardPositionY = obj.position.top - this.startingPosition.top;
+      this.cardPositionY =
+        100 *
+          Util.sigmoid((obj.position.top - this.startingPosition.top) / 100) -
+        50;
     }
   }
   get cardPositioning() {
