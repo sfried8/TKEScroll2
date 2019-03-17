@@ -71,6 +71,7 @@ export default class Index extends Vue {
       this.Brothers = data;
       const index = +(this.$route.params.scroll || 0);
       this.currentBrother = this.Brothers[this.$route.params.scroll];
+      this._nextBrother = this.Brothers[this.currentBrother.scroll + 1];
     });
   }
   startingPosition = { top: 0, left: 0 };
@@ -84,8 +85,9 @@ export default class Index extends Vue {
       this.startingPosition = obj.position;
     } else if (obj.isFinal) {
       if (
-        Math.abs(this.cardPositionX) > 250 ||
-        (Math.abs(this.cardPositionX) > 100 && +obj.duration < 300)
+        this.nextBrother &&
+        (Math.abs(this.cardPositionX) > 250 ||
+          (Math.abs(this.cardPositionX) > 100 && +obj.duration < 300))
       ) {
         this.$router.push("/brother/" + this.nextBrother.scroll);
       } else {
@@ -100,21 +102,28 @@ export default class Index extends Vue {
           Util.sigmoid((obj.position.top - this.startingPosition.top) / 100) -
         50;
     }
+    if (this.cardPositionX !== 0) {
+      this.direction = this.cardPositionX < 0 ? 1 : -1;
+    }
   }
   get cardPositioning() {
     return {
       transform: `translate(calc(0% + ${this.cardPositionX}px),${
         this.cardPositionY
-      }px)`
+      }px)`,
+      opacity: Math.max(
+        0,
+        1 - Math.max(Math.abs(this.cardPositionX) - 100, 0) / 150
+      )
     };
   }
   get cardClass() {
     return (this.isDragging ? "" : "return-to-origin") + " card-container";
   }
+  direction = 1;
   get nextBrother() {
-    const direction = this.cardPositionX < 0 ? 1 : -1;
     return this.currentBrother
-      ? this.Brothers[+this.currentBrother.scroll + direction]
+      ? this.Brothers[+this.currentBrother.scroll + this.direction]
       : null;
   }
 }
@@ -131,7 +140,7 @@ export default class Index extends Vue {
   width: 100%;
   height: 100%;
   padding: 40px;
-  background: #eee;
+  background: #fff;
   border: 1px #bbb solid;
 }
 

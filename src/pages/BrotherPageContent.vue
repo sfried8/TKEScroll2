@@ -1,11 +1,11 @@
 <template>
   <div class="brother-page">
+    <div class="brother-page-line">{{brother.scroll}}</div>
     <h4>{{brother.fname}} {{brother.lname}}</h4><br>
-    <div class="brother-page-line">{{brother.scroll}}</div><br>
     <div
       class="brother-page-line brother-link"
       @click="$router.push('/pc/'+(brother.isZetaTau ? 'ZT':'')+brother.pc)"
-    >{{brother.isZetaTau ? "Zeta Tau ":""}}Pledge Class {{brother.pc}}</div><br>
+    >{{PC}}</div><br>
     <div class="brother-page-line">{{brother.nickname}}</div><br>
     <div
       class="brother-page-line brother-link"
@@ -33,6 +33,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
+import Util from "../Util";
 import { dom, event, openURL, TouchSwipe } from "quasar";
 
 @Component({
@@ -53,6 +54,9 @@ export default class Index extends Vue {
     return this.brother
       ? this.brothers.filter(b => b.big == this.brother.scroll)
       : [];
+  }
+  get PC() {
+    return Util.pledgeClassName(this.brother.pc, this.brother.isZetaTau);
   }
   viewInTree(b) {
     this.$router.push("/tree?scroll=" + b.scroll);

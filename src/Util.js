@@ -17,5 +17,14 @@ export default {
   throttle: function (func, minimumTimeInMillis) {
     return Promise.all([func, this.pause(minimumTimeInMillis)]);
   },
-  sigmoid: t => 1 / (1 + Math.pow(Math.E, -t))
+  sigmoid: t => 1 / (1 + Math.pow(Math.E, -5 * t)),
+  pledgeClassName: (pc, isZetaTau, plural) => {
+    if (pc === 0) {
+      return "Pledge Class Unknown"
+    }
+    if (pc === 999 && isZetaTau) {
+      return "Zeta Tau Founder" + (plural ? "s" : "")
+    }
+    return (isZetaTau ? "Zeta Tau " : "") + "Pledge Class " + pc;
+  }
 };
