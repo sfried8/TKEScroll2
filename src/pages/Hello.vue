@@ -1,10 +1,7 @@
 <template>
   <div class="layout-padding">
     <div class="hello">
-      <p>
-        Welcome to the scroll website for the Xi-Upsilon Chapter of Tau Kappa Epsilon!
-      </p>
-      <img src="~/assets/lem.png" />
+      <img src="~/assets/lemwithspeechbubble.png" />
     </div>
   </div>
 </template>
@@ -42,6 +39,6 @@ export default class Index extends Vue {}
 }
 
 img {
-  width: 50%;
+  width: 100%;
 }
 </style>

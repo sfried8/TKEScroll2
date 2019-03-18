@@ -164,7 +164,7 @@ export default class Index extends Vue {
 
 <style lang="stylus">
 body {
-  background: #eee;
+  background: #fff;
 }
 
 .brother-link {
