@@ -1,1 +1,12 @@
 // app global css
+$desired-color = #ffddcc
+.q-if
+    .q-input-target-placeholder
+        color $desired-color !important
+    .q-input-target
+        &::-webkit-input-placeholder /* Chrome/Opera/Safari */
+            color $desired-color !important
+        &::-moz-placeholder
+            color $desired-color !important
+        &:-ms-input-placeholder
+            color $desired-color !important

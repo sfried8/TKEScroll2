@@ -10,7 +10,7 @@
       <q-toolbar>
         <q-btn
           flat
-          @click="left = !left"
+          @click.native="left = !left"
         >
           <q-icon name="menu"></q-icon>
         </q-btn>
@@ -63,7 +63,7 @@
             sublabel="Add/Edit brothers and Officers"
           ></q-item-main>
         </q-item>
-        <q-item @click="clearCache">
+        <q-item @click.native="clearCache">
           <q-item-side icon="delete"></q-item-side>
           <q-item-main label="Clear Cache"></q-item-main>
         </q-item>
@@ -149,6 +149,7 @@ export default class Index extends Vue {
     }
     clearCache() {
         Brothers.clearCache();
+        this.$router.push("/firsttime");
     }
     mounted() {
           document.querySelector(".q-layout").style.minHeight = window.innerHeight+"px"

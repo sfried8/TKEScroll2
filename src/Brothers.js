@@ -124,6 +124,7 @@ export default {
   clearCache() {
     LocalStorage.remove("brothers");
     LocalStorage.remove("brothersPassword");
+    console.log("deleted cache")
     Notify.create("Deleted cache");
   }
 };

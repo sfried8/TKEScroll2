@@ -1,18 +1,54 @@
 <template>
   <div>
-    <q-toolbar
-      slot="header"
-      class=""
+    <div
+      class="layout-padding"
+      :style="{'height':height + 'px'}"
     >
-      <q-toolbar-title>
-        Tau Kappa Epsilon
-        <div slot="subtitle">Xi-Upsilon</div>
-      </q-toolbar-title>
-    </q-toolbar>
-    <div class="layout-padding">
-      I am a...
-      <q-btn @click="promptForPassword(false)">Brother or Sweetheart</q-btn>
-      <q-btn @click="fakeData">Guest</q-btn>
+      <img
+        id="triangleimg"
+        src="~/assets/tketriangle.png"
+      />
+      <q-field
+        :warning="invalidPassword"
+        warning-label="invalid password"
+        color="orange"
+        :before="invalidPassword ? [
+    {
+      icon: 'error',
+      handler () {
+        // do something...
+      }
+    }
+  ]:[]"
+      >
+        <q-input
+          type="password"
+          color="white"
+          dark
+          autofocus
+          :loading="loading"
+          v-model="password"
+          placeholder="Password"
+        />
+      </q-field>
+      <br />
+      <q-btn
+        size="form-label-inverted"
+        color="white"
+        text-color="primary"
+        align="center"
+        class="full-width"
+        @click="submit()"
+      >Sign in</q-btn>
+      <br />
+      <div style="margin-top:50px">
+        Don't know the password? <br />Ask the Histor or <b
+          style="color:white; text-decoration:underline; cursor:pointer;"
+          @click="fakeData"
+        >continue as guest</b>
+      </div>
+      <!-- <q-btn @click="promptForPassword(false)">Brother or Sweetheart</q-btn> -->
+      <!-- <q-btn @click="fakeData">Guest</q-btn> -->
 
     </div>
   </div>
@@ -23,22 +59,30 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import {
-    QToolbar,
-    QToolbarTitle,
     QBtn,
     Dialog,
+    QInput,
+    QField,
     LocalStorage
 } from "quasar";
 
 @Component({
     name: "first-time",
     components: {
-        QToolbar,
-        QToolbarTitle,
-        QBtn
+        QBtn,
+        QInput,
+        QField
     }
 })
 export default class Index extends Vue {
+    height=0;
+    password = ""
+    loading = false
+    invalidPassword = false;
+    mounted() {
+      this.height = window.innerHeight;
+      document.querySelector("input").style.color = "#ffddcc";
+    }
     fakeData() {
                 this.$q.dialog({
             title: "Continue as guest?",
@@ -53,6 +97,20 @@ export default class Index extends Vue {
                         this.$router.push("/");
                     }).catch(()=>console.log("cancelled"));
 
+    }
+    submit() {
+      this.loading = true;
+      this.invalidPassword = false
+      Brothers.authenticate(this.password).then(data => {
+        this.loading = false
+                            if (data.role === "GUEST") {
+                                this.password = ""
+                                this.invalidPassword = true
+                            } else {
+                                LocalStorage.set("brothersPassword", this.password);
+                                this.$router.push("/");
+                            }
+                        });
     }
     promptForPassword(retry = false) {
         let attempt = null;
@@ -86,8 +144,23 @@ export default class Index extends Vue {
 }
 </script>
 
-<style lang="stylus">
-.layout-page-container {
-  padding-left: 0 !important;
+<style lang="stylus" scoped>
+.layout-padding {
+  background-image: radial-gradient(circle, #AD4644, #AD2624);
+  color: #FFddcc;
+}
+
+input::placeholder {
+  color: white;
+}
+
+.q-if-label-inner {
+  color: white !important;
+}
+
+#triangleimg {
+  width: 80%;
+  display: block;
+  margin: auto;
 }
 </style>
