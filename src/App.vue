@@ -9,14 +9,16 @@
 <script lang='js'>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-
+import {QWindowResizeObservable} from 'quasar'
 /*
  * Root component, but defined as a typescript decorated class
  */
-@Component({})
+@Component({components:{QWindowResizeObservable}})
 export default class App extends Vue {
+  windowSize
   onResize(size) {
-    $store.state.windowSize = size
+    document.querySelector(".q-layout").style.minHeight = size.height+"px"
+    document.body.style.minHeight = size.height+"px"
   }
 }
 </script>

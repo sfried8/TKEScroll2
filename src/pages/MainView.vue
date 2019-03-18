@@ -150,6 +150,10 @@ export default class Index extends Vue {
     clearCache() {
         Brothers.clearCache();
     }
+    mounted() {
+          document.querySelector(".q-layout").style.minHeight = window.innerHeight+"px"
+    document.body.style.minHeight = window.innerHeight+"px"
+    }
     beforeMount() {
         if (!LocalStorage.has("brothersPassword")) {
             this.$router.push("/firsttime");
