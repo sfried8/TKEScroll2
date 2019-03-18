@@ -14,10 +14,16 @@
             separator
             link
           >
-            <q-item @click.native="sortOption = 'scrollasc', $refs.popover.close()">
+            <q-item
+              v-close-overlay
+              @click.native="sortOption = 'scrollasc'"
+            >
               Scroll Asc
             </q-item>
-            <q-item @click.native="sortOption = 'scrollsc', $refs.popover.close()">
+            <q-item
+              v-close-overlay
+              @click.native="sortOption = 'scrollsc'"
+            >
               Scroll Desc
             </q-item>
           </q-list>
@@ -32,29 +38,45 @@
       type="text"
       float-label="filter"
     />
-    <q-list
+
+    <!-- <q-list
       style="background:white"
       separator
+    > -->
+    <RecycleScroller
+      :items="filteredBrothers"
+      :item-size="20"
+      key-field="string"
+      content-tag="div"
     >
-      <q-item
-        v-for="b in filteredBrothers"
-        :key="b.original.scroll"
-        @click.native="$router.push({ path: `/brother/${b.original.scroll}` }) "
-      >
-        <q-item-side>
-          {{b.original.scroll}}
-          <q-icon :name="getIconForOfficer(b.original.officer)"></q-icon>
-        </q-item-side>
-        <q-item-main :label="b.string"></q-item-main>
-      </q-item>
-      <q-item v-if="filteredBrothers.length == 0">
-        <q-item-main label="No Results Found!"></q-item-main>
-      </q-item>
-    </q-list>
+      <template slot-scope="props">
+        <q-item @click.native="$router.push({ path: `/brother/${props.item.original.scroll}` }) ">
+          <q-item-side>
+            {{props.item.original.scroll}}
+            <q-icon :name="getIconForOfficer(props.item.original.officer)"></q-icon>
+          </q-item-side>
+          <q-item-main :label="props.item.string"></q-item-main>
+        </q-item>
 
-    <!-- <q-fixed-position corner="top-right" :offset="[18, 18]">
-            <q-btn v-back-to-top.animate="{offset: 500, duration: 200}" round color="primary" class="animate-pop" style="animation-duration: .5s;" icon="keyboard_arrow_up" />
-        </q-fixed-position> -->
+      </template>
+    </RecycleScroller>
+    <q-item v-if="filteredBrothers.length == 0">
+      <q-item-main label="No Results Found!"></q-item-main>
+    </q-item>
+    <!-- </q-list> -->
+    <q-page-sticky
+      position="bottom-right"
+      :offset="[18, 18]"
+    >
+      <q-btn
+        v-back-to-top.animate="{offset: 500, duration: 200}"
+        round
+        color="primary"
+        class="animate-pop"
+        style="animation-duration: .5s;"
+        icon="keyboard_arrow_up"
+      />
+    </q-page-sticky>
   </div>
 </template>
 
@@ -62,6 +84,7 @@
 import Fuzzy from "fuzzy";
 import Vue from "vue";
 import Component from "vue-class-component";
+import {RecycleScroller} from "vue-virtual-scroller";
 import Brothers from "../Brothers";
 import {
     dom,
@@ -80,7 +103,9 @@ import {
     BackToTop,
     QSelect,
     QInput,
-    QPopover
+    QPopover,
+    QPageSticky,
+    CloseOverlay
 } from "quasar";
 
 @Component({
@@ -98,10 +123,13 @@ import {
         QItemMain,
         QSelect,
         QInput,
-        QPopover
+        QPageSticky,
+        QPopover,
+        RecycleScroller
     },
     directives: {
-        BackToTop
+        BackToTop,
+        CloseOverlay
     }
 })
 export default class Index extends Vue {
@@ -131,7 +159,7 @@ export default class Index extends Vue {
             pre: "<b>",
             post: "</b>",
             extract: el => el.fname + " " + el.lname
-        });
+        }).map(b=>({...b,id:b.original.scroll}));
     }
     get Brothers() {
         return this.sortOption === "scrollasc"

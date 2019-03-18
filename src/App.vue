@@ -17,7 +17,10 @@ import {QWindowResizeObservable} from 'quasar'
 export default class App extends Vue {
   windowSize
   onResize(size) {
-    document.querySelector(".q-layout").style.minHeight = size.height+"px"
+    const layoutElement = document.querySelector(".q-layout");
+    if (layoutElement) {
+      layoutElement.style.minHeight = size.height+"px"
+    }
     document.body.style.minHeight = size.height+"px"
   }
 }

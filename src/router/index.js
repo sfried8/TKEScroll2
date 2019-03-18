@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
+import VueVirtualScroller from "vue-virtual-scroller";
 
+Vue.use(VueVirtualScroller);
 import routes from './routes'
 
 Vue.use(VueRouter)
