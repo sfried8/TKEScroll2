@@ -1,6 +1,7 @@
 <template>
   <!-- Don't drop 'q-app' class -->
   <div id='q-app'>
+    <q-window-resize-observable @resize="onResize" />
     <router-view></router-view>
   </div>
 </template>
@@ -8,12 +9,18 @@
 <script lang='js'>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-
+import {QWindowResizeObservable} from 'quasar'
 /*
  * Root component, but defined as a typescript decorated class
  */
-@Component({})
-export default class App extends Vue {}
+@Component({components:{QWindowResizeObservable}})
+export default class App extends Vue {
+  windowSize
+  onResize(size) {
+    document.querySelector(".q-layout").style.minHeight = size.height+"px"
+    document.body.style.minHeight = size.height+"px"
+  }
+}
 </script>
 
 <style>
