@@ -1,9 +1,14 @@
 <template>
   <div class="layout-padding">
     <div class="pc-page">
-      <h4>{{isZT ? "Zeta Tau ":""}}Pledge Class {{pc}}</h4><br>
+      <h4>{{PCName}}</h4><br>
 
-      <div class="pc-page-line brother-link" v-for="pb in PBros" @click="$router.push('/brother/'+pb.scroll)" :key="pb.scroll">{{pb.scroll}}. {{pb.fname}} {{pb.lname}}</div>
+      <div
+        class="pc-page-line brother-link"
+        v-for="pb in PBros"
+        @click="$router.push('/brother/'+pb.scroll)"
+        :key="pb.scroll"
+      >{{pb.scroll}}. {{pb.fname}} {{pb.lname}}</div>
 
     </div>
   </div>
@@ -14,6 +19,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
+import Util from "../Util"
 import {
   dom,
   event,
@@ -65,6 +71,9 @@ export default class Index extends Vue {
     return this.Brothers.filter(
       el => el.pc === this.pc && el.isZetaTau === this.isZT
     );
+  }
+  get PCName() {
+    return Util.pledgeClassName(this.pc,this.isZT,true)
   }
 }
 </script>

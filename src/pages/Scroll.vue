@@ -1,41 +1,61 @@
 <template>
 
-    <div class="layout-padding">
-        <div>
-            <q-btn icon="sort" class="float-right" flat ref="target">
-                SORT BY
-                <q-popover ref="popover">
-                    <q-list separator link>
-                        <q-item @click="sortOption = 'scrollasc', $refs.popover.close()">
-                            Scroll Asc
-                        </q-item>
-                        <q-item @click="sortOption = 'scrollsc', $refs.popover.close()">
-                            Scroll Desc
-                        </q-item>
-                    </q-list>
-
-                </q-popover>
-            </q-btn>
-
-        </div>
-        <q-input clearable v-model="currentFilter" type="text" float-label="filter" />
-        <q-list style="background:white" separator>
-            <q-item v-for="b in filteredBrothers" :key="b.original.scroll" @click="$router.push({ path: `/brother/${b.original.scroll}` }) ">
-                <q-item-side>
-                    {{b.original.scroll}}
-                    <q-icon :name="getIconForOfficer(b.original.officer)"></q-icon>
-                </q-item-side>
-                <q-item-main :label="b.string"></q-item-main>
+  <div class="layout-padding">
+    <div>
+      <q-btn
+        icon="sort"
+        class="float-right"
+        flat
+        ref="target"
+      >
+        SORT BY
+        <q-popover ref="popover">
+          <q-list
+            separator
+            link
+          >
+            <q-item @click.native="sortOption = 'scrollasc', $refs.popover.close()">
+              Scroll Asc
             </q-item>
-            <q-item v-if="filteredBrothers.length == 0">
-                <q-item-main label="No Results Found!"></q-item-main>
+            <q-item @click.native="sortOption = 'scrollsc', $refs.popover.close()">
+              Scroll Desc
             </q-item>
-        </q-list>
+          </q-list>
 
-        <!-- <q-fixed-position corner="top-right" :offset="[18, 18]">
+        </q-popover>
+      </q-btn>
+
+    </div>
+    <q-input
+      clearable
+      v-model="currentFilter"
+      type="text"
+      float-label="filter"
+    />
+    <q-list
+      style="background:white"
+      separator
+    >
+      <q-item
+        v-for="b in filteredBrothers"
+        :key="b.original.scroll"
+        @click.native="$router.push({ path: `/brother/${b.original.scroll}` }) "
+      >
+        <q-item-side>
+          {{b.original.scroll}}
+          <q-icon :name="getIconForOfficer(b.original.officer)"></q-icon>
+        </q-item-side>
+        <q-item-main :label="b.string"></q-item-main>
+      </q-item>
+      <q-item v-if="filteredBrothers.length == 0">
+        <q-item-main label="No Results Found!"></q-item-main>
+      </q-item>
+    </q-list>
+
+    <!-- <q-fixed-position corner="top-right" :offset="[18, 18]">
             <q-btn v-back-to-top.animate="{offset: 500, duration: 200}" round color="primary" class="animate-pop" style="animation-duration: .5s;" icon="keyboard_arrow_up" />
         </q-fixed-position> -->
-    </div>
+  </div>
 </template>
 
 <script lang="js">

@@ -1,8 +1,17 @@
 <template>
-  <q-layout view="hHh Lpr fff" :left-class="{'bg-grey-2': true}">
-    <q-layout-header v-model="header" :reveal="true">
+  <q-layout
+    view="hHh Lpr fff"
+    :left-class="{'bg-grey-2': true}"
+  >
+    <q-layout-header
+      v-model="header"
+      :reveal="true"
+    >
       <q-toolbar>
-        <q-btn flat @click="left = !left">
+        <q-btn
+          flat
+          @click.native="left = !left"
+        >
           <q-icon name="menu"></q-icon>
         </q-btn>
 
@@ -12,8 +21,15 @@
         </q-toolbar-title>
       </q-toolbar>
     </q-layout-header>
-    <q-layout-drawer side="left" v-model="left">
-      <q-list no-border link inset-delimiter>
+    <q-layout-drawer
+      side="left"
+      v-model="left"
+    >
+      <q-list
+        no-border
+        link
+        inset-delimiter
+      >
         <q-list-header>Navigation</q-list-header>
         <q-item to="/">
           <q-item-side icon="home"></q-item-side>
@@ -21,21 +37,33 @@
         </q-item>
         <q-item to="/scroll">
           <q-item-side icon="group"></q-item-side>
-          <q-item-main label="Scroll" sublabel="View all brothers"></q-item-main>
+          <q-item-main
+            label="Scroll"
+            sublabel="View all brothers"
+          ></q-item-main>
         </q-item>
         <q-item to="/eboard">
           <q-item-side icon="gavel"></q-item-side>
-          <q-item-main label="E-Board" sublabel="View current officers"></q-item-main>
+          <q-item-main
+            label="E-Board"
+            sublabel="View current officers"
+          ></q-item-main>
         </q-item>
         <q-item to="/tree">
           <q-item-side icon="line style"></q-item-side>
-          <q-item-main label="Tree" sublabel="View the chapter family tree"></q-item-main>
+          <q-item-main
+            label="Tree"
+            sublabel="View the chapter family tree"
+          ></q-item-main>
         </q-item>
         <q-item to="/histor">
           <q-item-side icon="settings"></q-item-side>
-          <q-item-main label="Histor Control Panel" sublabel="Add/Edit brothers and Officers"></q-item-main>
+          <q-item-main
+            label="Histor Control Panel"
+            sublabel="Add/Edit brothers and Officers"
+          ></q-item-main>
         </q-item>
-        <q-item @click="clearCache">
+        <q-item @click.native="clearCache">
           <q-item-side icon="delete"></q-item-side>
           <q-item-main label="Clear Cache"></q-item-main>
         </q-item>
@@ -49,7 +77,7 @@
       -->
     <q-page-container>
 
-      <router-view style="position:absolute; min-width:100%;" :key="$route.path" />
+      <router-view :key="$route.path" />
     </q-page-container>
   </q-layout>
 </template>
@@ -121,6 +149,11 @@ export default class Index extends Vue {
     }
     clearCache() {
         Brothers.clearCache();
+        this.$router.push("/firsttime");
+    }
+    mounted() {
+          document.querySelector(".q-layout").style.minHeight = window.innerHeight+"px"
+    document.body.style.minHeight = window.innerHeight+"px"
     }
     beforeMount() {
         if (!LocalStorage.has("brothersPassword")) {
@@ -138,25 +171,10 @@ body {
 .brother-link {
   color: blue;
   text-decoration: underline;
-  text-decoration-style: dotted;
   cursor: pointer;
 
   div {
     width: 95%;
   }
 }
-
-/*
-.page-content {
-display: flex;
-position: relative;
-flex-direction: row;
-width: 100%;
-min-height: 60vh;
-}
-.page-content > * {
-position: relative;
-min-width: 100%;
-margin-right: -100%;
-} */
 </style>
