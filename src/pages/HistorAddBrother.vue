@@ -1,34 +1,76 @@
 <template>
-    <div class="layout-padding" @keyup.enter="submit">
-        <q-field>
-            <div class="row no-wrap">
-                <q-input v-model="scroll" class="rightmargin" float-label="Scroll" type="number" />
-                <q-input v-model="pc" float-label="Pledge Class" type="number" />
-            </div>
-        </q-field>
+  <div
+    class="layout-padding"
+    @keyup.enter="submit"
+  >
+    <q-field>
+      <div class="row no-wrap">
+        <q-input
+          v-model="scroll"
+          class="rightmargin"
+          float-label="Scroll"
+          type="number"
+        />
+        <q-input
+          v-model="pc"
+          float-label="Pledge Class"
+          type="number"
+        />
+      </div>
+    </q-field>
 
-        <q-field>
-            <div class="row no-wrap">
-                <q-input v-model="fname" class="rightmargin" float-label="First Name" />
-                <q-input v-model="lname" float-label="Last Name" />
-            </div>
-        </q-field>
+    <q-field>
+      <div class="row no-wrap">
+        <q-input
+          v-model="fname"
+          class="rightmargin"
+          float-label="First Name"
+        />
+        <q-input
+          v-model="lname"
+          float-label="Last Name"
+        />
+      </div>
+    </q-field>
 
-        <q-input v-model="nickname" float-label="Nickname" />
+    <q-input
+      v-model="nickname"
+      float-label="Nickname"
+    />
 
-        <q-input v-model="big" placeholder="Big Brother">
-            <q-autocomplete @search="search" :filter="myfilter" @selected="selected" />
-        </q-input>
+    <q-input
+      v-model="big"
+      placeholder="Big Brother"
+    >
+      <q-autocomplete
+        @search="search"
+        :filter="myfilter"
+        @selected="selected"
+      />
+    </q-input>
 
-        <q-toggle v-model="active" label="Active" />
-        <br/>
-        <q-btn @click="submit" icon="add">Add Brother</q-btn>
-        <br/><br/>
-        <div v-for="b in pendingBrothers" :key="b.scroll">
-            {{b.scroll}}. {{b.fname}} {{b.lname}} - {{b.nickname}}
-        </div>
-        <q-btn @click="addAll" icon="add" :disable="pendingBrothers.length < 1">Add {{pendingBrothers.length}} brother{{pendingBrothers.length != 1 ? "s" : ""}}</q-btn>
+    <q-toggle
+      v-model="active"
+      label="Active"
+    />
+    <br />
+    <q-btn
+      @click="submit"
+      icon="add"
+    >Add Brother</q-btn>
+    <br /><br />
+    <div
+      v-for="b in pendingBrothers"
+      :key="b.scroll"
+    >
+      {{b.scroll}}. {{b.fname}} {{b.lname}} - {{b.nickname}}
     </div>
+    <q-btn
+      @click="addAll"
+      icon="add"
+      :disable="pendingBrothers.length < 1"
+    >Add {{pendingBrothers.length}} brother{{pendingBrothers.length != 1 ? "s" : ""}}</q-btn>
+  </div>
 </template>
 
 <script lang="js">
@@ -43,7 +85,6 @@ import {
     QInput,
     QToggle,
     QField,
-    QAutocomplete,
 
 } from "quasar";
 async function parseBrothers() {
@@ -67,7 +108,6 @@ const DEBUG = true;
         QField,
         QBtn,
         QIcon,
-        QAutocomplete,
         QInput,
         QToggle
     }
@@ -164,7 +204,7 @@ export default class Index extends Vue {
 
 <style scoped>
 .rightmargin {
-    width: 48%;
-    margin-right: 4%;
+  width: 48%;
+  margin-right: 4%;
 }
 </style>

@@ -8,29 +8,19 @@
         id="triangleimg"
         src="~/assets/tketriangle.png"
       />
-      <q-field
-        :warning="invalidPassword"
-        warning-label="invalid password"
-        color="orange"
-        :before="invalidPassword ? [
-    {
-      icon: 'error',
-      handler () {
-        // do something...
-      }
-    }
-  ]:[]"
+
+      <q-input
+        type="password"
+        color="white"
+        :error="invalidPassword"
+        bottom-slots
+        autofocus
+        :loading="loading"
+        v-model="password"
+        placeholder="Password"
       >
-        <q-input
-          type="password"
-          color="white"
-          dark
-          autofocus
-          :loading="loading"
-          v-model="password"
-          placeholder="Password"
-        />
-      </q-field>
+        <template v-slot:error>invalid password</template>
+      </q-input>
       <br />
       <q-btn
         size="form-label-inverted"
@@ -60,7 +50,6 @@ import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import {
     QBtn,
-    Dialog,
     QInput,
     QField,
     LocalStorage
@@ -92,10 +81,10 @@ export default class Index extends Vue {
                 cancel:true
 
             
-        }).then(() => {
+        }).onOk(() => {
                         LocalStorage.set("brothersPassword", "GUEST");
                         this.$router.push("/");
-                    }).catch(()=>console.log("cancelled"));
+                    }).onCancel(()=>console.log("cancelled"));
 
     }
     submit() {

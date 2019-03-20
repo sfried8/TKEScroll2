@@ -1,37 +1,84 @@
 <template>
-    <div class="layout-padding" @keyup.enter="submit">
-        <q-input v-show="scroll==0" v-model="currentBrother" placeholder="Brother to edit">
-            <q-autocomplete @search="search" :filter="myfilter" @selected="selectedBrotherToEdit" />
-        </q-input>
-        <div v-show="scroll != 0">
-            <h5>{{currentBrother}}</h5>
-            <span @click="scroll=0" id="changeButton">change</span>
-            <q-field>
+  <div
+    class="layout-padding"
+    @keyup.enter="submit"
+  >
+    <q-input
+      v-show="scroll==0"
+      v-model="currentBrother"
+      placeholder="Brother to edit"
+    >
+      <q-autocomplete
+        @search="search"
+        :filter="myfilter"
+        @selected="selectedBrotherToEdit"
+      />
+    </q-input>
+    <div v-show="scroll != 0">
+      <h5>{{currentBrother}}</h5>
+      <span
+        @click="scroll=0"
+        id="changeButton"
+      >change</span>
+      <q-field>
 
-                <div class="row no-wrap">
+        <div class="row no-wrap">
 
-                    <q-input v-model="scroll" class="rightmargin" float-label="Scroll" type="number" />
-                    <q-input v-model="pc" float-label="Pledge Class" type="number" />
-                </div>
-            </q-field>
-            <q-field>
-
-                <div class="row no-wrap">
-
-                    <q-input v-model="fname" class="rightmargin" float-label="First Name" />
-                    <q-input v-model="lname" float-label="Last Name" />
-                </div>
-            </q-field>
-            <q-input v-model="nickname" float-label="Nickname" />
-            <q-input v-model="big" placeholder="Big Brother">
-                <q-autocomplete @search="search" :filter="myfilter" @selected="selected" />
-            </q-input>
-            <q-toggle v-model="active" label="Active" />
-            <br/><br/><br/>
-            <q-btn @click="submit" color="positive" icon="add">Update Brother</q-btn>
-            <br/><br/>
+          <q-input
+            v-model="scroll"
+            class="rightmargin"
+            float-label="Scroll"
+            type="number"
+          />
+          <q-input
+            v-model="pc"
+            float-label="Pledge Class"
+            type="number"
+          />
         </div>
+      </q-field>
+      <q-field>
+
+        <div class="row no-wrap">
+
+          <q-input
+            v-model="fname"
+            class="rightmargin"
+            float-label="First Name"
+          />
+          <q-input
+            v-model="lname"
+            float-label="Last Name"
+          />
+        </div>
+      </q-field>
+      <q-input
+        v-model="nickname"
+        float-label="Nickname"
+      />
+      <q-input
+        v-model="big"
+        placeholder="Big Brother"
+      >
+        <q-autocomplete
+          @search="search"
+          :filter="myfilter"
+          @selected="selected"
+        />
+      </q-input>
+      <q-toggle
+        v-model="active"
+        label="Active"
+      />
+      <br /><br /><br />
+      <q-btn
+        @click="submit"
+        color="positive"
+        icon="add"
+      >Update Brother</q-btn>
+      <br /><br />
     </div>
+  </div>
 </template>
 
 <script lang="js">
@@ -50,18 +97,12 @@ import {
     QBtn,
     QIcon,
     QList,
-    QListHeader,
     QItem,
-    QItemSide,
-    QItemMain,
-    BackToTop,
     QSelect,
     QInput,
     Loading,
     QToggle,
     QField,
-    QAutocomplete,
-    QPopover
 } from "quasar";
 async function parseBrothers() {
     const result = [];
@@ -87,18 +128,10 @@ async function parseBrothers() {
         QBtn,
         QIcon,
         QList,
-        QListHeader,
         QItem,
-        QAutocomplete,
-        QItemSide,
-        QItemMain,
         QSelect,
         QInput,
         QToggle,
-        QPopover
-    },
-    directives: {
-        BackToTop
     }
 })
 export default class Index extends Vue {
@@ -178,16 +211,16 @@ export default class Index extends Vue {
 
 <style scoped>
 .rightmargin {
-    width: 48%;
-    margin-right: 4%;
+  width: 48%;
+  margin-right: 4%;
 }
 #changeButton {
-    text-decoration: underline;
-    color: #444;
-    cursor: pointer;
+  text-decoration: underline;
+  color: #444;
+  cursor: pointer;
 }
 h5 {
-    display: inline-block;
+  display: inline-block;
 }
 </style>
 

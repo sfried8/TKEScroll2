@@ -30,10 +30,7 @@ import {
   QBtn,
   QIcon,
   QList,
-  QListHeader,
   QItem,
-  QItemSide,
-  QItemMain,
   TouchSwipe
 } from "quasar";
 
@@ -46,10 +43,7 @@ import {
     QBtn,
     QIcon,
     QList,
-    QListHeader,
     QItem,
-    QItemSide,
-    QItemMain
   }
 })
 export default class Index extends Vue {

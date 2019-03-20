@@ -1,57 +1,96 @@
 <template>
-    <div class="layout-padding" @keyup.enter="submit">
-        <div class="officer-container">
-            <div class="officer">
-                <div :class="'jewel'+(hasChanged('Prytanis') ? ' changed':'')"><img src="~assets/prytanis.png" />Prytanis</div>
-                <q-input v-model="PrytanisName">
-                    <q-autocomplete @search="search" :filter="myfilter" @selected="updatePry" />
-                </q-input>
-            </div>
-            <div class="officer">
-                <div :class="'jewel'+(hasChanged('Epiprytanis') ? ' changed':'')"><img src="~assets/epiprytanis.png" />Epiprytanis</div>
-                <q-input v-model="EpiprytanisName">
-                    <q-autocomplete @search="search" :filter="myfilter" @selected="updateEpi" />
-                </q-input>
-            </div>
-            <div class="officer">
-                <div :class="'jewel'+(hasChanged('Grammateus') ? ' changed':'')"><img src="~assets/grammateus.png" />Grammateus</div>
-                <q-input v-model="GrammateusName">
-                    <q-autocomplete @search="search" :filter="myfilter" @selected="updateGra" />
-                </q-input>
-            </div>
-            <div class="officer">
-                <div :class="'jewel'+(hasChanged('Crysophylos') ? ' changed':'')"><img src="~assets/crysophylos.png" />Crysophylos</div>
-                <q-input v-model="CrysophylosName">
-                    <q-autocomplete @search="search" :filter="myfilter" @selected="updateCry" />
-                </q-input>
-            </div>
-            <div class="officer">
-                <div :class="'jewel'+(hasChanged('Histor') ? ' changed':'')"><img src="~assets/histor.png" />Histor</div>
-                <q-input v-model="HistorName">
-                    <q-autocomplete @search="search" :filter="myfilter" @selected="updateHis" />
-                </q-input>
-            </div>
-            <div class="officer">
-                <div :class="'jewel'+(hasChanged('Hypophetes') ? ' changed':'')"><img src="~assets/hypophetes.png" />Hypophetes</div>
-                <q-input v-model="HypophetesName">
-                    <q-autocomplete @search="search" :filter="myfilter" @selected="updateHyp" />
-                </q-input>
-            </div>
-            <div class="officer">
-                <div :class="'jewel'+(hasChanged('Pylortes') ? ' changed':'')"><img src="~assets/pylortes.png" />Pylortes</div>
-                <q-input v-model="PylortesName">
-                    <q-autocomplete @search="search" :filter="myfilter" @selected="updatePyl" />
-                </q-input>
-            </div>
-            <div class="officer">
-                <div :class="'jewel'+(hasChanged('Hegemon') ? ' changed':'')"><img src="~assets/hegemon.png" />Hegemon</div>
-                <q-input v-model="HegemonName">
-                    <q-autocomplete @search="search" :filter="myfilter" @selected="updateHeg" />
-                </q-input>
-            </div>
-            <q-btn color="positive" icon="add" @click="submit">Update</q-btn>
-        </div>
+  <div
+    class="layout-padding"
+    @keyup.enter="submit"
+  >
+    <div class="officer-container">
+      <div class="officer">
+        <div :class="'jewel'+(hasChanged('Prytanis') ? ' changed':'')"><img src="~assets/prytanis.png" />Prytanis</div>
+        <q-input v-model="PrytanisName">
+          <q-autocomplete
+            @search="search"
+            :filter="myfilter"
+            @selected="updatePry"
+          />
+        </q-input>
+      </div>
+      <div class="officer">
+        <div :class="'jewel'+(hasChanged('Epiprytanis') ? ' changed':'')"><img src="~assets/epiprytanis.png" />Epiprytanis</div>
+        <q-input v-model="EpiprytanisName">
+          <q-autocomplete
+            @search="search"
+            :filter="myfilter"
+            @selected="updateEpi"
+          />
+        </q-input>
+      </div>
+      <div class="officer">
+        <div :class="'jewel'+(hasChanged('Grammateus') ? ' changed':'')"><img src="~assets/grammateus.png" />Grammateus</div>
+        <q-input v-model="GrammateusName">
+          <q-autocomplete
+            @search="search"
+            :filter="myfilter"
+            @selected="updateGra"
+          />
+        </q-input>
+      </div>
+      <div class="officer">
+        <div :class="'jewel'+(hasChanged('Crysophylos') ? ' changed':'')"><img src="~assets/crysophylos.png" />Crysophylos</div>
+        <q-input v-model="CrysophylosName">
+          <q-autocomplete
+            @search="search"
+            :filter="myfilter"
+            @selected="updateCry"
+          />
+        </q-input>
+      </div>
+      <div class="officer">
+        <div :class="'jewel'+(hasChanged('Histor') ? ' changed':'')"><img src="~assets/histor.png" />Histor</div>
+        <q-input v-model="HistorName">
+          <q-autocomplete
+            @search="search"
+            :filter="myfilter"
+            @selected="updateHis"
+          />
+        </q-input>
+      </div>
+      <div class="officer">
+        <div :class="'jewel'+(hasChanged('Hypophetes') ? ' changed':'')"><img src="~assets/hypophetes.png" />Hypophetes</div>
+        <q-input v-model="HypophetesName">
+          <q-autocomplete
+            @search="search"
+            :filter="myfilter"
+            @selected="updateHyp"
+          />
+        </q-input>
+      </div>
+      <div class="officer">
+        <div :class="'jewel'+(hasChanged('Pylortes') ? ' changed':'')"><img src="~assets/pylortes.png" />Pylortes</div>
+        <q-input v-model="PylortesName">
+          <q-autocomplete
+            @search="search"
+            :filter="myfilter"
+            @selected="updatePyl"
+          />
+        </q-input>
+      </div>
+      <div class="officer">
+        <div :class="'jewel'+(hasChanged('Hegemon') ? ' changed':'')"><img src="~assets/hegemon.png" />Hegemon</div>
+        <q-input v-model="HegemonName">
+          <q-autocomplete
+            @search="search"
+            :filter="myfilter"
+            @selected="updateHeg"
+          />
+        </q-input>
+      </div>
+      <q-btn
+        color="positive"
+        icon="add"
+        @click="submit"
+      >Update</q-btn>
     </div>
+  </div>
 </template>
 
 <script lang="js">
@@ -70,18 +109,12 @@ import {
     QBtn,
     QIcon,
     QList,
-    QListHeader,
     QItem,
-    QItemSide,
-    QItemMain,
-    BackToTop,
     QSelect,
     QInput,
     Loading,
     QToggle,
     QField,
-    QAutocomplete,
-    QPopover
 } from "quasar";
 async function parseBrothers() {
     const result = [];
@@ -107,18 +140,10 @@ async function parseBrothers() {
         QBtn,
         QIcon,
         QList,
-        QListHeader,
         QItem,
-        QAutocomplete,
-        QItemSide,
-        QItemMain,
         QSelect,
         QInput,
         QToggle,
-        QPopover
-    },
-    directives: {
-        BackToTop
     }
 })
 export default class Index extends Vue {
@@ -251,20 +276,20 @@ export default class Index extends Vue {
 
 <style scoped>
 .rightmargin {
-    width: 48%;
-    margin-right: 4%;
+  width: 48%;
+  margin-right: 4%;
 }
 #changeButton {
-    text-decoration: underline;
-    color: #444;
-    cursor: pointer;
+  text-decoration: underline;
+  color: #444;
+  cursor: pointer;
 }
 h5 {
-    display: inline-block;
+  display: inline-block;
 }
 .changed::after {
-    color: red;
-    content: "*";
+  color: red;
+  content: "*";
 }
 </style>
 

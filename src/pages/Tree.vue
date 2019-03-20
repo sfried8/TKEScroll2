@@ -1,10 +1,17 @@
 <template>
 
-    <div id="tree-container">
-        <q-input v-model="big" placeholder="Find">
-            <q-autocomplete @search="search" :filter="myfilter" @selected="selected" />
-        </q-input>
-    </div>
+  <div id="tree-container">
+    <q-input
+      v-model="big"
+      placeholder="Find"
+    >
+      <q-autocomplete
+        @search="search"
+        :filter="myfilter"
+        @selected="selected"
+      />
+    </q-input>
+  </div>
 </template>
 
 <script lang="js">
@@ -12,7 +19,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Tree from "../Tree";
 import Brothers from "../Brothers";
-import { QInput, QAutocomplete } from "quasar";
+import { QInput } from "quasar";
 import FuzzySearch from "fuzzy-search";
 
 async function parseBrothers() {
@@ -33,8 +40,7 @@ async function parseBrothers() {
 @Component({
     name: "my-family-tree",
     components: {
-        QInput,
-        QAutocomplete
+        QInput
     }
 })
 export default class Index extends Vue {
@@ -72,42 +78,42 @@ export default class Index extends Vue {
 
 <style type="text/css">
 .node {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .overlay {
-    background-color: #eee;
+  background-color: #eee;
 }
 
 .node circle {
-    fill: #fff;
-    stroke: #ad2624;
-    stroke-width: 1.5px;
+  fill: #fff;
+  stroke: #ad2624;
+  stroke-width: 1.5px;
 }
 
 .node text {
-    font-size: 10px;
-    font-family: sans-serif;
+  font-size: 10px;
+  font-family: sans-serif;
 }
 
 .link {
-    fill: none;
-    stroke: #ccc;
-    stroke-width: 1.5px;
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
 }
 
 .templink {
-    fill: none;
-    stroke: red;
-    stroke-width: 3px;
+  fill: none;
+  stroke: red;
+  stroke-width: 3px;
 }
 
 .ghostCircle.show {
-    display: block;
+  display: block;
 }
 
 .ghostCircle,
 .activeDrag .ghostCircle {
-    display: none;
+  display: none;
 }
 </style>

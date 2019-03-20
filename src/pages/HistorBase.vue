@@ -1,23 +1,56 @@
 <template>
 
-    <div class="page-content">
-        <q-tabs inverted color="tertiary">
-            <q-tab default class="white" icon="add" name="addbrother" slot="title" label="Add" />
-            <q-tab class="white" icon="edit" name="edit" slot="title" label="Edit" />
-            <q-tab class="white" icon="gavel" name="updateofficers" slot="title" label="E-Board" />
-            <div class="panes">
-                <q-tab-pane keep-alive name="addbrother">
-                    <histor-add-brother></histor-add-brother>
-                </q-tab-pane>
-                <q-tab-pane keep-alive name="edit">
-                    <histor-edit-brother></histor-edit-brother>
-                </q-tab-pane>
-                <q-tab-pane keep-alive name="updateofficers">
-                    <histor-eboard></histor-eboard>
-                </q-tab-pane>
-            </div>
-        </q-tabs>
-    </div>
+  <div class="page-content">
+    <q-tabs
+      v-model="currentTab"
+      inverted
+      color="tertiary"
+    >
+      <q-tab
+        default
+        class="white"
+        icon="add"
+        name="addbrother"
+        label="Add"
+      />
+      <q-tab
+        class="white"
+        icon="edit"
+        name="edit"
+        label="Edit"
+      />
+      <q-tab
+        class="white"
+        icon="gavel"
+        name="updateofficers"
+        label="E-Board"
+      />
+    </q-tabs>
+    <q-tab-panels
+      v-model="currentTab"
+      animated
+    >
+      <q-tab-panel
+        keep-alive
+        name="addbrother"
+      >
+        <histor-add-brother></histor-add-brother>
+      </q-tab-panel>
+      <q-tab-panel
+        keep-alive
+        name="edit"
+      >
+        <histor-edit-brother></histor-edit-brother>
+      </q-tab-panel>
+      <q-tab-panel
+        keep-alive
+        name="updateofficers"
+      >
+        <histor-eboard></histor-eboard>
+      </q-tab-panel>
+    </q-tab-panels>
+
+  </div>
 </template>
 
 <script lang="js">
@@ -34,19 +67,13 @@ import {
     QBtn,
     QIcon,
     QList,
-    QListHeader,
     QItem,
-    QItemSide,
-    QItemMain,
-    QAutocomplete,
     QInput,
-    QInputFrame,
-    QTabPane,
-    QSearch,
+    QTabPanel,
+    QTabPanels,
     
     QTabs,
     QTab,
-    filter
 } from "quasar";
 import Hello from "./Hello";
 import HistorAddBrother from "./HistorAddBrother";
@@ -63,16 +90,11 @@ import HistorEboard from "./HistorEBoard";
         QBtn,
         QIcon,
         QList,
-        QListHeader,
         QItem,
-        QItemSide,
-        QAutocomplete,
-        QSearch,
         QTabPane,
         QInput,
-        QInputFrame,
-        
-        QItemMain,
+            QTabPanel,
+    QTabPanels,
         Hello,
         HistorAddBrother,
         HistorEditBrother,
@@ -80,6 +102,7 @@ import HistorEboard from "./HistorEBoard";
     }
 })
 export default class Index extends Vue {
+    currentTab = "addbrother"
     goTo(page) {
         console.log("going to " + page);
         this.$refs.layout.toggleLeft(() => {
@@ -94,13 +117,13 @@ export default class Index extends Vue {
 
 <style lang="css" scoped>
 body {
-    background: #fff;
+  background: #fff;
 }
 .panes {
-    background: #eee;
+  background: #eee;
 }
 .white {
-    background: #fff;
+  background: #fff;
 }
 /* 
 .page-content {

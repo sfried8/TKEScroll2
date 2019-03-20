@@ -66,10 +66,10 @@ export default {
     if (this._brothers == null) {
       Loading.show();
       if (LocalStorage.has("brothers")) {
-        this._brothers = LocalStorage.get.item("brothers");
+        this._brothers = LocalStorage.getItem("brothers");
       }
       try {
-        const password = LocalStorage.get.item("brothersPassword");
+        const password = LocalStorage.getItem("brothersPassword");
         const rawdata = await fetch(
           password === "GUEST" ? fakeurl : awsGetUrl + "?password=" + password
         );

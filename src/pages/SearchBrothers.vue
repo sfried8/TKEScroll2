@@ -1,8 +1,16 @@
 <template>
   <div class="layout-padding">
-    <q-search v-model="terms" placeholder="Search for a brother by name">
-      <q-autocomplete :filter="myFilter" :debounce="50" @search="search" @selected="selected" />
-    </q-search>
+    <q-input
+      v-model="terms"
+      placeholder="Search for a brother by name"
+      debounce="50"
+    >
+      <q-autocomplete
+        :filter="myFilter"
+        @search="search"
+        @selected="selected"
+      />
+    </q-input>
   </div>
 </template>
 
@@ -21,15 +29,8 @@ import {
   QBtn,
   QIcon,
   QList,
-  QListHeader,
   QItem,
-  QItemSide,
-  QItemMain,
-  QAutocomplete,
   QInput,
-  QInputFrame,
-  QSearch,
-  filter
 } from "quasar";
 
 async function parseBrothers() {
@@ -56,14 +57,8 @@ async function parseBrothers() {
     QBtn,
     QIcon,
     QList,
-    QListHeader,
     QItem,
-    QItemSide,
-    QAutocomplete,
-    QSearch,
     QInput,
-    QInputFrame,
-    QItemMain
   }
 })
 export default class Index extends Vue {

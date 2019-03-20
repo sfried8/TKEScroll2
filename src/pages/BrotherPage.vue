@@ -40,9 +40,7 @@ import {
   QBtn,
   QIcon,
   TouchPan,
-  QCard,
-  QCardTitle,
-  QCardMain
+  QCard
 } from "quasar";
 
 @Component({
@@ -51,9 +49,7 @@ import {
     QLayout,
     QBtn,
     QIcon,
-    QCardTitle,
     QCard,
-    QCardMain,
     BrotherPageContent
   },
   directives: {
