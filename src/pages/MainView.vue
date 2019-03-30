@@ -31,7 +31,7 @@
         inset-delimiter
       >
         <q-item-label header>Navigation</q-item-label>
-        <q-item to="/">
+        <q-item to="/home">
           <q-item-section avatar>
             <q-icon name="home" />
           </q-item-section>
@@ -59,14 +59,20 @@
         </q-item>
         <q-item to="/tree">
           <q-item-section avatar>
-            <q-icon name="device_hub" />
+            <img
+              src="~/assets/familytreeicon.png"
+              style="width:24px;"
+            />
           </q-item-section>
           <q-item-section>
             <q-item-label>Tree</q-item-label>
             <q-item-label caption>View the chapter family tree</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item to="/histor">
+        <q-item
+          v-if="showHistor"
+          to="/histor"
+        >
           <q-item-section avatar>
             <q-icon name="settings" />
           </q-item-section>
@@ -91,7 +97,7 @@
         <router-view /> component
         if using subRoutes
       -->
-    <q-page-container>
+    <q-page-container style="overflow:visible;">
 
       <router-view :key="$route.path" />
     </q-page-container>
@@ -145,6 +151,7 @@ import {
 export default class Index extends Vue {
     left = true;
     header = true;
+    showHistor = false;
     goTo(page) {
         console.log("going to " + page);
         this.$refs.layout.toggleLeft(() => {
@@ -161,10 +168,16 @@ export default class Index extends Vue {
     mounted() {
           document.querySelector(".q-layout").style.minHeight = window.innerHeight+"px"
     document.body.style.minHeight = window.innerHeight+"px"
+
     }
     beforeMount() {
         if (!LocalStorage.has("brothersPassword")) {
             this.$router.push("/firsttime");
+        }
+        if (LocalStorage.has("role")) {
+          if (LocalStorage.getItem("role").toLowerCase() === "histor") {
+            this.showHistor = true;
+          }
         }
     }
 }

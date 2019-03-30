@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="layout-padding"
-    @keyup.enter="submit"
-  >
+  <div class="layout-padding">
     <q-field>
       <div class="row no-wrap">
         <q-input
@@ -38,16 +35,7 @@
       float-label="Nickname"
     />
 
-    <q-input
-      v-model="big"
-      placeholder="Big Brother"
-    >
-      <q-autocomplete
-        @search="search"
-        :filter="myfilter"
-        @selected="selected"
-      />
-    </q-input>
+    <brother-select v-model="big" />
 
     <q-toggle
       v-model="active"
@@ -77,8 +65,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
-import FuzzySearch from "fuzzy-search";
-
+import BrotherSelect from "../components/BrotherSelect";
 import {
     QBtn,
     QIcon,
@@ -87,20 +74,7 @@ import {
     QField,
 
 } from "quasar";
-async function parseBrothers() {
-    const result = [];
-    const brothers = await Brothers.getBrothers();
-    for (let scroll in brothers) {
-        const brother = brothers[scroll];
-        result.push({
-            label: `${brother.fname} ${brother.lname}`,
-            sublabel: `${brother.isZetaTau ? "Zeta Tau " : ""}PC ${brother.pc}`,
-            icon: "chevron right",
-            value: brother.scroll
-        });
-    }
-    return result;
-}
+
 const DEBUG = true;
 @Component({
     name: "histor-add-brother",
@@ -109,7 +83,8 @@ const DEBUG = true;
         QBtn,
         QIcon,
         QInput,
-        QToggle
+        QToggle,
+        BrotherSelect
     }
 })
 export default class Index extends Vue {
@@ -119,8 +94,7 @@ export default class Index extends Vue {
     nickname = "";
     pc = 0;
     active = true;
-    big = "";
-    bigS = 0;
+    big = null;
     brothers = [];
     searcher = null;
     pendingBrothers = [];
@@ -141,7 +115,7 @@ export default class Index extends Vue {
             lname: this.lname,
             pc: this.pc,
             nickname: this.nickname,
-            bigS: this.bigS,
+            bigS: this.big.scroll,
             active: this.active,
             isZetaTau: this.pc < 0
         };
@@ -162,34 +136,13 @@ export default class Index extends Vue {
                   .toString(36)
                   .substring(7)
             : "";
-        this.bigS = 0;
-        this.big = "";
+        this.big = null;
 
         // Brothers.addBrother(brother);
     }
-    search(terms, done) {
-        setTimeout(() => {
-            done(this.myfilter(terms, { field: "label", list: this.brothers }));
-        }, 50);
-    }
-    selected(item) {
-        this.big = item.label;
-        this.bigS = +item.value;
-    }
-    myfilter(terms, { field, list }) {
-        const token = terms.toLowerCase();
-        this.searcher = new FuzzySearch(list, [field], {
-            caseSensitive: false,
-            sort: true
-        });
-        return this.searcher.search(token);
-    }
+
     mounted() {
-        parseBrothers()
-            .then(brothers => {
-                this.brothers = brothers;
-                return Brothers.getBrothers();
-            })
+        Brothers.getBrothers()
             .then(brothers => {
                 const highestScroll = Math.max(...brothers.map(b => +b.scroll));
                 const highestPC = Math.max(

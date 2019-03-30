@@ -7,7 +7,7 @@ const routes = [
     path: "/",
     component: () => import("pages/MainView"),
     children: [
-      { path: "", component: () => import("pages/Hello") },
+      { path: "home", component: () => import("pages/Hello") },
 
       {
         path: "/brother/:scroll",
@@ -24,7 +24,7 @@ const routes = [
       { path: "/tree", component: () => import("pages/Tree") }
     ]
   }, // Default
-  { path: "*", component: () => import("pages/Scroll") } // Not found,
+  { path: "*", component: () => import("pages/Hello") } // Not found,
 ];
 
 // Always leave this as last one

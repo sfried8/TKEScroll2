@@ -1,6 +1,6 @@
 <template>
 
-  <div class="layout-padding">
+  <q-page padding>
     <div>
       <q-btn
         icon="sort"
@@ -10,6 +10,7 @@
       >
         SORT BY
         <q-menu
+          auto-close
           anchor="bottom right"
           self="top middle"
         >
@@ -62,11 +63,21 @@
         <q-item-label>No Results Found!</q-item-label>
       </q-item>
     </q-list>
-
+    <q-page-scroller
+      position="bottom-right"
+      :scroll-offset="150"
+      :offset="[18, 18]"
+    >
+      <q-btn
+        fab
+        icon="keyboard_arrow_up"
+        color="primary"
+      />
+    </q-page-scroller>
     <!-- <q-fixed-position corner="top-right" :offset="[18, 18]">
             <q-btn v-back-to-top.animate="{offset: 500, duration: 200}" round color="primary" class="animate-pop" style="animation-duration: .5s;" icon="keyboard_arrow_up" />
         </q-fixed-position> -->
-  </div>
+  </q-page>
 </template>
 
 <script lang="js">
@@ -75,43 +86,31 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import {
-    dom,
-    event,
-    openURL,
-    QLayout,
-    QToolbar,
-    QToolbarTitle,
     QBtn,
-    QIcon,
     QList,
     QItem,
     QItemSection,
     QItemLabel,
-    // BackToTop,
-    QSelect,
+    QPageScroller,
+    QPage,
     QInput,
     QMenu
 } from "quasar";
 
 @Component({
-    name: "scroll",
+  name: "scroll",
     components: {
-        QLayout,
-        QToolbar,
-        QToolbarTitle,
         QBtn,
-        QIcon,
+    QPage,
         QList,
         QItem,
         QItemSection,
+    QPageScroller,
         QItemLabel,
-        QSelect,
         QInput,
         QMenu
     },
-    // directives: {
-    //     BackToTop
-    // }
+
 })
 export default class Index extends Vue {
     _brothers = [];

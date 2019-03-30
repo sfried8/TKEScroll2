@@ -13,10 +13,14 @@ import Util from "./Util";
 export default {
   _brothers: null,
   async addBrother(brother) {
+    const url = LocalStorage.getItem("role") === "GUEST" ? fakeurl : awsAddUrl
     await Util.throttle(
-      fetch(awsAddUrl, {
+
+
+
+      fetch(url, {
         method: "POST", // *GET, PUT, DELETE, etc.
-        body: JSON.stringify(brother), // must match 'Content-Type' header
+        body: JSON.stringify({ ...brother, password: LocalStorage.getItem("brothersPassword") || "GUEST" }), // must match 'Content-Type' header
         headers: new Headers({
           Accept: "application/json",
           "content-type": "application/json"

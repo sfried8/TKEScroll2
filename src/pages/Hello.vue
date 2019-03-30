@@ -15,7 +15,8 @@ import Vue from "vue";
 @Component({
     name: "hello-view"
 })
-export default class Index extends Vue {}
+export default class Index extends Vue {
+}
 </script>
 
 <style lang="stylus" scoped>

@@ -27,8 +27,8 @@
       />
     </q-tabs>
     <q-tab-panels
+      style="overflow:visible;"
       v-model="currentTab"
-      animated
     >
       <q-tab-panel
         keep-alive
@@ -53,16 +53,37 @@
   </div>
 </template>
 
-<script lang="js">
+<script>
 import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import {
-    dom,
-    event,
-    openURL,
+  dom,
+  event,
+  openURL,
+  QLayout,
+  QToolbar,
+  QToolbarTitle,
+  QBtn,
+  QIcon,
+  QList,
+  QItem,
+  QInput,
+  QTabPanel,
+  QTabPanels,
+  QTabs,
+  QTab
+} from "quasar";
+import HistorAddBrother from "./HistorAddBrother";
+import HistorEditBrother from "./HistorEditBrother";
+import HistorEboard from "./HistorEBoard";
+@Component({
+  name: "histor-base",
+  components: {
     QLayout,
+    QTab,
     QToolbar,
+    QTabs,
     QToolbarTitle,
     QBtn,
     QIcon,
@@ -71,59 +92,19 @@ import {
     QInput,
     QTabPanel,
     QTabPanels,
-    
-    QTabs,
-    QTab,
-} from "quasar";
-import Hello from "./Hello";
-import HistorAddBrother from "./HistorAddBrother";
-import HistorEditBrother from "./HistorEditBrother";
-import HistorEboard from "./HistorEBoard";
-@Component({
-    name: "histor-base",
-    components: {
-        QLayout,
-        QTab,
-        QToolbar,
-        QTabs,
-        QToolbarTitle,
-        QBtn,
-        QIcon,
-        QList,
-        QItem,
-        QTabPane,
-        QInput,
-            QTabPanel,
-    QTabPanels,
-        Hello,
-        HistorAddBrother,
-        HistorEditBrother,
-        HistorEboard
-    }
+    HistorAddBrother,
+    HistorEditBrother,
+    HistorEboard
+  }
 })
 export default class Index extends Vue {
-    currentTab = "addbrother"
-    goTo(page) {
-        console.log("going to " + page);
-        this.$refs.layout.toggleLeft(() => {
-            this.$router.push({ path: `/${page}` });
-        });
-    }
-    launch(url) {
-        openURL(url);
-    }
+  currentTab = "addbrother";
 }
 </script>
 
-<style lang="css" scoped>
-body {
-  background: #fff;
-}
-.panes {
-  background: #eee;
-}
-.white {
-  background: #fff;
+<style lang="css">
+.scroll {
+  overflow: visible;
 }
 /* 
 .page-content {
