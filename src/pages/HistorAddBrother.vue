@@ -5,12 +5,12 @@
         <q-input
           v-model="scroll"
           class="rightmargin"
-          float-label="Scroll"
+          label="Scroll"
           type="number"
         />
         <q-input
           v-model="pc"
-          float-label="Pledge Class"
+          label="Pledge Class"
           type="number"
         />
       </div>
@@ -21,21 +21,24 @@
         <q-input
           v-model="fname"
           class="rightmargin"
-          float-label="First Name"
+          label="First Name"
         />
         <q-input
           v-model="lname"
-          float-label="Last Name"
+          label="Last Name"
         />
       </div>
     </q-field>
 
     <q-input
       v-model="nickname"
-      float-label="Nickname"
+      label="Nickname"
     />
 
-    <brother-select v-model="big" />
+    <brother-select
+      v-model="big"
+      label="Big Brother"
+    />
 
     <q-toggle
       v-model="active"
@@ -113,7 +116,7 @@ export default class Index extends Vue {
             scroll: `${this.scroll}`,
             fname: this.fname,
             lname: this.lname,
-            pc: this.pc,
+            pc: +this.pc,
             nickname: this.nickname,
             bigS: this.big.scroll,
             active: this.active,

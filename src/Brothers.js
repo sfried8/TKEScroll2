@@ -40,7 +40,7 @@ export default {
     return Util.throttle(
       fetch(awsAddOfficerUrl, {
         method: "POST", // *GET, PUT, DELETE, etc.
-        body: JSON.stringify(officer), // must match 'Content-Type' header
+        body: JSON.stringify({ ...officer, password: LocalStorage.getItem("brothersPassword") || "GUEST" }), // must match 'Content-Type' header
         headers: new Headers({
           Accept: "application/json",
           "content-type": "application/json"

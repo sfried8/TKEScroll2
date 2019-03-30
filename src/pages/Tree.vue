@@ -34,7 +34,7 @@ export default class Index extends Vue {
     @Watch("big")
     selected(val) {
         if (this.big) {
-
+          
           Tree.centerNode(Tree.nodes.find(n=>n.name===val.fname+" "+val.lname))
           this.big = null;
         }

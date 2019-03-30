@@ -124,7 +124,7 @@ export default class Index extends Vue {
       scroll: `${this.scroll}`,
       fname: this.fname,
       lname: this.lname,
-      pc: this.pc,
+      pc: +this.pc,
       nickname: this.nickname,
       bigS: this.big.scroll,
       active: this.active,
@@ -149,20 +149,7 @@ export default class Index extends Vue {
     this.nickname = this.currentBrother.nickname;
     this.pc = this.currentBrother.pc;
     this.active = this.currentBrother.active;
-    this.big = this.currentBrother.big;
-  }
-
-  selectedBrotherToEdit(item) {
-    this.currentBrother = item.label;
-    this.scroll = item.value;
-    const selectedBrother = this.brotherObjects[this.scroll];
-    this.fname = selectedBrother.fname;
-    this.lname = selectedBrother.lname;
-    this.nickname = selectedBrother.nickname;
-    this.pc = selectedBrother.pc;
-    this.bigS = selectedBrother.big;
-    const _big = this.brotherObjects[this.bigS];
-    this.big = `${_big.fname} ${_big.lname}`;
+    this.big = this.brothers[this.currentBrother.big];
   }
   mounted() {
     Brothers.getBrothers().then(b => (this.brothers = b));

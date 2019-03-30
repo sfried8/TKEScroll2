@@ -56,40 +56,15 @@
 <script>
 import Vue from "vue";
 import Component from "vue-class-component";
-import Brothers from "../Brothers";
-import {
-  dom,
-  event,
-  openURL,
-  QLayout,
-  QToolbar,
-  QToolbarTitle,
-  QBtn,
-  QIcon,
-  QList,
-  QItem,
-  QInput,
-  QTabPanel,
-  QTabPanels,
-  QTabs,
-  QTab
-} from "quasar";
+import { QTabPanel, QTabPanels, QTabs, QTab } from "quasar";
 import HistorAddBrother from "./HistorAddBrother";
 import HistorEditBrother from "./HistorEditBrother";
 import HistorEboard from "./HistorEBoard";
 @Component({
   name: "histor-base",
   components: {
-    QLayout,
-    QTab,
-    QToolbar,
     QTabs,
-    QToolbarTitle,
-    QBtn,
-    QIcon,
-    QList,
-    QItem,
-    QInput,
+    QTab,
     QTabPanel,
     QTabPanels,
     HistorAddBrother,
@@ -106,17 +81,4 @@ export default class Index extends Vue {
 .scroll {
   overflow: visible;
 }
-/* 
-.page-content {
-  display: flex;
-  position: relative;
-  flex-direction: row;
-  width: 100%;
-  min-height: 60vh;
-}
-  .page-content > * {
-    position: relative;
-    min-width: 100%;
-    margin-right: -100%;
-} */
 </style>

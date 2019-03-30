@@ -20,30 +20,11 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import Util from "../Util"
-import {
-  dom,
-  event,
-  openURL,
-  QLayout,
-  QToolbar,
-  QToolbarTitle,
-  QBtn,
-  QIcon,
-  QList,
-  QItem,
-  TouchSwipe
-} from "quasar";
+
 
 @Component({
   name: "pc-page",
   components: {
-    QLayout,
-    QToolbar,
-    QToolbarTitle,
-    QBtn,
-    QIcon,
-    QList,
-    QItem,
   }
 })
 export default class Index extends Vue {

@@ -2,10 +2,12 @@
 
   <q-select
     v-model="selected"
+    ref="qbs"
     use-input
     hide-selected
     hide-dropdown-icon
     input-debounce="200"
+    :label="label"
     :options="options"
     @filter="filterFn"
     style="padding-bottom: 32px"
@@ -44,7 +46,9 @@ import { QSelect, QItem, QItemSection } from "quasar";
     QItemSection
   },
   props: {
-    "clear-after-select": Boolean
+    "clear-after-select": Boolean,
+    value: Object,
+    label: String
   }
 })
 export default class Index extends Vue {
@@ -60,10 +64,21 @@ export default class Index extends Vue {
       this.options = [];
     });
   }
+  @Watch("value")
+  onValueChanged(val, oldVal) {
+    this.selected = val;
+    this.$nextTick().then(() => {
+      this.$refs.qbs.add(this.selected);
+    });
+  }
   @Watch("selected")
   onSelectedChanged(val, oldVal) {
     if (val) {
-      this.$emit("input", val.value);
+      if (val.value) {
+        this.$emit("input", val.value);
+      } else {
+        this.$emit("input", val);
+      }
       if (this.clearAfterSelect) {
         this.$nextTick().then(() => {
           this.selected = null;
@@ -84,7 +99,12 @@ export default class Index extends Vue {
         extract: el => el.label
       })
         .slice(0, 5)
-        .map(o => o.original);
+        .map(o => o.original)
+        .sort(
+          (a, b) =>
+            (a.label.toLowerCase().indexOf(val.toLowerCase()) === 0) -
+            (b.label.toLowerCase().indexOf(val.toLowerCase()) === 0)
+        );
     });
   }
 }

@@ -5,9 +5,11 @@ const routes = [
   },
   {
     path: "/",
+    redirect: "/home",
     component: () => import("pages/MainView"),
+
     children: [
-      { path: "home", component: () => import("pages/Hello") },
+      { path: "/home", component: () => import("pages/Hello") },
 
       {
         path: "/brother/:scroll",
@@ -24,7 +26,7 @@ const routes = [
       { path: "/tree", component: () => import("pages/Tree") }
     ]
   }, // Default
-  { path: "*", component: () => import("pages/Hello") } // Not found,
+  { path: "*", redirect: "/home" } // Not found,
 ];
 
 // Always leave this as last one
