@@ -1,7 +1,7 @@
 <template>
   <div class="brother-page">
     <div class="brother-page-line">{{brother.scroll}}</div>
-    <h4>{{brother.fname}} {{brother.lname}}</h4><br>
+    <h5>{{brother.fname}} {{brother.lname}}</h5>
     <div
       class="brother-page-line brother-link"
       @click="$router.push('/pc/'+(brother.isZetaTau ? 'ZT':'')+brother.pc)"
@@ -24,7 +24,11 @@
         >{{l.fname}} {{l.lname}}</li>
       </ul>
     </div>
-    <button @click="viewInTree(brother)">View in tree</button>
+    <q-btn
+      color="green"
+      icon-right="send"
+      @click="viewInTree(brother)"
+    >View in tree</q-btn>
   </div>
 
 </template>
@@ -34,11 +38,11 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import Util from "../Util";
-import { dom, event, openURL, TouchSwipe } from "quasar";
+import { QBtn } from "quasar";
 
 @Component({
   name: "brother-page-content",
-  components: {},
+  components: { QBtn },
   props: {
     brother: Object,
     brothers: Array
