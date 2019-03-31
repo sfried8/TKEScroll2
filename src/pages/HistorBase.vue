@@ -1,36 +1,37 @@
 <template>
 
-  <div class="page-content">
+  <q-page padding>
     <q-tabs
       v-model="currentTab"
-      inverted
-      color="tertiary"
+      indicator-color="primary"
+      active-color="primary"
+      class="bg-white text-grey rounded-borders shadow-2"
+      align="left"
     >
       <q-tab
         default
-        class="white"
         icon="add"
         name="addbrother"
         label="Add"
       />
       <q-tab
-        class="white"
         icon="edit"
         name="edit"
         label="Edit"
       />
       <q-tab
-        class="white"
         icon="gavel"
         name="updateofficers"
         label="E-Board"
       />
     </q-tabs>
+    <q-separator />
     <q-tab-panels
-      style="overflow:visible;"
+      style="overflow:visible;min-height:100%;"
       v-model="currentTab"
     >
       <q-tab-panel
+        style=""
         keep-alive
         name="addbrother"
       >
@@ -50,13 +51,13 @@
       </q-tab-panel>
     </q-tab-panels>
 
-  </div>
+  </q-page>
 </template>
 
 <script>
 import Vue from "vue";
 import Component from "vue-class-component";
-import { QTabPanel, QTabPanels, QTabs, QTab } from "quasar";
+import { QTabPanel, QTabPanels, QTabs, QTab, QPage, QSeparator } from "quasar";
 import HistorAddBrother from "./HistorAddBrother";
 import HistorEditBrother from "./HistorEditBrother";
 import HistorEboard from "./HistorEBoard";
@@ -65,7 +66,9 @@ import HistorEboard from "./HistorEBoard";
   components: {
     QTabs,
     QTab,
+    QPage,
     QTabPanel,
+    QSeparator,
     QTabPanels,
     HistorAddBrother,
     HistorEditBrother,

@@ -3,53 +3,99 @@
     class="layout-padding"
     @keyup.enter="submit"
   >
-    <div class="officer-container">
-      <div class="officer">
-        <div :class="'jewel'+(hasChanged('Prytanis') ? ' changed':'')"><img src="~assets/prytanis.png" />Prytanis</div>
-        <brother-select v-model="Prytanis">
-        </brother-select>
-      </div>
-      <div class="officer">
-        <div :class="'jewel'+(hasChanged('Epiprytanis') ? ' changed':'')"><img src="~assets/epiprytanis.png" />Epiprytanis</div>
-        <brother-select v-model="Epiprytanis">
-        </brother-select>
-      </div>
-      <div class="officer">
-        <div :class="'jewel'+(hasChanged('Grammateus') ? ' changed':'')"><img src="~assets/grammateus.png" />Grammateus</div>
-        <brother-select v-model="Grammateus">
-        </brother-select>
-      </div>
-      <div class="officer">
-        <div :class="'jewel'+(hasChanged('Crysophylos') ? ' changed':'')"><img src="~assets/crysophylos.png" />Crysophylos</div>
-        <brother-select v-model="Crysophylos">
-        </brother-select>
-      </div>
-      <div class="officer">
-        <div :class="'jewel'+(hasChanged('Histor') ? ' changed':'')"><img src="~assets/histor.png" />Histor</div>
-        <brother-select v-model="Histor">
-        </brother-select>
-      </div>
-      <div class="officer">
-        <div :class="'jewel'+(hasChanged('Hypophetes') ? ' changed':'')"><img src="~assets/hypophetes.png" />Hypophetes</div>
-        <brother-select v-model="Hypophetes">
-        </brother-select>
-      </div>
-      <div class="officer">
-        <div :class="'jewel'+(hasChanged('Pylortes') ? ' changed':'')"><img src="~assets/pylortes.png" />Pylortes</div>
-        <brother-select v-model="Pylortes">
-        </brother-select>
-      </div>
-      <div class="officer">
-        <div :class="'jewel'+(hasChanged('Hegemon') ? ' changed':'')"><img src="~assets/hegemon.png" />Hegemon</div>
-        <brother-select v-model="Hegemon">
-        </brother-select>
-      </div>
-      <q-btn
-        color="positive"
-        icon="add"
-        @click="submit"
-      >Update</q-btn>
+
+    <div class="row no-wrap q-col-gutter-lg">
+
+      <brother-select
+        class="col"
+        v-model="Prytanis"
+        label="Prytanis"
+      >
+        <template v-slot:prepend>
+          <img src="~assets/prytanis.png" />
+        </template>
+      </brother-select>
+
+      <brother-select
+        class="col"
+        v-model="Epiprytanis"
+        label="Epiprytanis"
+      >
+        <template v-slot:prepend>
+          <img src="~assets/epiprytanis.png" />
+        </template>
+      </brother-select>
     </div>
+    <div class="row no-wrap q-col-gutter-lg">
+      <brother-select
+        class="col"
+        v-model="Grammateus"
+        label="Grammateus"
+      >
+        <template v-slot:prepend>
+          <img src="~assets/grammateus.png" />
+        </template>
+      </brother-select>
+
+      <brother-select
+        class="col"
+        v-model="Crysophylos"
+        label="Crysophylos"
+      >
+        <template v-slot:prepend>
+          <img src="~assets/crysophylos.png" />
+        </template>
+      </brother-select>
+    </div>
+    <div class="row no-wrap q-col-gutter-lg">
+      <brother-select
+        class="col"
+        v-model="Histor"
+        label="Histor"
+      >
+        <template v-slot:prepend>
+          <img src="~assets/histor.png" />
+        </template>
+      </brother-select>
+
+      <brother-select
+        class="col"
+        v-model="Hypophetes"
+        label="Hypophetes"
+      >
+        <template v-slot:prepend>
+          <img src="~assets/hypophetes.png" />
+        </template>
+      </brother-select>
+    </div>
+    <div class="row no-wrap q-col-gutter-lg">
+      <brother-select
+        class="col"
+        v-model="Pylortes"
+        label="Pylortes"
+      >
+        <template v-slot:prepend>
+          <img src="~assets/pylortes.png" />
+        </template>
+      </brother-select>
+
+      <brother-select
+        class="col"
+        v-model="Hegemon"
+        label="Hegemon"
+      >
+        <template v-slot:prepend>
+          <img src="~assets/hegemon.png" />
+        </template>
+      </brother-select>
+    </div>
+    <q-btn
+      color="positive"
+      class="q-mt-lg"
+      icon="add"
+      @click="submit"
+    >Update</q-btn>
+  </div>
   </div>
 </template>
 
@@ -137,10 +183,6 @@ export default class Index extends Vue {
 </script>
 
 <style scoped>
-.rightmargin {
-  width: 48%;
-  margin-right: 4%;
-}
 #changeButton {
   text-decoration: underline;
   color: #444;
@@ -152,6 +194,11 @@ h5 {
 .changed::after {
   color: red;
   content: "*";
+}
+img {
+  max-width: 75px;
+  max-height: 50%;
+  margin-right: 18px;
 }
 </style>
 

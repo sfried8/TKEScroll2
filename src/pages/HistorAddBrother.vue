@@ -1,44 +1,45 @@
 <template>
   <div class="layout-padding">
-    <q-field>
-      <div class="row no-wrap">
-        <q-input
-          v-model="scroll"
-          class="rightmargin"
-          label="Scroll"
-          type="number"
-        />
-        <q-input
-          v-model="pc"
-          label="Pledge Class"
-          type="number"
-        />
-      </div>
-    </q-field>
+    <div class="row q-col-gutter-lg no-wrap">
+      <q-input
+        class="col"
+        v-model="scroll"
+        label="Scroll"
+        type="number"
+      />
+      <q-input
+        class="col"
+        v-model="pc"
+        label="Pledge Class"
+        type="number"
+      />
+    </div>
 
-    <q-field>
-      <div class="row no-wrap">
-        <q-input
-          v-model="fname"
-          class="rightmargin"
-          label="First Name"
-        />
-        <q-input
-          v-model="lname"
-          label="Last Name"
-        />
-      </div>
-    </q-field>
+    <div class="row q-col-gutter-lg no-wrap">
+      <q-input
+        class="col"
+        v-model="fname"
+        label="First Name"
+      />
+      <q-input
+        class="col"
+        v-model="lname"
+        label="Last Name"
+      />
+    </div>
 
-    <q-input
-      v-model="nickname"
-      label="Nickname"
-    />
-
-    <brother-select
-      v-model="big"
-      label="Big Brother"
-    />
+    <div class="row q-col-gutter-lg no-wrap">
+      <q-input
+        class="col"
+        v-model="nickname"
+        label="Nickname"
+      />
+      <brother-select
+        class="col"
+        v-model="big"
+        label="Big Brother"
+      />
+    </div>
 
     <q-toggle
       v-model="active"
@@ -71,10 +72,8 @@ import Brothers from "../Brothers";
 import BrotherSelect from "../components/BrotherSelect";
 import {
     QBtn,
-    QIcon,
     QInput,
     QToggle,
-    QField,
 
 } from "quasar";
 
@@ -82,9 +81,7 @@ const DEBUG = true;
 @Component({
     name: "histor-add-brother",
     components: {
-        QField,
         QBtn,
-        QIcon,
         QInput,
         QToggle,
         BrotherSelect
@@ -158,9 +155,8 @@ export default class Index extends Vue {
 }
 </script>
 
-<style scoped>
-.rightmargin {
-  width: 48%;
-  margin-right: 4%;
+<style>
+.q-field__prepend {
+  padding-right: 0 !important;
 }
 </style>

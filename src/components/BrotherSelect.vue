@@ -4,14 +4,18 @@
     v-model="selected"
     ref="qbs"
     use-input
-    hide-selected
     hide-dropdown-icon
+    hide-selected
+    :outlined="outlined"
+    :rounded="rounded"
     input-debounce="200"
     :label="label"
     :options="options"
     @filter="filterFn"
-    style="padding-bottom: 32px"
   >
+    <template v-slot:prepend>
+      <slot name="prepend"></slot>
+    </template>
     <template v-slot:append>
       <q-icon
         v-if="selected !== null"
@@ -48,7 +52,9 @@ import { QSelect, QItem, QItemSection } from "quasar";
   props: {
     "clear-after-select": Boolean,
     value: Object,
-    label: String
+    label: String,
+    outlined: Boolean,
+    rounded: Boolean
   }
 })
 export default class Index extends Vue {
@@ -61,14 +67,28 @@ export default class Index extends Vue {
         label: o.fname + " " + o.lname,
         value: o
       }));
-      this.options = [];
+      this.options = this.Brothers;
+      this.$nextTick().then(() => {
+        this.selected = this.value
+          ? {
+              label: this.value.fname + " " + this.value.lname,
+              value: this.value
+            }
+          : null;
+        this.selected && (this.$refs.qbs.inputValue = this.selected.label);
+      });
     });
   }
   @Watch("value")
   onValueChanged(val, oldVal) {
-    this.selected = val;
     this.$nextTick().then(() => {
-      this.$refs.qbs.add(this.selected);
+      this.selected = this.value
+        ? {
+            label: this.value.fname + " " + this.value.lname,
+            value: this.value
+          }
+        : null;
+      this.selected && (this.$refs.qbs.inputValue = this.selected.label);
     });
   }
   @Watch("selected")

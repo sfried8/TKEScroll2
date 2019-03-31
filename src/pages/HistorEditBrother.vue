@@ -1,6 +1,7 @@
 <template>
   <div class="layout-padding">
     <brother-select
+      label="Brother to edit"
       v-show="!currentBrother"
       v-model="currentBrother"
     />
@@ -10,43 +11,48 @@
         @click="currentBrother = null"
         id="changeButton"
       >change</span>
-      <q-field>
 
-        <div class="row no-wrap">
+      <div class="row no-wrap q-col-gutter-lg">
 
-          <q-input
-            v-model="scroll"
-            class="rightmargin"
-            float-label="Scroll"
-            type="number"
-          />
-          <q-input
-            v-model="pc"
-            float-label="Pledge Class"
-            type="number"
-          />
-        </div>
-      </q-field>
-      <q-field>
+        <q-input
+          v-model="scroll"
+          class="col"
+          label="Scroll"
+          type="number"
+        />
+        <q-input
+          v-model="pc"
+          class="col"
+          label="Pledge Class"
+          type="number"
+        />
+      </div>
 
-        <div class="row no-wrap">
+      <div class="row no-wrap q-col-gutter-lg">
 
-          <q-input
-            v-model="fname"
-            class="rightmargin"
-            float-label="First Name"
-          />
-          <q-input
-            v-model="lname"
-            float-label="Last Name"
-          />
-        </div>
-      </q-field>
-      <q-input
-        v-model="nickname"
-        float-label="Nickname"
-      />
-      <brother-select v-model="big" />
+        <q-input
+          v-model="fname"
+          class="col"
+          label="First Name"
+        />
+        <q-input
+          v-model="lname"
+          class="col"
+          label="Last Name"
+        />
+      </div>
+      <div class="row no-wrap q-col-gutter-lg">
+        <q-input
+          class="col"
+          v-model="nickname"
+          label="Nickname"
+        />
+        <brother-select
+          class="col"
+          v-model="big"
+          label="Big Brother"
+        />
+      </div>
       <q-toggle
         v-model="active"
         label="Active"
@@ -69,36 +75,12 @@ import Component from "vue-class-component";
 import BrotherSelect from "../components/BrotherSelect";
 import Brothers from "../Brothers";
 
-import {
-  dom,
-  event,
-  openURL,
-  QLayout,
-  QToolbar,
-  QToolbarTitle,
-  QBtn,
-  QIcon,
-  QList,
-  QItem,
-  QSelect,
-  QInput,
-  Loading,
-  QToggle,
-  QField
-} from "quasar";
+import { QBtn, QInput, QToggle } from "quasar";
 
 @Component({
   name: "histor-edit-brother",
   components: {
-    QLayout,
-    QToolbar,
-    QField,
-    QToolbarTitle,
     QBtn,
-    QIcon,
-    QList,
-    QItem,
-    QSelect,
     QInput,
     QToggle,
     BrotherSelect
@@ -158,13 +140,10 @@ export default class Index extends Vue {
 </script>
 
 <style scoped>
-.rightmargin {
-  width: 48%;
-  margin-right: 4%;
-}
 #changeButton {
   text-decoration: underline;
   color: #444;
+  margin-left: 10px;
   cursor: pointer;
 }
 h5 {
