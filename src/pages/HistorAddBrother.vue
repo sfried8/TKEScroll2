@@ -49,7 +49,7 @@
     <q-btn
       @click="submit"
       icon="add"
-    >Add Brother</q-btn>
+    >Add</q-btn>
     <br /><br />
     <div
       v-for="b in pendingBrothers"
@@ -59,9 +59,10 @@
     </div>
     <q-btn
       @click="addAll"
-      icon="add"
-      :disable="pendingBrothers.length < 1"
-    >Add {{pendingBrothers.length}} brother{{pendingBrothers.length != 1 ? "s" : ""}}</q-btn>
+      icon-right="send"
+      color="positive"
+      v-if="pendingBrothers.length >= 1"
+    >Add {{pendingBrothers.length}} brother{{pendingBrothers.length != 1 ? "s" : ""}} to the database</q-btn>
   </div>
 </template>
 
@@ -77,7 +78,7 @@ import {
 
 } from "quasar";
 
-const DEBUG = true;
+const DEBUG = false;
 @Component({
     name: "histor-add-brother",
     components: {
@@ -149,7 +150,7 @@ export default class Index extends Vue {
                     ...brothers.map(b => (b.pc < 999 ? b.pc : 0))
                 );
                 this.scroll = highestScroll + 1;
-                this.pc = highestPC + 1;
+                this.pc = highestPC;
             });
     }
 }

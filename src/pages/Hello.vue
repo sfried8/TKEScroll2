@@ -1,40 +1,42 @@
 <template>
-  <div class="layout-padding">
-    <div class="hello">
+  <q-page
+    padding
+    class="hello"
+  >
+    <div>
       <p>
         Welcome to the scroll website for the Xi-Upsilon Chapter of Tau Kappa Epsilon!
       </p>
       <img src="~/assets/lem.png" />
     </div>
-  </div>
+    <div class="absolute-bottom q-ma-xl">
+      <p>
+        Something wrong?
+      </p>
+      <p>
+        Contact the Histor with any corrections to the brothers' information. For any issues/bugs with the website itself, <a href="https://github.com/sfried8/TKEScroll2/issues">submit an issue on GitHub</a> or send me an email at sfried8@gmail.com
+      </p>
+    </div>
+  </q-page>
 </template>
 
 <script lang="js">
 import Component from "vue-class-component";
 import Vue from "vue";
+import {QPage} from "quasar"
 @Component({
-    name: "hello-view"
+    name: "hello-view",
+    components:{QPage}
 })
 export default class Index extends Vue {
 }
 </script>
 
 <style lang="stylus" scoped>
-.logo-container {
-  width: 255px;
-  height: 242px;
-  perspective: 800px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-}
-
 .hello {
   text-align: center;
-  width: 80%;
-  margin: auto;
   height: 100%;
+  background-color: white;
 }
 
 .logo {
@@ -43,6 +45,7 @@ export default class Index extends Vue {
 }
 
 img {
-  width: 50%;
+  max-width: 50%;
+  max-height: 300px;
 }
 </style>

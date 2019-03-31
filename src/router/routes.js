@@ -17,7 +17,6 @@ const routes = [
       },
       { path: "/pc/:pc", component: () => import("pages/PCPage") },
       { path: "/scroll", component: () => import("pages/Scroll") },
-      { path: "/search", component: () => import("pages/SearchBrothers") },
       {
         path: "/histor",
         component: () => import("pages/HistorBase")

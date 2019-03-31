@@ -83,15 +83,15 @@
         </q-item>
         <q-item @click.native="clearCache">
           <q-item-section avatar>
-            <q-icon name="delete" />
+            <q-icon name="exit_to_app" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Clear Cache</q-item-label>
+            <q-item-label>Sign Out</q-item-label>
+            <q-item-label caption>Clear cache and sign out</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
     </q-drawer>
-
     <!--
         Replace following <> with
         <router-view /> component
@@ -162,6 +162,7 @@ export default class Index extends Vue {
         openURL(url);
     }
     clearCache() {
+      LocalStorage.clear()
         Brothers.clearCache();
         this.$router.push("/firsttime");
     }

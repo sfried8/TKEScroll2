@@ -3,9 +3,16 @@
     <div class="brother-page-line">{{brother.scroll}}</div>
     <h5>{{brother.fname}} {{brother.lname}}</h5>
     <div
+      v-if="brother.pc"
       class="brother-page-line brother-link"
       @click="$router.push('/pc/'+(brother.isZetaTau ? 'ZT':'')+brother.pc)"
-    >{{PC}}</div><br>
+    >{{PC}}</div>
+    <div
+      v-else
+      class="brother-page-line"
+    >{{PC}}
+
+    </div><br>
     <div class="brother-page-line">{{brother.nickname}}</div><br>
     <div
       class="brother-page-line brother-link"

@@ -116,7 +116,8 @@ input::placeholder {
 }
 
 #triangleimg {
-  width: 80%;
+  max-width: 80%;
+  max-height: 250px;
   display: block;
   margin: auto;
 }

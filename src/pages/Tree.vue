@@ -1,6 +1,25 @@
 <template>
   <q-page padding>
+    <help-overlay help-id="treePage">
+      <div
+        class="column justify-center items-center"
+        style="height:100%"
+      >
+        <div
+          class="col-2 row justify-center items-center"
+          style="width:100%;"
+        >
 
+          <img
+            src="~/assets/pinchzoomtouchmove.png"
+            style="height:100%;margin:auto"
+          />
+        </div>
+        <p class="col-1 text-subtitle1">Pan around and pinch to zoom</p>
+        <p class="col-1 text-subtitle1">Tap a brother to show/hide their littles</p>
+        <p class="col-1 text-subtitle1">Search to find a brother in the tree</p>
+      </div>
+    </help-overlay>
     <div
       id="tree-container"
       class="bg-white"
@@ -33,11 +52,12 @@ import Component from "vue-class-component";
 import { Watch } from "vue-property-decorator";
 import { QPage, QIcon, QPageSticky } from "quasar";
 import BrotherSelect from "../components/BrotherSelect";
+import HelpOverlay from "../components/HelpOverlay";
 import Tree from "../Tree";
 
 @Component({
   name: "my-family-tree",
-  components: { BrotherSelect, QPage, QIcon, QPageSticky }
+  components: { BrotherSelect, QPage, QIcon, QPageSticky, HelpOverlay }
 })
 export default class Index extends Vue {
   big = null;
@@ -62,7 +82,7 @@ export default class Index extends Vue {
 <style type="text/css">
 #tree-container {
   overflow: hidden;
-  touch-action: manipulation;
+  touch-action: none;
 }
 .node {
   cursor: pointer;

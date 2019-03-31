@@ -29,11 +29,15 @@ import Vue from 'vue'
 import createApp from './app.js'
 
 
+import 'app/src-pwa/register-service-worker.js'
 
 
 
 
 
+
+
+import FastClick from 'fastclick'
 
 
 
@@ -44,12 +48,21 @@ Vue.config.productionTip = false
 
 
 
-console.info('[Quasar] Running SPA.')
-
+console.info('[Quasar] Running PWA.')
+console.info('[Quasar] Forcing PWA into the network-first approach to not break Hot Module Replacement while developing.')
 
 
 const { app, router } = createApp()
 
+
+
+// Needed only for iOS PWAs
+if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && window.navigator.standalone) {
+
+  document.addEventListener('DOMContentLoaded', () => {
+    FastClick.attach(document.body)
+  }, false)
+}
 
 
 async function start () {
