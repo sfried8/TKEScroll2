@@ -172,7 +172,7 @@ export default class Index extends Vue {
 
     }
     beforeMount() {
-        if (!LocalStorage.has("brothersPassword")) {
+        if (!LocalStorage.has("apiKey")) {
             this.$router.push("/firsttime");
         }
         if (LocalStorage.has("role")) {

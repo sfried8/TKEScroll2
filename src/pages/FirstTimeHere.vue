@@ -73,7 +73,7 @@ export default class Index extends Vue {
         cancel: true
       })
       .onOk(() => {
-        LocalStorage.set("brothersPassword", "GUEST");
+        LocalStorage.set("apiKey", "GUEST");
         this.$router.push("/");
       })
       .onCancel(() => console.log("cancelled"));
@@ -88,7 +88,7 @@ export default class Index extends Vue {
         this.invalidPassword = true;
       } else {
         LocalStorage.set("role", data.role);
-        LocalStorage.set("brothersPassword", this.password);
+        LocalStorage.set("apiKey", this.password);
         if (data.role === "HISTOR") {
           this.$router.push("/histor");
         } else {

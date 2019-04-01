@@ -48,7 +48,7 @@ const FamilyTree = {
       FamilyTree.nodes = nodes;
       // size of the diagram
       var viewerWidth = document.body.clientWidth;
-      var viewerHeight = document.body.clientHeight - 75;
+      var viewerHeight = document.body.clientHeight - 50;
       var panTimer;
       tree = d3.layout.tree().size([viewerHeight, viewerWidth]);
 

@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page>
     <help-overlay help-id="treePage">
       <div
         class="column justify-center items-center"
@@ -26,16 +26,15 @@
     >
       <q-page-sticky
         position="top-left"
-        :offset="[15, 15]"
+        class="q-ma-lg"
       >
 
         <brother-select
           v-model="big"
           label="Find brother"
           outlined
-          rounded
           class="bg-white"
-          :clear-after-select="true"
+          clear-after-select
         >
           <template #prepend>
             <q-icon name="search"></q-icon>

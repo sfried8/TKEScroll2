@@ -20,9 +20,10 @@ export default {
 
       fetch(url, {
         method: "POST", // *GET, PUT, DELETE, etc.
-        body: JSON.stringify({ ...brother, password: LocalStorage.getItem("brothersPassword") || "GUEST" }), // must match 'Content-Type' header
+        body: JSON.stringify(brother), // must match 'Content-Type' header
         headers: new Headers({
           Accept: "application/json",
+          Authorization: "key=" + (LocalStorage.getItem("apiKey") || "GUEST"),
           "content-type": "application/json"
         })
       }).then(rawdata => rawdata.json()),
@@ -40,9 +41,10 @@ export default {
     return Util.throttle(
       fetch(awsAddOfficerUrl, {
         method: "POST", // *GET, PUT, DELETE, etc.
-        body: JSON.stringify({ ...officer, password: LocalStorage.getItem("brothersPassword") || "GUEST" }), // must match 'Content-Type' header
+        body: JSON.stringify(officer), // must match 'Content-Type' header
         headers: new Headers({
           Accept: "application/json",
+          Authorization: "key=" + (LocalStorage.getItem("apiKey") || "GUEST"),
           "content-type": "application/json"
         })
       }).then(rawdata => rawdata.json()),
@@ -73,10 +75,23 @@ export default {
         this._brothers = LocalStorage.getItem("brothers");
       }
       try {
-        const password = LocalStorage.getItem("brothersPassword");
-        const rawdata = await fetch(
-          password === "GUEST" ? fakeurl : awsGetUrl + "?password=" + password
-        );
+        const password = LocalStorage.getItem("apiKey");
+        let rawdata;
+        if (password === "GUEST") {
+          rawdata = await fetch(fakeurl)
+        } else {
+          rawdata = await fetch(
+            awsGetUrl,
+            {
+              method: "GET", // *GET, PUT, DELETE, etc.
+              headers: new Headers({
+                Authorization: "key=" + password
+              })
+            }
+
+          );
+        }
+
 
         const data = await rawdata.json();
         if (data.error) {
@@ -121,14 +136,18 @@ export default {
     return this._brothers;
   },
   authenticate(password) {
-    return fetch(authenticateUrl + "?password=" + password).then(data =>
+    return fetch(authenticateUrl, {
+      method: "GET", // *GET, PUT, DELETE, etc.
+      headers: new Headers({
+        Authorization: "key=" + password
+      })
+    }).then(data =>
       data.json()
     );
   },
   clearCache() {
     LocalStorage.remove("brothers");
-    LocalStorage.remove("brothersPassword");
-    console.log("deleted cache")
-    Notify.create("Deleted cache");
+    LocalStorage.remove("apiKey");
+    this._brothers = null;
   }
 };

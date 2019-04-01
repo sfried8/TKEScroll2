@@ -38,7 +38,7 @@
 import Vue from "vue";
 import { Component, Watch, Prop } from "vue-property-decorator";
 import Fuzzy from "fuzzy";
-
+import Util from "../Util.js";
 import Brothers from "../Brothers";
 import { QSelect, QItem, QItemSection } from "quasar";
 
@@ -115,16 +115,16 @@ export default class Index extends Vue {
       return;
     }
     update(() => {
-      this.options = Fuzzy.filter(val, this.Brothers, {
-        extract: el => el.label
-      })
-        .slice(0, 5)
-        .map(o => o.original)
-        .sort(
-          (a, b) =>
-            (a.label.toLowerCase().indexOf(val.toLowerCase()) === 0) -
-            (b.label.toLowerCase().indexOf(val.toLowerCase()) === 0)
-        );
+      this.options = Util.stableSort(
+        Fuzzy.filter(val, this.Brothers, {
+          extract: el => el.label
+        })
+          .slice(0, 5)
+          .map(o => o.original),
+        (a, b) =>
+          (a.label.toLowerCase().indexOf(val.toLowerCase()) !== 0) -
+          (b.label.toLowerCase().indexOf(val.toLowerCase()) !== 0)
+      );
     });
   }
 }
