@@ -5,9 +5,11 @@ const routes = [
   },
   {
     path: "/",
+    redirect: "/home",
     component: () => import("pages/MainView"),
+
     children: [
-      { path: "", component: () => import("pages/Hello") },
+      { path: "/home", component: () => import("pages/Hello") },
 
       {
         path: "/brother/:scroll",
@@ -15,7 +17,6 @@ const routes = [
       },
       { path: "/pc/:pc", component: () => import("pages/PCPage") },
       { path: "/scroll", component: () => import("pages/Scroll") },
-      { path: "/search", component: () => import("pages/SearchBrothers") },
       {
         path: "/histor",
         component: () => import("pages/HistorBase")
@@ -24,7 +25,7 @@ const routes = [
       { path: "/tree", component: () => import("pages/Tree") }
     ]
   }, // Default
-  { path: "*", component: () => import("pages/Scroll") } // Not found,
+  { path: "*", redirect: "/home" } // Not found,
 ];
 
 // Always leave this as last one

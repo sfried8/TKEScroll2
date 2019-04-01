@@ -1,16 +1,16 @@
 // Configuration for your app
 
-module.exports = function(ctx) {
+module.exports = function (ctx) {
   return {
-    // app plugins (/src/plugins)
-    plugins: [],
+    // app plugins (/src/boot)
+    boot: [],
     css: ["app.styl"],
     extras: [
-      ctx.theme.mat ? "roboto-font" : null,
+      "roboto-font",
       "material-icons" // optional, you are not bound to it
-      // 'ionicons',
-      // 'mdi',
-      // 'fontawesome'
+      // 'ionicons-v4',
+      // 'mdi-v3',
+      // 'fontawesome-v5'
     ],
     supportIE: false,
     build: {
@@ -38,8 +38,8 @@ module.exports = function(ctx) {
     framework: {
       components: [
         "QLayout",
-        "QLayoutHeader",
-        "QLayoutDrawer",
+        "QHeader",
+        "QDrawer",
         "QPageContainer",
         "QPage",
         "QToolbar",
@@ -47,16 +47,13 @@ module.exports = function(ctx) {
         "QBtn",
         "QIcon",
         "QList",
-        "QListHeader",
         "QItem",
-        "QItemMain",
-        "QItemSide"
       ],
       directives: ["Ripple"],
       // Quasar plugins
       plugins: ["Notify", "LocalStorage", "Loading", "Dialog"]
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
-      // i18n: 'de' // Quasar language
+      // lang: 'de' // Quasar language
     },
     // animations: 'all' --- includes all animations
     animations: [],
@@ -67,13 +64,13 @@ module.exports = function(ctx) {
       // workboxPluginMode: 'InjectManifest',
       // workboxOptions: {},
       manifest: {
-        // name: 'Quasar App',
-        // short_name: 'Quasar-PWA',
+        name: 'TKE Scroll',
+        short_name: 'TKEScroll',
         // description: 'Best PWA App in town!',
         display: "standalone",
         orientation: "portrait",
         background_color: "#ffffff",
-        theme_color: "#027be3",
+        theme_color: "#AD2624",
         icons: [
           {
             src: "statics/icons/icon-128x128.png",

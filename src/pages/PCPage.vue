@@ -20,36 +20,11 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import Util from "../Util"
-import {
-  dom,
-  event,
-  openURL,
-  QLayout,
-  QToolbar,
-  QToolbarTitle,
-  QBtn,
-  QIcon,
-  QList,
-  QListHeader,
-  QItem,
-  QItemSide,
-  QItemMain,
-  TouchSwipe
-} from "quasar";
+
 
 @Component({
   name: "pc-page",
   components: {
-    QLayout,
-    QToolbar,
-    QToolbarTitle,
-    QBtn,
-    QIcon,
-    QList,
-    QListHeader,
-    QItem,
-    QItemSide,
-    QItemMain
   }
 })
 export default class Index extends Vue {
@@ -80,10 +55,10 @@ export default class Index extends Vue {
 
 <style lang="stylus" scoped>
 .pc-page {
-  border-radius: 4px;
+  // border-radius: 4px;
   height: 200%;
   padding: 40px;
-  box-shadow: 0px 4px 20px 0px #888888;
+  // box-shadow: 0px 4px 20px 0px #888888;
   background-color: white;
 }
 

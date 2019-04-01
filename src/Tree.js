@@ -3,34 +3,15 @@ import Brothers from "./Brothers";
 var tree;
 const FamilyTree = {
   tree: tree,
-  render: function(center) {
+  render: function (center) {
     Brothers.getBrothers().then(brothers => {
-      /*
-            var width = 4000;
-            var height = 4000;
-            var svg = d3
-                .select("svg")
-                .attr("width", "100%")
-                .attr("height", "100%")
-                .call(
-                    d3.zoom().on("zoom", function() {
-                        svg.attr("transform", d3.event.transform);
-                    })
-                );
-            var g = svg.append("g");
 
-            var tree = d3.tree().size([height, width - 160]);
-
-            var stratify = d3.stratify().parentId(function(d) {
-                return d.id.substring(0, d.id.lastIndexOf("."));
-            });
-*/
       var node;
       var scale;
       var initialCenterNode;
       var x;
       var y;
-      const createNode = function(scroll) {
+      const createNode = function (scroll) {
         const brother = brothers[scroll];
         const node = {
           name: brother.fname + " " + brother.lname,
@@ -68,11 +49,11 @@ const FamilyTree = {
       // size of the diagram
       var viewerWidth = document.body.clientWidth;
       var viewerHeight = document.body.clientHeight - 50;
-
+      var panTimer;
       tree = d3.layout.tree().size([viewerHeight, viewerWidth]);
 
       // define a d3 diagonal projection for use by the node paths later on.
-      var diagonal = d3.svg.diagonal().projection(function(d) {
+      var diagonal = d3.svg.diagonal().projection(function (d) {
         return [d.y, d.x];
       });
 
@@ -95,11 +76,11 @@ const FamilyTree = {
       // Call visit function to establish maxLabelLength
       visit(
         treeData,
-        function(d) {
+        function (d) {
           totalNodes++;
           maxLabelLength = Math.max(d.name.length, maxLabelLength);
         },
-        function(d) {
+        function (d) {
           return d.children && d.children.length > 0 ? d.children : null;
         }
       );
@@ -107,7 +88,7 @@ const FamilyTree = {
       // sort the tree according to the node names
 
       function sortTree() {
-        tree.sort(function(a, b) {
+        tree.sort(function (a, b) {
           return b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1;
         });
       }
@@ -141,12 +122,12 @@ const FamilyTree = {
             .attr(
               "transform",
               "translate(" +
-                translateX +
-                "," +
-                translateY +
-                ")scale(" +
-                scale +
-                ")"
+              translateX +
+              "," +
+              translateY +
+              ")scale(" +
+              scale +
+              ")"
             );
           d3.select(domNode)
             .select("g.node")
@@ -156,7 +137,7 @@ const FamilyTree = {
             );
           zoomListener.scale(zoomListener.scale());
           zoomListener.translate([translateX, translateY]);
-          panTimer = setTimeout(function() {
+          panTimer = setTimeout(function () {
             pan(domNode, speed, direction);
           }, 50);
         }
@@ -189,7 +170,7 @@ const FamilyTree = {
       // Define the drag listeners for drag/drop behaviour of nodes.
       var dragListener = d3.behavior
         .drag()
-        .on("dragstart", function(d) {
+        .on("dragstart", function (d) {
           if (d == root) {
             return;
           }
@@ -199,7 +180,7 @@ const FamilyTree = {
           d3.event.sourceEvent.stopPropagation();
           // it's important that we suppress the mouseover event on the node being dragged. Otherwise it will absorb the mouseover event and the underlying node will not detect it d3.select(this).attr('pointer-events', 'none');
         })
-        .on("drag", function(d) {
+        .on("drag", function (d) {
           if (d == root) {
             return;
           }
@@ -226,14 +207,14 @@ const FamilyTree = {
           } else {
             try {
               clearTimeout(panTimer);
-            } catch (e) {}
+            } catch (e) { }
           }
 
           d.x0 += d3.event.dy;
           d.y0 += d3.event.dx;
           var node = d3.select(this);
         })
-        .on("dragend", function(d) {
+        .on("dragend", function (d) {
           if (d == root) {
             return;
           }
@@ -300,17 +281,17 @@ const FamilyTree = {
         }
       }
 
-      var overCircle = function(d) {
+      var overCircle = function (d) {
         selectedNode = d;
         updateTempConnector();
       };
-      var outCircle = function(d) {
+      var outCircle = function (d) {
         selectedNode = null;
         updateTempConnector();
       };
 
       // Function to update the temporary connector indicating dragging affiliation
-      var updateTempConnector = function() {
+      var updateTempConnector = function () {
         var data = [];
         if (draggingNode !== null && selectedNode !== null) {
           // have to flip the source coordinates since we did this for the existing connectors on the original tree
@@ -337,7 +318,7 @@ const FamilyTree = {
 
       // Function to center node when clicked/dropped so node doesn't get lost when collapsing/moving with large amount of children.
 
-      FamilyTree.centerNode = function(source) {
+      FamilyTree.centerNode = function (source) {
         scale = zoomListener.scale();
         x = -source.y0;
         y = -source.x0;
@@ -381,12 +362,12 @@ const FamilyTree = {
         // This prevents the layout looking squashed when new nodes are made visible or looking sparse when nodes are removed
         // This makes the layout more consistent.
         var levelWidth = [1];
-        var childCount = function(level, n) {
+        var childCount = function (level, n) {
           if (n.children && n.children.length > 0) {
             if (levelWidth.length <= level + 1) levelWidth.push(0);
 
             levelWidth[level + 1] += n.children.length;
-            n.children.forEach(function(d) {
+            n.children.forEach(function (d) {
               childCount(level + 1, d);
             });
           }
@@ -400,7 +381,7 @@ const FamilyTree = {
           links = tree.links(nodes);
 
         // Set widths between levels based on maxLabelLength.
-        nodes.forEach(function(d) {
+        nodes.forEach(function (d) {
           d.y = d.depth * (maxLabelLength * 10); //maxLabelLength * 10px
           // alternatively to keep a fixed scale one can set a fixed depth per level
           // Normalize for fixed-depth by commenting out below line
@@ -410,7 +391,7 @@ const FamilyTree = {
         // Update the nodes…
         node = svgGroup
           .selectAll("g.node")
-          .data(nodes.filter(n => n.name !== "Unknown Unknown"), function(d) {
+          .data(nodes.filter(n => n.name !== "Unknown Unknown"), function (d) {
             return d.id || (d.id = ++i);
           });
 
@@ -420,7 +401,7 @@ const FamilyTree = {
           .append("g")
           .call(dragListener)
           .attr("class", "node")
-          .attr("transform", function(d) {
+          .attr("transform", function (d) {
             return "translate(" + source.y0 + "," + source.x0 + ")";
           })
           .on("click", click);
@@ -429,21 +410,21 @@ const FamilyTree = {
           .append("circle")
           .attr("class", "nodeCircle")
           .attr("r", 0)
-          .style("fill", function(d) {
+          .style("fill", function (d) {
             return d._children ? "#FF8987" : "#fff";
           });
 
         nodeEnter
           .append("text")
-          .attr("x", function(d) {
+          .attr("x", function (d) {
             return d.children || d._children ? -10 : 10;
           })
           .attr("dy", ".35em")
           .attr("class", "nodeText")
-          .attr("text-anchor", function(d) {
+          .attr("text-anchor", function (d) {
             return d.children || d._children ? "end" : "start";
           })
-          .text(function(d) {
+          .text(function (d) {
             return d.name;
           })
           .style("fill-opacity", 0);
@@ -456,23 +437,23 @@ const FamilyTree = {
           .attr("opacity", 0.2) // change this to zero to hide the target area
           .style("fill", "red")
           .attr("pointer-events", "mouseover")
-          .on("mouseover", function(node) {
+          .on("mouseover", function (node) {
             overCircle(node);
           })
-          .on("mouseout", function(node) {
+          .on("mouseout", function (node) {
             outCircle(node);
           });
 
         // Update the text to reflect whether node has children or not.
         node
           .select("text")
-          .attr("x", function(d) {
+          .attr("x", function (d) {
             return d.children || d._children ? -10 : 10;
           })
-          .attr("text-anchor", function(d) {
+          .attr("text-anchor", function (d) {
             return d.children || d._children ? "end" : "start";
           })
-          .text(function(d) {
+          .text(function (d) {
             return d.name;
           });
 
@@ -480,7 +461,7 @@ const FamilyTree = {
         node
           .select("circle.nodeCircle")
           .attr("r", 4.5)
-          .style("fill", function(d) {
+          .style("fill", function (d) {
             return d._children ? "#FF8987" : "#fff";
           });
 
@@ -488,7 +469,7 @@ const FamilyTree = {
         var nodeUpdate = node
           .transition()
           .duration(duration)
-          .attr("transform", function(d) {
+          .attr("transform", function (d) {
             return "translate(" + d.y + "," + d.x + ")";
           });
 
@@ -500,7 +481,7 @@ const FamilyTree = {
           .exit()
           .transition()
           .duration(duration)
-          .attr("transform", function(d) {
+          .attr("transform", function (d) {
             return "translate(" + source.y + "," + source.x + ")";
           })
           .remove();
@@ -511,7 +492,7 @@ const FamilyTree = {
 
         links = links.filter(l => l.source.name !== "Unknown Unknown");
         // Update the links…
-        var link = svgGroup.selectAll("path.link").data(links, function(d) {
+        var link = svgGroup.selectAll("path.link").data(links, function (d) {
           return d.target.id;
         });
 
@@ -520,7 +501,7 @@ const FamilyTree = {
           .enter()
           .insert("path", "g")
           .attr("class", "link")
-          .attr("d", function(d) {
+          .attr("d", function (d) {
             var o = { x: source.x0, y: source.y0 };
             return diagonal({ source: o, target: o });
           });
@@ -536,14 +517,14 @@ const FamilyTree = {
           .exit()
           .transition()
           .duration(duration)
-          .attr("d", function(d) {
+          .attr("d", function (d) {
             var o = { x: source.x, y: source.y };
             return diagonal({ source: o, target: o });
           })
           .remove();
 
         // Stash the old positions for transition.
-        nodes.forEach(function(d) {
+        nodes.forEach(function (d) {
           d.x0 = d.x;
           d.y0 = d.y;
         });

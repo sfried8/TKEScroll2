@@ -1,151 +1,140 @@
 <template>
 
-  <div class="layout-padding">
-    <div>
-      <q-btn
-        icon="sort"
-        class="float-right"
-        flat
-        ref="target"
+  <q-page padding>
+    <q-btn
+      icon="sort"
+      class="float-right"
+      flat
+      ref="target"
+    >
+      SORT BY
+      <q-menu
+        auto-close
+        anchor="bottom right"
+        self="top middle"
       >
-        SORT BY
-        <q-popover ref="popover">
-          <q-list
-            separator
-            link
-          >
-            <q-item @click.native="sortOption = 'scrollasc', $refs.popover.close()">
-              Scroll Asc
-            </q-item>
-            <q-item @click.native="sortOption = 'scrollsc', $refs.popover.close()">
-              Scroll Desc
-            </q-item>
-          </q-list>
 
-        </q-popover>
-      </q-btn>
+        <q-item
+          clickable
+          @click.native="sortOption = 'scrollasc'"
+        >
+          Scroll Asc
+        </q-item>
+        <q-item
+          clickable
+          @click.native="sortOption = 'scrollsc'"
+        >
+          Scroll Desc
+        </q-item>
 
-    </div>
+      </q-menu>
+    </q-btn>
+
     <q-input
-      clearable
       v-model="currentFilter"
       type="text"
-      float-label="filter"
+      debounce="350"
+      label="filter"
     />
     <q-list
       style="background:white"
       separator
+      padding
     >
       <q-item
         v-for="b in filteredBrothers"
         :key="b.original.scroll"
         @click.native="$router.push({ path: `/brother/${b.original.scroll}` }) "
       >
-        <q-item-side>
+        <q-item-section side>
           {{b.original.scroll}}
-          <q-icon :name="getIconForOfficer(b.original.officer)"></q-icon>
-        </q-item-side>
-        <q-item-main :label="b.string"></q-item-main>
+        </q-item-section>
+        <q-item-section>
+          <q-item-label><span v-html="b.string"></span></q-item-label>
+          <q-item-label
+            v-if="b.original.officer"
+            caption
+          >{{b.original.officer}}</q-item-label>
+        </q-item-section>
       </q-item>
       <q-item v-if="filteredBrothers.length == 0">
-        <q-item-main label="No Results Found!"></q-item-main>
+        <q-item-label>No Results Found!</q-item-label>
       </q-item>
     </q-list>
+    <q-page-scroller
+      position="bottom-right"
+      :scroll-offset="150"
+      :offset="[18, 18]"
+    >
+      <q-btn
+        fab
+        icon="keyboard_arrow_up"
+        color="primary"
+      />
+    </q-page-scroller>
 
-    <!-- <q-fixed-position corner="top-right" :offset="[18, 18]">
-            <q-btn v-back-to-top.animate="{offset: 500, duration: 200}" round color="primary" class="animate-pop" style="animation-duration: .5s;" icon="keyboard_arrow_up" />
-        </q-fixed-position> -->
-  </div>
+  </q-page>
 </template>
 
-<script lang="js">
+<script>
 import Fuzzy from "fuzzy";
 import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import {
-    dom,
-    event,
-    openURL,
-    QLayout,
-    QToolbar,
-    QToolbarTitle,
-    QBtn,
-    QIcon,
-    QList,
-    QListHeader,
-    QItem,
-    QItemSide,
-    QItemMain,
-    BackToTop,
-    QSelect,
-    QInput,
-    QPopover
+  QBtn,
+  QList,
+  QItem,
+  QItemSection,
+  QItemLabel,
+  QPageScroller,
+  QPage,
+  QInput,
+  QMenu
 } from "quasar";
 
 @Component({
-    name: "scroll",
-    components: {
-        QLayout,
-        QToolbar,
-        QToolbarTitle,
-        QBtn,
-        QIcon,
-        QList,
-        QListHeader,
-        QItem,
-        QItemSide,
-        QItemMain,
-        QSelect,
-        QInput,
-        QPopover
-    },
-    directives: {
-        BackToTop
-    }
+  name: "scroll",
+  components: {
+    QBtn,
+    QPage,
+    QList,
+    QItem,
+    QItemSection,
+    QPageScroller,
+    QItemLabel,
+    QInput,
+    QMenu
+  }
 })
 export default class Index extends Vue {
-    _brothers = [];
-    _brothersReversed = [];
-    showScrollDown = true;
-    sortOption = "scrollasc";
-    currentFilter = "";
-    icons = {
-        Prytanis: "gavel",
-        Epiprytanis: "book",
-        Histor: "map",
-        Grammateus: "edit",
-        Hypophetes: "favorite",
-        Hegemon: "school",
-        Crysophylos: "vpn key",
-        Pylortes: "colorize"
-    };
-    getIconForOfficer(officer) {
-        return this.icons[officer] || "";
+  _brothers = [];
+  _brothersReversed = [];
+  sortOption = "scrollasc";
+  currentFilter = "";
+  get filteredBrothers() {
+    if (!this.Brothers) {
+      return [];
     }
-    get filteredBrothers() {
-        if (!this.Brothers) {
-            return [];
-        }
-        return Fuzzy.filter(this.currentFilter, this.Brothers, {
-            pre: "<b>",
-            post: "</b>",
-            extract: el => el.fname + " " + el.lname
-        });
-    }
-    get Brothers() {
-        return this.sortOption === "scrollasc"
-            ? this._brothers
-            : this._brothersReversed;
-    }
-    mounted() {
-        Brothers.getBrothers().then(data => {
-            this._brothers = data.filter(el => el.scroll > 0);
-            this._brothersReversed = this._brothers.slice().reverse();
-            this.sortOption = "";
-            this.sortOption = "scrollasc";
-        });
-    }
+    return Fuzzy.filter(this.currentFilter, this.Brothers, {
+      pre: "<b>",
+      post: "</b>",
+      extract: el => el.fname + " " + el.lname
+    });
+  }
+  get Brothers() {
+    return this.sortOption === "scrollasc"
+      ? this._brothers
+      : this._brothersReversed;
+  }
+  mounted() {
+    Brothers.getBrothers().then(data => {
+      this._brothers = data.filter(el => el.scroll > 0);
+      this._brothersReversed = this._brothers.slice().reverse();
+      this.sortOption = "";
+      this.sortOption = "scrollasc";
+    });
+  }
 }
 </script>
 

@@ -1,5 +1,24 @@
 <template>
   <div class="layout-padding">
+    <help-overlay help-id="brotherPage">
+
+      <div
+        class="column justify-center items-center"
+        style="height:100%"
+      >
+        <img
+          class="col-3 self-center"
+          src="~/assets/swipe.png"
+        />
+        <p
+          class="col-2 self-center text-h5"
+          style="text-align:center"
+        >
+          Swipe left and right to navigate. It's just like Tinder!
+
+        </p>
+      </div>
+    </help-overlay>
     <div
       id="nextBrotherContainer"
       :class="cardClass"
@@ -32,6 +51,8 @@ import Util from "../Util";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import BrotherPageContent from "./BrotherPageContent";
+import HelpOverlay from "../components/HelpOverlay";
+
 import {
   dom,
   event,
@@ -40,9 +61,7 @@ import {
   QBtn,
   QIcon,
   TouchPan,
-  QCard,
-  QCardTitle,
-  QCardMain
+  QCard
 } from "quasar";
 
 @Component({
@@ -51,9 +70,8 @@ import {
     QLayout,
     QBtn,
     QIcon,
-    QCardTitle,
     QCard,
-    QCardMain,
+    HelpOverlay,
     BrotherPageContent
   },
   directives: {
@@ -122,7 +140,8 @@ export default class Index extends Vue {
   }
   direction = 1;
   get nextBrother() {
-    return this.currentBrother
+    return this.currentBrother &&
+      +this.currentBrother.scroll + this.direction > 0
       ? this.Brothers[+this.currentBrother.scroll + this.direction]
       : null;
   }

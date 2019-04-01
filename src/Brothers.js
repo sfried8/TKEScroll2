@@ -13,12 +13,17 @@ import Util from "./Util";
 export default {
   _brothers: null,
   async addBrother(brother) {
+    const url = LocalStorage.getItem("role") === "GUEST" ? fakeurl : awsAddUrl
     await Util.throttle(
-      fetch(awsAddUrl, {
+
+
+
+      fetch(url, {
         method: "POST", // *GET, PUT, DELETE, etc.
         body: JSON.stringify(brother), // must match 'Content-Type' header
         headers: new Headers({
           Accept: "application/json",
+          Authorization: "key=" + (LocalStorage.getItem("apiKey") || "GUEST"),
           "content-type": "application/json"
         })
       }).then(rawdata => rawdata.json()),
@@ -39,6 +44,7 @@ export default {
         body: JSON.stringify(officer), // must match 'Content-Type' header
         headers: new Headers({
           Accept: "application/json",
+          Authorization: "key=" + (LocalStorage.getItem("apiKey") || "GUEST"),
           "content-type": "application/json"
         })
       }).then(rawdata => rawdata.json()),
@@ -66,13 +72,26 @@ export default {
     if (this._brothers == null) {
       Loading.show();
       if (LocalStorage.has("brothers")) {
-        this._brothers = LocalStorage.get.item("brothers");
+        this._brothers = LocalStorage.getItem("brothers");
       }
       try {
-        const password = LocalStorage.get.item("brothersPassword");
-        const rawdata = await fetch(
-          password === "GUEST" ? fakeurl : awsGetUrl + "?password=" + password
-        );
+        const password = LocalStorage.getItem("apiKey");
+        let rawdata;
+        if (password === "GUEST") {
+          rawdata = await fetch(fakeurl)
+        } else {
+          rawdata = await fetch(
+            awsGetUrl,
+            {
+              method: "GET", // *GET, PUT, DELETE, etc.
+              headers: new Headers({
+                Authorization: "key=" + password
+              })
+            }
+
+          );
+        }
+
 
         const data = await rawdata.json();
         if (data.error) {
@@ -117,14 +136,18 @@ export default {
     return this._brothers;
   },
   authenticate(password) {
-    return fetch(authenticateUrl + "?password=" + password).then(data =>
+    return fetch(authenticateUrl, {
+      method: "GET", // *GET, PUT, DELETE, etc.
+      headers: new Headers({
+        Authorization: "key=" + password
+      })
+    }).then(data =>
       data.json()
     );
   },
   clearCache() {
     LocalStorage.remove("brothers");
-    LocalStorage.remove("brothersPassword");
-    console.log("deleted cache")
-    Notify.create("Deleted cache");
+    LocalStorage.remove("apiKey");
+    this._brothers = null;
   }
 };
