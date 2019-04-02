@@ -24,6 +24,11 @@
         name="updateofficers"
         label="E-Board"
       />
+      <q-tab
+        icon="delete"
+        name="deletebrother"
+        label="Delete"
+      />
     </q-tabs>
     <q-separator />
     <q-tab-panels
@@ -49,6 +54,12 @@
       >
         <histor-eboard></histor-eboard>
       </q-tab-panel>
+      <q-tab-panel
+        keep-alive
+        name="deletebrother"
+      >
+        <histor-delete-brother></histor-delete-brother>
+      </q-tab-panel>
     </q-tab-panels>
 
   </q-page>
@@ -61,6 +72,7 @@ import { QTabPanel, QTabPanels, QTabs, QTab, QPage, QSeparator } from "quasar";
 import HistorAddBrother from "./HistorAddBrother";
 import HistorEditBrother from "./HistorEditBrother";
 import HistorEboard from "./HistorEBoard";
+import HistorDeleteBrother from "./HistorDeleteBrother";
 @Component({
   name: "histor-base",
   components: {
@@ -72,7 +84,8 @@ import HistorEboard from "./HistorEBoard";
     QTabPanels,
     HistorAddBrother,
     HistorEditBrother,
-    HistorEboard
+    HistorEboard,
+    HistorDeleteBrother
   }
 })
 export default class Index extends Vue {
