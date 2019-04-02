@@ -53,24 +53,9 @@ import Brothers from "../Brothers";
 import BrotherPageContent from "./BrotherPageContent";
 import HelpOverlay from "../components/HelpOverlay";
 
-import {
-  dom,
-  event,
-  openURL,
-  QLayout,
-  QBtn,
-  QIcon,
-  TouchPan,
-  QCard
-} from "quasar";
-
 @Component({
   name: "brother-page",
   components: {
-    QLayout,
-    QBtn,
-    QIcon,
-    QCard,
     HelpOverlay,
     BrotherPageContent
   },

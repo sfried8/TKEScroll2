@@ -45,14 +45,10 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
-import { QBtn, QInput, LocalStorage } from "quasar";
+import { LocalStorage } from "quasar";
 
 @Component({
-  name: "first-time",
-  components: {
-    QBtn,
-    QInput
-  }
+  name: "first-time"
 })
 export default class Index extends Vue {
   height = 0;

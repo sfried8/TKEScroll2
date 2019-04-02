@@ -104,15 +104,9 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import Util from "../Util";
-import { QBtn } from "quasar";
-import BrotherSelect from "components/BrotherSelect";
 
 @Component({
-  name: "histor-eboard",
-  components: {
-    QBtn,
-    BrotherSelect
-  }
+  name: "histor-eboard"
 })
 export default class Index extends Vue {
   Prytanis = null;

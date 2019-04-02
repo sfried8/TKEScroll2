@@ -72,19 +72,10 @@
 import Vue from "vue";
 import { Watch } from "vue-property-decorator";
 import Component from "vue-class-component";
-import BrotherSelect from "../components/BrotherSelect";
 import Brothers from "../Brothers";
 
-import { QBtn, QInput, QToggle } from "quasar";
-
 @Component({
-  name: "histor-edit-brother",
-  components: {
-    QBtn,
-    QInput,
-    QToggle,
-    BrotherSelect
-  }
+  name: "histor-edit-brother"
 })
 export default class Index extends Vue {
   scroll = 0;

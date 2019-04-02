@@ -49,14 +49,13 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Watch } from "vue-property-decorator";
-import { QPage, QIcon, QPageSticky } from "quasar";
 import BrotherSelect from "../components/BrotherSelect";
 import HelpOverlay from "../components/HelpOverlay";
 import Tree from "../Tree";
 
 @Component({
   name: "my-family-tree",
-  components: { BrotherSelect, QPage, QIcon, QPageSticky, HelpOverlay }
+  components: { BrotherSelect, HelpOverlay }
 })
 export default class Index extends Vue {
   big = null;

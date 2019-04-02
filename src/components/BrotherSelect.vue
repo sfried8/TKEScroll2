@@ -36,19 +36,13 @@
 
 <script>
 import Vue from "vue";
-import { Component, Watch, Prop } from "vue-property-decorator";
+import { Component, Watch } from "vue-property-decorator";
 import Fuzzy from "fuzzy";
 import Util from "../Util.js";
 import Brothers from "../Brothers";
-import { QSelect, QItem, QItemSection } from "quasar";
 
 @Component({
   name: "brother-select",
-  components: {
-    QSelect,
-    QItem,
-    QItemSection
-  },
   props: {
     "clear-after-select": Boolean,
     value: Object,

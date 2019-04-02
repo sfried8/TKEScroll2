@@ -15,17 +15,14 @@
 
 </template>
 
-<script lang="js">
+<script>
 import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
-import Util from "../Util"
-
+import Util from "../Util";
 
 @Component({
-  name: "pc-page",
-  components: {
-  }
+  name: "pc-page"
 })
 export default class Index extends Vue {
   Brothers = [];
@@ -48,7 +45,7 @@ export default class Index extends Vue {
     );
   }
   get PCName() {
-    return Util.pledgeClassName(this.pc,this.isZT,true)
+    return Util.pledgeClassName(this.pc, this.isZT, true);
   }
 }
 </script>

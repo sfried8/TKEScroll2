@@ -32,7 +32,7 @@
       </ul>
     </div>
     <q-btn
-      color="green"
+      color="positive"
       icon-right="send"
       @click="viewInTree(brother)"
     >View in tree</q-btn>
@@ -45,11 +45,9 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
 import Util from "../Util";
-import { QBtn } from "quasar";
 
 @Component({
   name: "brother-page-content",
-  components: { QBtn },
   props: {
     brother: Object,
     brothers: Array

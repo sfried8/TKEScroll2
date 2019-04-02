@@ -26,11 +26,10 @@
 import Component from "vue-class-component";
 import Vue from "vue";
 
-import { LocalStorage, QBtn } from "quasar";
+import { LocalStorage } from "quasar";
 
 @Component({
   name: "help-overlay",
-  components: { QBtn },
   props: { "help-id": String }
 })
 export default class Index extends Vue {

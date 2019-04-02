@@ -57,22 +57,17 @@
 <script>
 import Vue from "vue";
 import Component from "vue-class-component";
-import { QTabPanel, QTabPanels, QTabs, QTab, QPage, QSeparator } from "quasar";
+import BrotherSelect from "../components/BrotherSelect";
 import HistorAddBrother from "./HistorAddBrother";
 import HistorEditBrother from "./HistorEditBrother";
 import HistorEboard from "./HistorEBoard";
 @Component({
   name: "histor-base",
   components: {
-    QTabs,
-    QTab,
-    QPage,
-    QTabPanel,
-    QSeparator,
-    QTabPanels,
     HistorAddBrother,
     HistorEditBrother,
-    HistorEboard
+    HistorEboard,
+    BrotherSelect
   }
 })
 export default class Index extends Vue {

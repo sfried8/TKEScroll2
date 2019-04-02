@@ -20,16 +20,13 @@
   </q-page>
 </template>
 
-<script lang="js">
+<script>
 import Component from "vue-class-component";
 import Vue from "vue";
-import {QPage} from "quasar"
 @Component({
-    name: "hello-view",
-    components:{QPage}
+  name: "hello-view"
 })
-export default class Index extends Vue {
-}
+export default class Index extends Vue {}
 </script>
 
 <style lang="stylus" scoped>

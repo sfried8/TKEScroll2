@@ -85,31 +85,10 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
-import {
-    dom,
-    event,
-    openURL,
-    QLayout,
-    QToolbar,
-    QToolbarTitle,
-    QBtn,
-    QIcon,
-    QList,
-    QItem,
-    TouchSwipe
-} from "quasar";
+
 
 @Component({
-    name: "eboard-page",
-    components: {
-        QLayout,
-        QToolbar,
-        QToolbarTitle,
-        QBtn,
-        QIcon,
-        QList,
-        QItem,
-    }
+    name: "eboard-page"
 })
 export default class Index extends Vue {
     Brothers = [];

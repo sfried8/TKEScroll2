@@ -104,83 +104,39 @@
   </q-layout>
 </template>
 
-<script lang="js">
+<script>
 import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
-import {
-    dom,
-    event,
-    openURL,
-    QLayout,
-    QHeader,
-    QDrawer,
-    QPageContainer,
-    QToolbar,
-    QToolbarTitle,
-    QBtn,
-    QIcon,
-    QList,
-    QItem,
-    QInput,
-    QItemLabel,
-    QItemSection,
-    // QSideLink,
-    LocalStorage
-} from "quasar";
+import { LocalStorage } from "quasar";
 
 @Component({
-    name: "main-view",
-    components: {
-        QLayout,
-        QToolbar,
-        QToolbarTitle,
-        QBtn,
-        QIcon,
-        QList,
-        QHeader,
-        QDrawer,
-        QPageContainer,
-        QItem,
-        QInput,
-        QItemLabel,
-        QItemSection,
-        // QSideLink,
-    }
+  name: "main-view"
 })
 export default class Index extends Vue {
-    left = true;
-    header = true;
-    showHistor = false;
-    goTo(page) {
-        console.log("going to " + page);
-        this.$refs.layout.toggleLeft(() => {
-            this.$router.push({ path: `/${page}` });
-        });
+  left = true;
+  header = true;
+  showHistor = false;
+  clearCache() {
+    LocalStorage.clear();
+    Brothers.clearCache();
+    this.$router.push("/firsttime");
+  }
+  mounted() {
+    document.querySelector(".q-layout").style.minHeight =
+      window.innerHeight + "px";
+    document.body.style.minHeight = window.innerHeight + "px";
+  }
+  beforeMount() {
+    if (!LocalStorage.has("apiKey")) {
+      this.$router.push("/firsttime");
     }
-    launch(url) {
-        openURL(url);
+    if (LocalStorage.has("role")) {
+      if (LocalStorage.getItem("role").toLowerCase() === "histor") {
+        this.showHistor = true;
+      }
     }
-    clearCache() {
-      LocalStorage.clear()
-        Brothers.clearCache();
-        this.$router.push("/firsttime");
-    }
-    mounted() {
-          document.querySelector(".q-layout").style.minHeight = window.innerHeight+"px"
-    document.body.style.minHeight = window.innerHeight+"px"
-
-    }
-    beforeMount() {
-        if (!LocalStorage.has("apiKey")) {
-            this.$router.push("/firsttime");
-        }
-        if (LocalStorage.has("role")) {
-          if (LocalStorage.getItem("role").toLowerCase() === "histor") {
-            this.showHistor = true;
-          }
-        }
-    }
+  }
 }
 </script>
 
