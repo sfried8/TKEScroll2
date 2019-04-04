@@ -42,76 +42,81 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import { LocalStorage } from "quasar";
+  import { LocalStorage } from "quasar";
 
-@Component
-export default class Index extends Vue {
-  height = 0;
-  password = "";
-  loading = false;
-  invalidPassword = false;
-  mounted() {
-    this.height = window.innerHeight;
-    document.querySelector("input").style.color = "#ffddcc";
-  }
-  fakeData() {
-    this.$q
-      .dialog({
-        title: "Continue as guest?",
-        message:
-          "You will be able to view and demo the whole site, but fake information will be used.",
-        ok: true,
-        cancel: true
-      })
-      .onOk(() => {
-        LocalStorage.set("apiKey", "GUEST");
-        this.$router.push("/");
-      })
-      .onCancel(() => console.log("cancelled"));
-  }
-  submit() {
-    this.loading = true;
-    this.invalidPassword = false;
-    this.$brothers.authenticate(this.password).then(data => {
-      this.loading = false;
-      if (data.role === "GUEST") {
-        this.password = "";
-        this.invalidPassword = true;
-      } else {
-        LocalStorage.set("role", data.role);
-        LocalStorage.set("apiKey", this.password);
-        if (data.role === "HISTOR") {
-          this.$router.push("/histor");
-        } else {
-          this.$router.push("/home");
-        }
+  export default {
+    data() {
+      return {
+        height: 0,
+        password: "",
+        loading: false,
+        invalidPassword: false
+      };
+    },
+
+    mounted() {
+      this.height = window.innerHeight;
+      document.querySelector("input").style.color = "#ffddcc";
+    },
+    methods: {
+      fakeData() {
+        this.$q
+          .dialog({
+            title: "Continue as guest?",
+            message:
+              "You will be able to view and demo the whole site, but fake information will be used.",
+            ok: true,
+            cancel: true
+          })
+          .onOk(() => {
+            LocalStorage.set("apiKey", "GUEST");
+            this.$router.push("/");
+          })
+          .onCancel(() => console.log("cancelled"));
+      },
+      submit() {
+        this.loading = true;
+        this.invalidPassword = false;
+        this.$brothers.authenticate(this.password).then(data => {
+          this.loading = false;
+
+          if (data.error || data.role === "GUEST") {
+            this.password = "";
+            this.invalidPassword = true;
+          } else {
+            LocalStorage.set("role", data.role);
+            LocalStorage.set("apiKey", this.password);
+            if (data.role === "HISTOR") {
+              this.$router.push("/histor");
+            } else {
+              this.$router.push("/home");
+            }
+          }
+        });
       }
-    });
-  }
-}
+    }
+  };
 </script>
 
 <style lang="stylus" scoped>
-.first-time {
-  padding: 8%;
-  background-image: radial-gradient(circle, #AD4644, #AD2624);
-  color: #FFddcc;
-}
+  .first-time {
+    padding: 8%;
+    background-image: radial-gradient(circle, #AD4644, #AD2624);
+    color: #FFddcc;
+  }
 
-input::placeholder {
-  color: white;
-}
+  input::placeholder {
+    color: white;
+  }
 
-.q-if-label-inner {
-  color: white !important;
-}
+  .q-if-label-inner {
+    color: white !important;
+  }
 
-#triangleimg {
-  max-width: 80%;
-  max-height: 250px;
-  display: block;
-  margin: auto;
-}
+  #triangleimg {
+    max-width: 80%;
+    max-height: 250px;
+    display: block;
+    margin: auto;
+  }
 </style>

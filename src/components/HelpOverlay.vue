@@ -23,30 +23,29 @@
 </template>
 
 <script>
-import Component from "vue-class-component";
-import Vue from "vue";
+  import { LocalStorage } from "quasar";
 
-import { LocalStorage } from "quasar";
-
-@Component({
-  props: { "help-id": String }
-})
-export default class Index extends Vue {
-  shouldShow = false;
-  mounted() {
-    if (!LocalStorage.has("hasSeen" + this.helpId)) {
-      this.shouldShow = true;
+  export default {
+    props: { "help-id": String },
+    data() {
+      return { shouldShow: false };
+    },
+    mounted() {
+      if (!LocalStorage.has("hasSeen" + this.helpId)) {
+        this.shouldShow = true;
+      }
+    },
+    methods: {
+      dismiss() {
+        this.shouldShow = false;
+        LocalStorage.set("hasSeen" + this.helpId, true);
+      }
     }
-  }
-  dismiss() {
-    this.shouldShow = false;
-    LocalStorage.set("hasSeen" + this.helpId, true);
-  }
-}
+  };
 </script>
 
 <style>
-.help-overlay {
-  background: rgba(0, 0, 0, 0.8);
-}
+  .help-overlay {
+    background: rgba(0, 0, 0, 0.8);
+  }
 </style>

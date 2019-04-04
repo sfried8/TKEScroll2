@@ -30,7 +30,7 @@
       >
 
         <brother-select
-          v-model="big"
+          v-model="findTarget"
           label="Find brother"
           outlined
           class="bg-white"
@@ -46,69 +46,72 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { Component, Watch } from "vue-property-decorator";
-import Tree from "../Tree";
+  import Tree from "../Tree";
 
-@Component
-export default class Index extends Vue {
-  big = null;
-  mounted() {
-    Tree.render(this.$route.query ? +this.$route.query.scroll : 0);
-  }
-
-  @Watch("big")
-  selected(val) {
-    if (this.big) {
-      const node = Tree.nodes.find(n => n.name === val.fname + " " + val.lname);
-      if (node) {
-        Tree.centerNode(node);
+  export default {
+    data() {
+      return {
+        findTarget: null
+      };
+    },
+    mounted() {
+      Tree.render(this.$route.query ? +this.$route.query.scroll : 0);
+    },
+    watch: {
+      findTarget(val) {
+        if (this.findTarget) {
+          const node = Tree.nodes.find(
+            n => n.name === val.fname + " " + val.lname
+          );
+          if (node) {
+            Tree.centerNode(node);
+          }
+          this.findTarget = null;
+        }
+        // this.big = ""
       }
-      this.big = null;
     }
-    // this.big = ""
-  }
-}
+  };
 </script>
 
 <style type="text/css">
-#tree-container {
-  overflow: hidden;
-  touch-action: none;
-}
-.node {
-  cursor: pointer;
-}
+  #tree-container {
+    overflow: hidden;
+    touch-action: none;
+  }
+  .node {
+    cursor: pointer;
+  }
 
-.node circle {
-  fill: #fff;
-  stroke: #ad2624;
-  stroke-width: 1.5px;
-}
+  .node circle {
+    fill: #fff;
+    stroke: #ad2624;
+    stroke-width: 1.5px;
+  }
 
-.node text {
-  font-size: 10px;
-  font-family: sans-serif;
-}
+  .node text {
+    font-size: 10px;
+    font-family: sans-serif;
+  }
 
-.link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 1.5px;
-}
+  .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+  }
 
-.templink {
-  fill: none;
-  stroke: red;
-  stroke-width: 3px;
-}
+  .templink {
+    fill: none;
+    stroke: red;
+    stroke-width: 3px;
+  }
 
-.ghostCircle.show {
-  display: block;
-}
+  .ghostCircle.show {
+    display: block;
+  }
 
-.ghostCircle,
-.activeDrag .ghostCircle {
-  display: none;
-}
+  .ghostCircle,
+  .activeDrag .ghostCircle {
+    display: none;
+  }
 </style>

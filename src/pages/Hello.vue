@@ -21,26 +21,23 @@
 </template>
 
 <script>
-import Component from "vue-class-component";
-import Vue from "vue";
-@Component
-export default class Index extends Vue {}
+  export default {};
 </script>
 
 <style lang="stylus" scoped>
-.hello {
-  text-align: center;
-  height: 100%;
-  background-color: white;
-}
+  .hello {
+    text-align: center;
+    height: 100%;
+    background-color: white;
+  }
 
-.logo {
-  position: absolute;
-  transform-style: preserve-3d;
-}
+  .logo {
+    position: absolute;
+    transform-style: preserve-3d;
+  }
 
-img {
-  max-width: 50%;
-  max-height: 300px;
-}
+  img {
+    max-width: 50%;
+    max-height: 300px;
+  }
 </style>

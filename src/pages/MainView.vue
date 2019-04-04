@@ -105,50 +105,54 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import { LocalStorage } from "quasar";
+  import { LocalStorage } from "quasar";
 
-@Component
-export default class Index extends Vue {
-  left = true;
-  header = true;
-  showHistor = false;
-  clearCache() {
-    LocalStorage.clear();
-    this.$brothers.clearCache();
-    this.$router.push("/firsttime");
-  }
-  mounted() {
-    document.querySelector(".q-layout").style.minHeight =
-      window.innerHeight + "px";
-    document.body.style.minHeight = window.innerHeight + "px";
-  }
-  beforeMount() {
-    if (!LocalStorage.has("apiKey")) {
-      this.$router.push("/firsttime");
-    }
-    if (LocalStorage.has("role")) {
-      if (LocalStorage.getItem("role").toLowerCase() === "histor") {
-        this.showHistor = true;
+  export default {
+    data() {
+      return {
+        left: true,
+        header: true,
+        showHistor: false
+      };
+    },
+    methods: {
+      clearCache() {
+        LocalStorage.clear();
+        this.$brothers.clearCache();
+        this.$router.push("/firsttime");
+      }
+    },
+
+    mounted() {
+      document.querySelector(".q-layout").style.minHeight =
+        window.innerHeight + "px";
+      document.body.style.minHeight = window.innerHeight + "px";
+    },
+    beforeMount() {
+      if (!LocalStorage.has("apiKey")) {
+        this.$router.push("/firsttime");
+      }
+      if (LocalStorage.has("role")) {
+        if (LocalStorage.getItem("role").toLowerCase() === "histor") {
+          this.showHistor = true;
+        }
       }
     }
-  }
-}
+  };
 </script>
 
 <style lang="stylus">
-body {
-  background: #eee;
-}
-
-.brother-link {
-  color: blue;
-  text-decoration: underline;
-  cursor: pointer;
-
-  div {
-    width: 95%;
+  body {
+    background: #eee;
   }
-}
+
+  .brother-link {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+
+    div {
+      width: 95%;
+    }
+  }
 </style>

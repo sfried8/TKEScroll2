@@ -46,111 +46,118 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import BrotherPageContent from "./BrotherPageContent";
+  import BrotherPageContent from "./BrotherPageContent";
 
-@Component({ components: { BrotherPageContent } })
-export default class Index extends Vue {
-  Brothers = [];
-  currentBrother = null;
-  showSwipe = true;
-  cardPositionX = 0;
-  cardPositionY = 0;
-  mounted() {
-    this.$brothers.getBrothers().then(data => {
-      this.Brothers = data;
-      const index = +(this.$route.params.scroll || 0);
-      this.currentBrother = this.Brothers[this.$route.params.scroll];
-      this._nextBrother = this.Brothers[this.currentBrother.scroll + 1];
-    });
-  }
-  startingPosition = { top: 0, left: 0 };
-  isDragging = false;
-  panHandler(obj) {
-    this.isDragging = true;
-    // if (+obj.distance.x > 30 || +obj.distance.y > 30 || +obj.duration > 500) {
-    obj.evt.preventDefault();
-    // }
-    if (obj.isFirst) {
-      this.startingPosition = obj.position;
-    } else if (obj.isFinal) {
-      if (
-        this.nextBrother &&
-        (Math.abs(this.cardPositionX) > 250 ||
-          (Math.abs(this.cardPositionX) > 100 && +obj.duration < 300))
-      ) {
-        this.$router.push("/brother/" + this.nextBrother.scroll);
-      } else {
-        this.isDragging = false;
+  export default {
+    components: { BrotherPageContent },
+    data() {
+      return {
+        Brothers: [],
+        currentBrother: null,
+        showSwipe: true,
+        cardPositionX: 0,
+        cardPositionY: 0,
+        startingPosition: { top: 0, left: 0 },
+        isDragging: false,
+        direction: 1
+      };
+    },
+
+    mounted() {
+      this.$brothers.getBrothers().then(data => {
+        this.Brothers = data;
+        const index = +(this.$route.params.scroll || 0);
+        this.currentBrother = this.Brothers[this.$route.params.scroll];
+        this._nextBrother = this.Brothers[this.currentBrother.scroll + 1];
+      });
+    },
+    methods: {
+      panHandler(obj) {
+        this.isDragging = true;
+        // if (+obj.distance.x > 30 || +obj.distance.y > 30 || +obj.duration > 500) {
+        obj.evt.preventDefault();
+        // }
+        if (obj.isFirst) {
+          this.startingPosition = obj.position;
+        } else if (obj.isFinal) {
+          if (
+            this.nextBrother &&
+            (Math.abs(this.cardPositionX) > 250 ||
+              (Math.abs(this.cardPositionX) > 100 && +obj.duration < 300))
+          ) {
+            this.$router.push("/brother/" + this.nextBrother.scroll);
+          } else {
+            this.isDragging = false;
+          }
+          this.cardPositionX = 0;
+          this.cardPositionY = 0;
+        } else {
+          this.cardPositionX = obj.position.left - this.startingPosition.left;
+          this.cardPositionY =
+            100 *
+              this.$util.sigmoid(
+                (obj.position.top - this.startingPosition.top) / 100
+              ) -
+            50;
+        }
+        if (this.cardPositionX !== 0) {
+          this.direction = this.cardPositionX < 0 ? 1 : -1;
+        }
       }
-      this.cardPositionX = 0;
-      this.cardPositionY = 0;
-    } else {
-      this.cardPositionX = obj.position.left - this.startingPosition.left;
-      this.cardPositionY =
-        100 *
-          this.$util.sigmoid(
-            (obj.position.top - this.startingPosition.top) / 100
-          ) -
-        50;
+    },
+    computed: {
+      cardPositioning() {
+        return {
+          transform: `translate(calc(0% + ${this.cardPositionX}px),${
+            this.cardPositionY
+          }px)`,
+          opacity: Math.max(
+            0,
+            1 - Math.max(Math.abs(this.cardPositionX) - 100, 0) / 150
+          )
+        };
+      },
+      cardClass() {
+        return (this.isDragging ? "" : "return-to-origin") + " card-container";
+      },
+      nextBrother() {
+        return this.currentBrother &&
+          +this.currentBrother.scroll + this.direction > 0
+          ? this.Brothers[+this.currentBrother.scroll + this.direction]
+          : null;
+      }
     }
-    if (this.cardPositionX !== 0) {
-      this.direction = this.cardPositionX < 0 ? 1 : -1;
-    }
-  }
-  get cardPositioning() {
-    return {
-      transform: `translate(calc(0% + ${this.cardPositionX}px),${
-        this.cardPositionY
-      }px)`,
-      opacity: Math.max(
-        0,
-        1 - Math.max(Math.abs(this.cardPositionX) - 100, 0) / 150
-      )
-    };
-  }
-  get cardClass() {
-    return (this.isDragging ? "" : "return-to-origin") + " card-container";
-  }
-  direction = 1;
-  get nextBrother() {
-    return this.currentBrother &&
-      +this.currentBrother.scroll + this.direction > 0
-      ? this.Brothers[+this.currentBrother.scroll + this.direction]
-      : null;
-  }
-}
+  };
 </script>
 
 <style lang="stylus">
-.return-to-origin {
-  transition: all 100ms ease-out;
-}
+  .return-to-origin {
+    transition: all 100ms ease-out;
+  }
 
-.brother-page {
-  position: absolute;
-  border-radius: 4px;
-  width: 100%;
-  height: 100%;
-  padding: 40px;
-  background: #fff;
-  border: 1px #bbb solid;
-}
+  .brother-page {
+    position: absolute;
+    border-radius: 4px;
+    width: 100%;
+    height: 100%;
+    padding: 40px;
+    background: #fff;
+    border: 1px #bbb solid;
+  }
 
-#nextBrotherContainer {
-  box-shadow: 0px 4px 20px 0px #888888;
-}
+  #nextBrotherContainer {
+    box-shadow: 0px 4px 20px 0px #888888;
+  }
 
-.card-container {
-  position: absolute;
-  height: 80%;
-  top: 10%;
-  width: 80%;
-  left: 10%;
-}
+  .card-container {
+    position: absolute;
+    height: 80%;
+    top: 10%;
+    width: 80%;
+    left: 10%;
+  }
 
-.brother-page-line {
-  font-weight: 300;
-}
+  .brother-page-line {
+    font-weight: 300;
+  }
 </style>

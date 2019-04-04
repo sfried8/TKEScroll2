@@ -66,82 +66,80 @@
   </div>
 </template>
 
-<script lang="js">
-import Vue from "vue";
-import Component from "vue-class-component";
-
-const DEBUG = false;
-@Component
-export default class Index extends Vue {
-    scroll = 0;
-    fname = "";
-    lname = "";
-    nickname = "";
-    pc = 0;
-    active = true;
-    big = null;
-    brothers = [];
-    searcher = null;
-    pendingBrothers = [];
-    addAll() {
+<script>
+  const DEBUG = false;
+  export default {
+    data() {
+      return {
+        scroll: 0,
+        fname: "",
+        lname: "",
+        nickname: "",
+        pc: 0,
+        active: true,
+        big: null,
+        brothers: [],
+        searcher: null,
+        pendingBrothers: []
+      };
+    },
+    methods: {
+      addAll() {
         this.$brothers.addBrothers(this.pendingBrothers).then(() => {
-            this.$q.notify(
-                `Successfully added ${this.pendingBrothers.length} Brother${
-                    this.pendingBrothers.length > 1 ? "s" : ""
-                }!`
-            );
-            this.pendingBrothers = [];
+          this.$q.notify(
+            `Successfully added ${this.pendingBrothers.length} Brother${
+              this.pendingBrothers.length > 1 ? "s" : ""
+            }!`
+          );
+          this.pendingBrothers = [];
         });
-    }
-    submit() {
+      },
+      submit() {
         const brother = {
-            scroll: `${this.scroll}`,
-            fname: this.fname,
-            lname: this.lname,
-            pc: +this.pc,
-            nickname: this.nickname,
-            bigS: this.big.scroll,
-            active: this.active,
-            isZetaTau: this.pc < 0
+          scroll: `${this.scroll}`,
+          fname: this.fname,
+          lname: this.lname,
+          pc: +this.pc,
+          nickname: this.nickname,
+          bigS: this.big.scroll,
+          active: this.active,
+          isZetaTau: this.pc < 0
         };
         this.pendingBrothers.push(brother);
         this.scroll++;
         this.fname = DEBUG
-            ? Math.random()
-                  .toString(36)
-                  .substring(7)
-            : "";
+          ? Math.random()
+              .toString(36)
+              .substring(7)
+          : "";
         this.lname = DEBUG
-            ? Math.random()
-                  .toString(36)
-                  .substring(7)
-            : "";
+          ? Math.random()
+              .toString(36)
+              .substring(7)
+          : "";
         this.nickname = DEBUG
-            ? Math.random()
-                  .toString(36)
-                  .substring(7)
-            : "";
+          ? Math.random()
+              .toString(36)
+              .substring(7)
+          : "";
         this.big = null;
 
         // Brothers.addBrother(brother);
-    }
-
+      }
+    },
     mounted() {
-        this.$brothers.getBrothers()
-            .then(brothers => {
-                const highestScroll = Math.max(...brothers.map(b => +b.scroll));
-                const highestPC = Math.max(
-                    ...brothers.map(b => (b.pc < 999 ? b.pc : 0))
-                );
-                this.scroll = highestScroll + 1;
-                this.pc = highestPC;
-            });
+      this.$brothers.getBrothers().then(brothers => {
+        const highestScroll = Math.max(...brothers.map(b => +b.scroll));
+        const highestPC = Math.max(...brothers.map(b => (b.pc < 999 ? b.pc : 0)));
+        this.scroll = highestScroll + 1;
+        this.pc = highestPC;
+      });
     }
-}
+  };
 </script>
 
 <style>
-.q-field__prepend {
-  padding-right: 0 !important;
-}
+  .q-field__prepend {
+    padding-right: 0 !important;
+  }
 </style>

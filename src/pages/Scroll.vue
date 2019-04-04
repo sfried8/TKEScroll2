@@ -77,40 +77,43 @@
 </template>
 
 <script>
-import Fuzzy from "fuzzy";
-import Vue from "vue";
-import Component from "vue-class-component";
+  import Fuzzy from "fuzzy";
 
-@Component
-export default class Index extends Vue {
-  _brothers = [];
-  _brothersReversed = [];
-  sortOption = "scrollasc";
-  currentFilter = "";
-  get filteredBrothers() {
-    if (!this.Brothers) {
-      return [];
+  export default {
+    data() {
+      return {
+        _brothers: [],
+        _brothersReversed: [],
+        sortOption: "scrollasc",
+        currentFilter: ""
+      };
+    },
+    computed: {
+      filteredBrothers() {
+        if (!this.Brothers) {
+          return [];
+        }
+        return Fuzzy.filter(this.currentFilter, this.Brothers, {
+          pre: "<b>",
+          post: "</b>",
+          extract: el => el.fname + " " + el.lname
+        });
+      },
+      Brothers() {
+        return this.sortOption === "scrollasc"
+          ? this._brothers
+          : this._brothersReversed;
+      }
+    },
+    mounted() {
+      this.$brothers.getBrothers().then(data => {
+        this._brothers = data.filter(el => el.scroll > 0);
+        this._brothersReversed = this._brothers.slice().reverse();
+        this.sortOption = "";
+        this.sortOption = "scrollasc";
+      });
     }
-    return Fuzzy.filter(this.currentFilter, this.Brothers, {
-      pre: "<b>",
-      post: "</b>",
-      extract: el => el.fname + " " + el.lname
-    });
-  }
-  get Brothers() {
-    return this.sortOption === "scrollasc"
-      ? this._brothers
-      : this._brothersReversed;
-  }
-  mounted() {
-    this.$brothers.getBrothers().then(data => {
-      this._brothers = data.filter(el => el.scroll > 0);
-      this._brothersReversed = this._brothers.slice().reverse();
-      this.sortOption = "";
-      this.sortOption = "scrollasc";
-    });
-  }
-}
+  };
 </script>
 
 <style lang="stylus">

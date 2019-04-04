@@ -41,32 +41,34 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-
-@Component({
-  props: {
-    brother: Object,
-    brothers: Array
-  }
-})
-export default class Index extends Vue {
-  get Big() {
-    return this.brother && this.brother.big
-      ? this.brothers[this.brother.big]
-      : {};
-  }
-  get Littles() {
-    return this.brother
-      ? this.brothers.filter(b => b.big == this.brother.scroll)
-      : [];
-  }
-  get PC() {
-    return this.$util.pledgeClassName(this.brother.pc, this.brother.isZetaTau);
-  }
-  viewInTree(b) {
-    this.$router.push("/tree?scroll=" + b.scroll);
-  }
-}
+  export default {
+    props: {
+      brother: Object,
+      brothers: Array
+    },
+    computed: {
+      Big() {
+        return this.brother && this.brother.big
+          ? this.brothers[this.brother.big]
+          : {};
+      },
+      Littles() {
+        return this.brother
+          ? this.brothers.filter(b => b.big == this.brother.scroll)
+          : [];
+      },
+      PC() {
+        return this.$util.pledgeClassName(
+          this.brother.pc,
+          this.brother.isZetaTau
+        );
+      }
+    },
+    methods: {
+      viewInTree(b) {
+        this.$router.push("/tree?scroll=" + b.scroll);
+      }
+    }
+  };
 </script>
 

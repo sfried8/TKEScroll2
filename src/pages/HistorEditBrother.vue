@@ -69,74 +69,72 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { Component, Watch } from "vue-property-decorator";
+  export default {
+    data() {
+      return {
+        scroll: 0,
+        fname: "",
+        lname: "",
+        nickname: "",
+        pc: 0,
+        active: true,
+        big: null,
+        currentBrother: null
+      };
+    },
+    methods: {
+      submit() {
+        const brother = {
+          scroll: `${this.scroll}`,
+          fname: this.fname,
+          lname: this.lname,
+          pc: +this.pc,
+          nickname: this.nickname,
+          bigS: this.big.scroll,
+          active: this.active,
+          isZetaTau: false
+        };
+        this.$brothers
+          .addBrother(brother)
+          .then(
+            this.$q.notify(
+              `Successfully updated information for ${this.currentBrother}!`
+            )
+          );
 
-@Component
-export default class Index extends Vue {
-  scroll = 0;
+        // Brothers.addBrother(brother);
+      }
+    },
+    watch: {
+      currentBrother(val, oldVal) {
+        if (!val) {
+          return;
+        }
+        this.scroll = this.currentBrother.scroll;
+        this.fname = this.currentBrother.fname;
+        this.lname = this.currentBrother.lname;
+        this.nickname = this.currentBrother.nickname;
+        this.pc = this.currentBrother.pc;
+        this.active = this.currentBrother.active;
+        this.big = this.brothers[this.currentBrother.big];
+      }
+    },
 
-  fname = "";
-
-  lname = "";
-
-  nickname = "";
-
-  pc = 0;
-
-  active = true;
-
-  big = null;
-  currentBrother = null;
-  submit() {
-    const brother = {
-      scroll: `${this.scroll}`,
-      fname: this.fname,
-      lname: this.lname,
-      pc: +this.pc,
-      nickname: this.nickname,
-      bigS: this.big.scroll,
-      active: this.active,
-      isZetaTau: false
-    };
-    this.$brothers
-      .addBrother(brother)
-      .then(
-        this.$q.notify(
-          `Successfully updated information for ${this.currentBrother}!`
-        )
-      );
-
-    // Brothers.addBrother(brother);
-  }
-  @Watch("currentBrother")
-  onCurrentBrotherChanged(val, oldVal) {
-    if (!val) {
-      return;
+    mounted() {
+      this.$brothers.getBrothers().then(b => (this.brothers = b));
     }
-    this.scroll = this.currentBrother.scroll;
-    this.fname = this.currentBrother.fname;
-    this.lname = this.currentBrother.lname;
-    this.nickname = this.currentBrother.nickname;
-    this.pc = this.currentBrother.pc;
-    this.active = this.currentBrother.active;
-    this.big = this.brothers[this.currentBrother.big];
-  }
-  mounted() {
-    this.$brothers.getBrothers().then(b => (this.brothers = b));
-  }
-}
+  };
 </script>
 
 <style scoped>
-#changeButton {
-  text-decoration: underline;
-  color: #444;
-  margin-left: 10px;
-  cursor: pointer;
-}
-h5 {
-  display: inline-block;
-}
+  #changeButton {
+    text-decoration: underline;
+    color: #444;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  h5 {
+    display: inline-block;
+  }
 </style>
 

@@ -6,8 +6,6 @@ const awsAddOfficerUrl = awsUrl + "/brothers/addOfficer";
 const authenticateUrl = awsUrl + "/authenticate";
 const fakeurl =
   "https://raw.githubusercontent.com/sfried8/BrotherAPI2/master/fakebrothers.json";
-require("isomorphic-fetch");
-// require("es6-promise").polyfill();
 import { LocalStorage, Notify, Loading } from "quasar";
 import Util from "./Util";
 export default {
