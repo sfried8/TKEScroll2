@@ -18,12 +18,8 @@
 <script>
 import Vue from "vue";
 import Component from "vue-class-component";
-import Brothers from "../Brothers";
-import Util from "../Util";
 
-@Component({
-  name: "pc-page"
-})
+@Component
 export default class Index extends Vue {
   Brothers = [];
   pc = 0;
@@ -37,7 +33,7 @@ export default class Index extends Vue {
       this.pc = +pcparam;
     }
     this.Brothers = [];
-    Brothers.getBrothers().then(data => (this.Brothers = data));
+    this.$brothers.getBrothers().then(data => (this.Brothers = data));
   }
   get PBros() {
     return this.Brothers.filter(
@@ -45,7 +41,7 @@ export default class Index extends Vue {
     );
   }
   get PCName() {
-    return Util.pledgeClassName(this.pc, this.isZT, true);
+    return this.$util.pledgeClassName(this.pc, this.isZT, true);
   }
 }
 </script>

@@ -107,19 +107,16 @@
 <script>
 import Vue from "vue";
 import Component from "vue-class-component";
-import Brothers from "../Brothers";
 import { LocalStorage } from "quasar";
 
-@Component({
-  name: "main-view"
-})
+@Component
 export default class Index extends Vue {
   left = true;
   header = true;
   showHistor = false;
   clearCache() {
     LocalStorage.clear();
-    Brothers.clearCache();
+    this.$brothers.clearCache();
     this.$router.push("/firsttime");
   }
   mounted() {

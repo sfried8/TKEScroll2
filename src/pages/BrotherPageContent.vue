@@ -43,11 +43,8 @@
 <script>
 import Vue from "vue";
 import Component from "vue-class-component";
-import Brothers from "../Brothers";
-import Util from "../Util";
 
 @Component({
-  name: "brother-page-content",
   props: {
     brother: Object,
     brothers: Array
@@ -65,7 +62,7 @@ export default class Index extends Vue {
       : [];
   }
   get PC() {
-    return Util.pledgeClassName(this.brother.pc, this.brother.isZetaTau);
+    return this.$util.pledgeClassName(this.brother.pc, this.brother.isZetaTau);
   }
   viewInTree(b) {
     this.$router.push("/tree?scroll=" + b.scroll);

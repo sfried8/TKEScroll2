@@ -44,12 +44,9 @@
 <script>
 import Vue from "vue";
 import Component from "vue-class-component";
-import Brothers from "../Brothers";
 import { LocalStorage } from "quasar";
 
-@Component({
-  name: "first-time"
-})
+@Component
 export default class Index extends Vue {
   height = 0;
   password = "";
@@ -77,7 +74,7 @@ export default class Index extends Vue {
   submit() {
     this.loading = true;
     this.invalidPassword = false;
-    Brothers.authenticate(this.password).then(data => {
+    this.$brothers.authenticate(this.password).then(data => {
       this.loading = false;
       if (data.role === "GUEST") {
         this.password = "";

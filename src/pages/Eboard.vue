@@ -84,12 +84,9 @@
 <script lang="js">
 import Vue from "vue";
 import Component from "vue-class-component";
-import Brothers from "../Brothers";
 
 
-@Component({
-    name: "eboard-page"
-})
+@Component
 export default class Index extends Vue {
     Brothers = [];
     Prytanis = null;
@@ -102,7 +99,7 @@ export default class Index extends Vue {
     Hegemon = null;
     mounted() {
         this.Brothers = [];
-        Brothers.getBrothers().then(data => {
+        this.$brothers.getBrothers().then(data => {
             this.Brothers = data;
             const officers = this.Brothers.filter(el => !!el.officer);
             const positions = [

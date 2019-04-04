@@ -70,13 +70,9 @@
 
 <script>
 import Vue from "vue";
-import { Watch } from "vue-property-decorator";
-import Component from "vue-class-component";
-import Brothers from "../Brothers";
+import { Component, Watch } from "vue-property-decorator";
 
-@Component({
-  name: "histor-edit-brother"
-})
+@Component
 export default class Index extends Vue {
   scroll = 0;
 
@@ -103,11 +99,13 @@ export default class Index extends Vue {
       active: this.active,
       isZetaTau: false
     };
-    Brothers.addBrother(brother).then(
-      this.$q.notify(
-        `Successfully updated information for ${this.currentBrother}!`
-      )
-    );
+    this.$brothers
+      .addBrother(brother)
+      .then(
+        this.$q.notify(
+          `Successfully updated information for ${this.currentBrother}!`
+        )
+      );
 
     // Brothers.addBrother(brother);
   }
@@ -125,7 +123,7 @@ export default class Index extends Vue {
     this.big = this.brothers[this.currentBrother.big];
   }
   mounted() {
-    Brothers.getBrothers().then(b => (this.brothers = b));
+    this.$brothers.getBrothers().then(b => (this.brothers = b));
   }
 }
 </script>

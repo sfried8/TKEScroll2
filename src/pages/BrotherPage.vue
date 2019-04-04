@@ -47,22 +47,10 @@
 
 <script>
 import Vue from "vue";
-import Util from "../Util";
 import Component from "vue-class-component";
-import Brothers from "../Brothers";
 import BrotherPageContent from "./BrotherPageContent";
-import HelpOverlay from "../components/HelpOverlay";
 
-@Component({
-  name: "brother-page",
-  components: {
-    HelpOverlay,
-    BrotherPageContent
-  },
-  directives: {
-    TouchPan
-  }
-})
+@Component({ components: { BrotherPageContent } })
 export default class Index extends Vue {
   Brothers = [];
   currentBrother = null;
@@ -70,7 +58,7 @@ export default class Index extends Vue {
   cardPositionX = 0;
   cardPositionY = 0;
   mounted() {
-    Brothers.getBrothers().then(data => {
+    this.$brothers.getBrothers().then(data => {
       this.Brothers = data;
       const index = +(this.$route.params.scroll || 0);
       this.currentBrother = this.Brothers[this.$route.params.scroll];
@@ -81,9 +69,9 @@ export default class Index extends Vue {
   isDragging = false;
   panHandler(obj) {
     this.isDragging = true;
-    if (+obj.distance.x > 30 || +obj.distance.y > 30 || +obj.duration > 500) {
-      obj.evt.preventDefault();
-    }
+    // if (+obj.distance.x > 30 || +obj.distance.y > 30 || +obj.duration > 500) {
+    obj.evt.preventDefault();
+    // }
     if (obj.isFirst) {
       this.startingPosition = obj.position;
     } else if (obj.isFinal) {
@@ -102,7 +90,9 @@ export default class Index extends Vue {
       this.cardPositionX = obj.position.left - this.startingPosition.left;
       this.cardPositionY =
         100 *
-          Util.sigmoid((obj.position.top - this.startingPosition.top) / 100) -
+          this.$util.sigmoid(
+            (obj.position.top - this.startingPosition.top) / 100
+          ) -
         50;
     }
     if (this.cardPositionX !== 0) {

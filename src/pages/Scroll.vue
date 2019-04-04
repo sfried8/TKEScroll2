@@ -80,11 +80,8 @@
 import Fuzzy from "fuzzy";
 import Vue from "vue";
 import Component from "vue-class-component";
-import Brothers from "../Brothers";
 
-@Component({
-  name: "scroll"
-})
+@Component
 export default class Index extends Vue {
   _brothers = [];
   _brothersReversed = [];
@@ -106,7 +103,7 @@ export default class Index extends Vue {
       : this._brothersReversed;
   }
   mounted() {
-    Brothers.getBrothers().then(data => {
+    this.$brothers.getBrothers().then(data => {
       this._brothers = data.filter(el => el.scroll > 0);
       this._brothersReversed = this._brothers.slice().reverse();
       this.sortOption = "";

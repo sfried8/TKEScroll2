@@ -31,6 +31,8 @@ import createApp from './app.js'
 
 
 
+import b_BootcustomComponents from 'boot/customComponents'
+
 
 
 
@@ -53,6 +55,28 @@ const { app, router } = createApp()
 
 
 async function start () {
+  
+  const bootFiles = [b_BootcustomComponents]
+  for (let i = 0; i < bootFiles.length; i++) {
+    try {
+      await bootFiles[i]({
+        app,
+        router,
+        
+        Vue,
+        ssrContext: null
+      })
+    }
+    catch (err) {
+      if (err && err.url) {
+        window.location.href = err.url
+        return
+      }
+
+      console.error('[Quasar] boot error:', err)
+      return
+    }
+  }
   
 
   

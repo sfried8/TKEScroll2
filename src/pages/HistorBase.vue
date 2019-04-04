@@ -57,17 +57,14 @@
 <script>
 import Vue from "vue";
 import Component from "vue-class-component";
-import BrotherSelect from "../components/BrotherSelect";
 import HistorAddBrother from "./HistorAddBrother";
 import HistorEditBrother from "./HistorEditBrother";
 import HistorEboard from "./HistorEBoard";
 @Component({
-  name: "histor-base",
   components: {
     HistorAddBrother,
     HistorEditBrother,
-    HistorEboard,
-    BrotherSelect
+    HistorEboard
   }
 })
 export default class Index extends Vue {

@@ -23,9 +23,7 @@
 <script>
 import Component from "vue-class-component";
 import Vue from "vue";
-@Component({
-  name: "hello-view"
-})
+@Component
 export default class Index extends Vue {}
 </script>
 

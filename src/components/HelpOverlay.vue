@@ -29,7 +29,6 @@ import Vue from "vue";
 import { LocalStorage } from "quasar";
 
 @Component({
-  name: "help-overlay",
   props: { "help-id": String }
 })
 export default class Index extends Vue {

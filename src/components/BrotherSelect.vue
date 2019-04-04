@@ -38,11 +38,8 @@
 import Vue from "vue";
 import { Component, Watch } from "vue-property-decorator";
 import Fuzzy from "fuzzy";
-import Util from "../Util.js";
-import Brothers from "../Brothers";
 
 @Component({
-  name: "brother-select",
   props: {
     "clear-after-select": Boolean,
     value: Object,
@@ -56,7 +53,7 @@ export default class Index extends Vue {
   options = [];
   selected = null;
   mounted() {
-    Brothers.getBrothers().then(b => {
+    this.$brothers.getBrothers().then(b => {
       this.Brothers = b.map(o => ({
         label: o.fname + " " + o.lname,
         value: o
@@ -109,7 +106,7 @@ export default class Index extends Vue {
       return;
     }
     update(() => {
-      this.options = Util.stableSort(
+      this.options = this.$util.stableSort(
         Fuzzy.filter(val, this.Brothers, {
           extract: el => el.label
         })

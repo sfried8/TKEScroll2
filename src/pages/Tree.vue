@@ -47,16 +47,10 @@
 
 <script>
 import Vue from "vue";
-import Component from "vue-class-component";
-import { Watch } from "vue-property-decorator";
-import BrotherSelect from "../components/BrotherSelect";
-import HelpOverlay from "../components/HelpOverlay";
+import { Component, Watch } from "vue-property-decorator";
 import Tree from "../Tree";
 
-@Component({
-  name: "my-family-tree",
-  components: { BrotherSelect, HelpOverlay }
-})
+@Component
 export default class Index extends Vue {
   big = null;
   mounted() {

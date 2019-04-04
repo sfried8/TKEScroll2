@@ -103,11 +103,8 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import Brothers from "../Brothers";
-import Util from "../Util";
 
-@Component({
-  name: "histor-eboard"
-})
+@Component
 export default class Index extends Vue {
   Prytanis = null;
   Epiprytanis = null;
@@ -130,7 +127,7 @@ export default class Index extends Vue {
     return this[position] !== this["original" + position];
   }
   mounted() {
-    Brothers.getBrothers().then(b => {
+    this.$brothers.getBrothers().then(b => {
       const officers = b.filter(el => !!el.officer);
 
       const positions = [
@@ -164,10 +161,10 @@ export default class Index extends Vue {
     const changedPositions = positions.filter(this.hasChanged);
 
     for (const c of changedPositions) {
-      await Brothers.addOfficer({ title: c, current: this[c].scroll });
+      await this.$brothers.addOfficer({ title: c, current: this[c].scroll });
     }
     this.$q.notify(
-      `Successfully updated ${Util.prettyJoinList(changedPositions)}`
+      `Successfully updated ${this.$util.prettyJoinList(changedPositions)}`
     );
     for (const pos of positions) {
       this["original" + pos] = this[pos];

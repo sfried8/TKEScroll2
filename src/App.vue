@@ -11,7 +11,7 @@ import Component from 'vue-class-component'
 /*
  * Root component, but defined as a typescript decorated class
  */
-@Component({})
+@Component
 export default class App extends Vue {
 
 }

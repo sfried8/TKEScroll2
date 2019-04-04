@@ -69,12 +69,9 @@
 <script lang="js">
 import Vue from "vue";
 import Component from "vue-class-component";
-import Brothers from "../Brothers";
 
 const DEBUG = false;
-@Component({
-    name: "histor-add-brother",
-})
+@Component
 export default class Index extends Vue {
     scroll = 0;
     fname = "";
@@ -87,7 +84,7 @@ export default class Index extends Vue {
     searcher = null;
     pendingBrothers = [];
     addAll() {
-        Brothers.addBrothers(this.pendingBrothers).then(() => {
+        this.$brothers.addBrothers(this.pendingBrothers).then(() => {
             this.$q.notify(
                 `Successfully added ${this.pendingBrothers.length} Brother${
                     this.pendingBrothers.length > 1 ? "s" : ""
@@ -130,7 +127,7 @@ export default class Index extends Vue {
     }
 
     mounted() {
-        Brothers.getBrothers()
+        this.$brothers.getBrothers()
             .then(brothers => {
                 const highestScroll = Math.max(...brothers.map(b => +b.scroll));
                 const highestPC = Math.max(
