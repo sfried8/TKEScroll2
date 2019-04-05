@@ -36,8 +36,9 @@
 
 <script>
   import Fuzzy from "fuzzy";
-
+  import BrotherInfoMixin from "../mixins/BrotherInfoMixin";
   export default {
+    mixins: [BrotherInfoMixin],
     props: {
       "clear-after-select": Boolean,
       value: Object,
@@ -47,28 +48,9 @@
     },
     data() {
       return {
-        Brothers: [],
         options: [],
         selected: null
       };
-    },
-    mounted() {
-      this.$brothers.getBrothers().then(b => {
-        this.Brothers = b.map(o => ({
-          label: o.fname + " " + o.lname,
-          value: o
-        }));
-        this.options = this.Brothers;
-        this.$nextTick().then(() => {
-          this.selected = this.value
-            ? {
-                label: this.value.fname + " " + this.value.lname,
-                value: this.value
-              }
-            : null;
-          this.selected && (this.$refs.qbs.inputValue = this.selected.label);
-        });
-      });
     },
     watch: {
       value(val, oldVal) {
@@ -102,6 +84,22 @@
     },
 
     methods: {
+      onGetBrothers() {
+        this.Brothers = this.Brothers.map(o => ({
+          label: o.fname + " " + o.lname,
+          value: o
+        }));
+        this.options = this.Brothers;
+        this.$nextTick().then(() => {
+          this.selected = this.value
+            ? {
+                label: this.value.fname + " " + this.value.lname,
+                value: this.value
+              }
+            : null;
+          this.selected && (this.$refs.qbs.inputValue = this.selected.label);
+        });
+      },
       filterFn(val, update, abort) {
         if (!val) {
           abort();

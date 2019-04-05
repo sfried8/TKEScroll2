@@ -16,10 +16,12 @@
 </template>
 
 <script>
+  import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
+
   export default {
+    mixins: [BrotherInfoMixin],
     data() {
       return {
-        Brothers: [],
         pc: 0,
         isZT: false
       };
@@ -33,8 +35,6 @@
       } else {
         this.pc = +pcparam;
       }
-      this.Brothers = [];
-      this.$brothers.getBrothers().then(data => (this.Brothers = data));
     },
     computed: {
       PBros() {

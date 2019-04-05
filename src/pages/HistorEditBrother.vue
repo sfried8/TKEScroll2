@@ -69,7 +69,10 @@
 </template>
 
 <script>
+  import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
+
   export default {
+    mixins: [BrotherInfoMixin],
     data() {
       return {
         scroll: 0,
@@ -116,12 +119,8 @@
         this.nickname = this.currentBrother.nickname;
         this.pc = this.currentBrother.pc;
         this.active = this.currentBrother.active;
-        this.big = this.brothers[this.currentBrother.big];
+        this.big = this.Brothers[this.currentBrother.big];
       }
-    },
-
-    mounted() {
-      this.$brothers.getBrothers().then(b => (this.brothers = b));
     }
   };
 </script>

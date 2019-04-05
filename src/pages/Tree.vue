@@ -47,17 +47,23 @@
 
 <script>
   import Tree from "../Tree";
-
+  import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
   export default {
+    mixins: [BrotherInfoMixin],
     data() {
       return {
         findTarget: null
       };
     },
-    mounted() {
-      Tree.render(this.$route.query ? +this.$route.query.scroll : 0);
-    },
     watch: {
+      Brothers(val) {
+        if (this.Brothers) {
+          Tree.render(
+            this.Brothers,
+            this.$route.query ? +this.$route.query.scroll : 0
+          );
+        }
+      },
       findTarget(val) {
         if (this.findTarget) {
           const node = Tree.nodes.find(

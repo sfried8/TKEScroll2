@@ -82,10 +82,11 @@
 </template>
 
 <script>
+  import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
   export default {
+    mixins: [BrotherInfoMixin],
     data() {
       return {
-        Brothers: [],
         Prytanis: null,
         Epiprytanis: null,
         Grammateus: null,
@@ -97,10 +98,8 @@
       };
     },
 
-    mounted() {
-      this.Brothers = [];
-      this.$brothers.getBrothers().then(data => {
-        this.Brothers = data;
+    methods: {
+      onGetBrothers() {
         const officers = this.Brothers.filter(el => !!el.officer);
         const positions = [
           "Prytanis",
@@ -115,7 +114,7 @@
         positions.forEach(
           pos => (this[pos] = officers.find(o => o.officer === pos) || undefined)
         );
-      });
+      }
     }
   };
 </script>

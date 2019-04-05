@@ -47,13 +47,13 @@
 
 <script>
   import BrotherPageContent from "./BrotherPageContent";
-
+  import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
   export default {
     components: { BrotherPageContent },
+    mixins: [BrotherInfoMixin],
     data() {
       return {
-        Brothers: [],
-        currentBrother: null,
+        currentScroll: this.$route.params.scroll,
         showSwipe: true,
         cardPositionX: 0,
         cardPositionY: 0,
@@ -61,15 +61,6 @@
         isDragging: false,
         direction: 1
       };
-    },
-
-    mounted() {
-      this.$brothers.getBrothers().then(data => {
-        this.Brothers = data;
-        const index = +(this.$route.params.scroll || 0);
-        this.currentBrother = this.Brothers[this.$route.params.scroll];
-        this._nextBrother = this.Brothers[this.currentBrother.scroll + 1];
-      });
     },
     methods: {
       panHandler(obj) {
@@ -106,6 +97,9 @@
       }
     },
     computed: {
+      currentBrother() {
+        return this.Brothers[this.currentScroll];
+      },
       cardPositioning() {
         return {
           transform: `translate(calc(0% + ${this.cardPositionX}px),${

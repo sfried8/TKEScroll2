@@ -78,40 +78,40 @@
 
 <script>
   import Fuzzy from "fuzzy";
-
+  import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
   export default {
+    mixins: [BrotherInfoMixin],
     data() {
       return {
-        _brothers: [],
-        _brothersReversed: [],
         sortOption: "scrollasc",
         currentFilter: ""
       };
     },
     computed: {
       filteredBrothers() {
-        if (!this.Brothers) {
+        if (!this.orderedBrothers) {
           return [];
         }
-        return Fuzzy.filter(this.currentFilter, this.Brothers, {
+        return Fuzzy.filter(this.currentFilter, this.orderedBrothers, {
           pre: "<b>",
           post: "</b>",
           extract: el => el.fname + " " + el.lname
         });
       },
-      Brothers() {
+      orderedBrothers() {
         return this.sortOption === "scrollasc"
-          ? this._brothers
-          : this._brothersReversed;
+          ? this.Brothers
+          : this.reversedBrothers;
+      },
+      reversedBrothers() {
+        this.Brothers.slice().reverse();
       }
     },
-    mounted() {
-      this.$brothers.getBrothers().then(data => {
-        this._brothers = data.filter(el => el.scroll > 0);
-        this._brothersReversed = this._brothers.slice().reverse();
-        this.sortOption = "";
+    methods: {
+      onGetBrothers() {
         this.sortOption = "scrollasc";
-      });
+        this.Brothers = this.Brothers.filter(el => el.scroll > 0);
+      }
     }
   };
 </script>

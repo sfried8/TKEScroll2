@@ -78,7 +78,6 @@
         pc: 0,
         active: true,
         big: null,
-        brothers: [],
         searcher: null,
         pendingBrothers: []
       };
