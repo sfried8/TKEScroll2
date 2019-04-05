@@ -37,16 +37,20 @@ const FamilyTree = {
     // append the svg object to the body of the page
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
-    var svg = d3.select("#tree-container").append("svg")
+    var canvas = d3.select("#tree-container").append("canvas")
       .attr("width", width + margin.right + margin.left)
       .attr("height", height + margin.top + margin.bottom)
-      .call(d3.zoom().on("zoom", function () {
-        svg.attr("transform", d3.event.transform)
-      }))
-      .append("g")
-      .attr("transform", "translate("
-        + margin.left + "," + margin.top + ")");
-
+    // .call(d3.zoom().on("zoom", function () {
+    //   canvas.attr("transform", d3.event.transform)
+    // }))
+    // .append("g")
+    // .attr("transform", "translate("
+    //   + margin.left + "," + margin.top + ")");
+    var context = canvas.node().getContext('2d')
+    var customBase = document.createElement('custom');
+    var custom = d3.select(customBase);
+    var customPathBase = document.createElement('custompath');
+    var customPath = d3.select(customPathBase);
     var i = 0,
       duration = 750,
       root;
@@ -79,8 +83,8 @@ const FamilyTree = {
       var treeData = treemap(root);
 
       // Compute the new tree layout.
-      var nodes = treeData.descendants(),
-        links = treeData.descendants().slice(1);
+      var nodes = treeData.descendants();
+      var links = treeData.descendants().slice(1);
 
       // Normalize for fixed-depth.
       nodes.forEach(function (d) { d.y = d.depth * 180 });
@@ -88,79 +92,71 @@ const FamilyTree = {
       // ****************** Nodes section ***************************
 
       // Update the nodes...
-      var node = svg.selectAll('g.node')
+      var node = custom.selectAll('custom.node')
         .data(nodes, function (d) { return d.id || (d.id = ++i); });
 
       // Enter any new modes at the parent's previous position.
-      var nodeEnter = node.enter().append('g')
+      var nodeEnter = node.enter().append('custom')
         .attr('class', 'node')
-        .attr("transform", function (d) {
-          return "translate(" + source.y0 + "," + source.x0 + ")";
-        })
-        .on('click', click);
+        .attr("y", source.y0)
+        .attr("x", source.x0);
+      // })
+      // .on('click', click);
 
-      // Add Circle for the nodes
-      nodeEnter.append('circle')
-        .attr('class', 'node')
-        .attr('r', 1e-6)
-        .style("fill", function (d) {
-          return d._children ? "lightsteelblue" : "#fff";
-        });
+      // // Add Circle for the nodes
+      // nodeEnter.append('circle')
+      //   .attr('class', 'node')
+      //   .attr('r', 1e-6)
+      //   .style("fill", function (d) {
+      //     return d._children ? "lightsteelblue" : "#fff";
+      //   });
 
-      // Add labels for the nodes
-      nodeEnter.append('text')
-        .attr("dy", ".35em")
-        .attr("x", function (d) {
-          return d.children || d._children ? -13 : 13;
-        })
-        .attr("text-anchor", function (d) {
-          return d.children || d._children ? "end" : "start";
-        })
-        .text(function (d) { return d.data.name; });
+      // // Add labels for the nodes
+      // nodeEnter.append('text')
+      //   .attr("dy", ".35em")
+      //   .attr("x", function (d) {
+      //     return d.children || d._children ? -13 : 13;
+      //   })
+      //   .attr("text-anchor", function (d) {
+      //     return d.children || d._children ? "end" : "start";
+      //   })
+      //   .text(function (d) { return d.data.name; });
 
       // UPDATE
-      var nodeUpdate = nodeEnter.merge(node);
+      var nodeUpdate = nodeEnter.merge(node)
+        .attr("fillStyle", d => d._children ? "#ff0000" : "#00ff00")
 
       // Transition to the proper position for the node
       nodeUpdate.transition()
         .duration(duration)
-        .attr("transform", function (d) {
-          return "translate(" + d.y + "," + d.x + ")";
-        });
+        .attr("x", d => d.x)
+        .attr("y", d => d.y)
 
-      // Update the node attributes and style
-      nodeUpdate.select('circle.node')
-        .attr('r', 10)
-        .style("fill", function (d) {
-          return d._children ? "lightsteelblue" : "#fff";
-        })
-        .attr('cursor', 'pointer');
 
 
       // Remove any exiting nodes
       var nodeExit = node.exit().transition()
         .duration(duration)
-        .attr("transform", function (d) {
-          return "translate(" + source.y + "," + source.x + ")";
-        })
+        .attr("width", 0)
+        .attr("height", 0)
         .remove();
 
       // On exit reduce the node circles size to 0
-      nodeExit.select('circle')
-        .attr('r', 1e-6);
+      // nodeExit.select('circle')
+      //   .attr('r', 1e-6);
 
-      // On exit reduce the opacity of text labels
-      nodeExit.select('text')
-        .style('fill-opacity', 1e-6);
+      // // On exit reduce the opacity of text labels
+      // nodeExit.select('text')
+      //   .style('fill-opacity', 1e-6);
 
       // ****************** links section ***************************
 
       // Update the links...
-      var link = svg.selectAll('path.link')
+      var link = customPath.selectAll('custompath.link')
         .data(links, function (d) { return d.id; });
 
       // Enter any new links at the parent's previous position.
-      var linkEnter = link.enter().insert('path', "g")
+      var linkEnter = link.enter().insert('custompath', "custom")
         .attr("class", "link")
         .attr('d', function (d) {
           var o = { x: source.x0, y: source.y0 }
@@ -211,6 +207,45 @@ const FamilyTree = {
         }
         update(d);
       }
+      draw();
+    }
+    function innerDraw() {
+      context.clearRect(0, 0, width, height);
+
+      var elements = custom.selectAll('custom.node');
+      // Grab all elements you bound data to in the databind() function.
+      elements.each(function (d, i) { // For each virtual/custom element...
+        // This is each individual element in the loop. 
+
+        context.fillStyle = d.fillStyle;
+        // Here you retrieve the colour from the individual in-memory node and set the fillStyle for the canvas paint
+        context.fillRect(d.y, d.x, 10, 10);
+        // Here you retrieve the position of the node and apply it to the fillRect context function which will fill and paint the square.
+      }); // Loop through each element.
+
+      var paths = customPath.selectAll("custompath.link");
+      paths.each(function (path, i) {
+        const sX = path.x
+        const sY = path.y
+        const pX = path.parent.x
+        const pY = path.parent.y
+        context.beginPath();
+        context.lineWidth = "2"
+        context.strokeStyle = "red"
+        context.moveTo(sY, sX)
+        context.bezierCurveTo((sY + pY) / 2, sX, (sY + pY) / 2, pX, pY, pX)
+        context.stroke();
+
+      })
+    }
+    function draw() {
+      var t = d3.timer(function (elapsed) {
+        innerDraw();
+        if (elapsed > 300) t.stop();
+      });
+      setTimeout(() => {
+        t.stop()
+      }, 10000);
     }
     // FamilyTree.centerNode(initialCenterNode || root);
   }

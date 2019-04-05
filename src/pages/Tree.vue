@@ -58,9 +58,11 @@
     watch: {
       Brothers(val) {
         if (this.Brothers) {
-          Tree.render(
-            this.Brothers,
-            this.$route.query ? +this.$route.query.scroll : 0
+          this.$nextTick().then(() =>
+            Tree.render(
+              this.Brothers,
+              this.$route.query ? +this.$route.query.scroll : 0
+            )
           );
         }
       },
