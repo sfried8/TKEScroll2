@@ -46,13 +46,13 @@ const FamilyTree = {
     // .append("g")
     // .attr("transform", "translate("
     //   + margin.left + "," + margin.top + ")");
-    var context = canvas.node().getContext('2d')
+    var ctx = canvas.node().getContext('2d')
     var customBase = document.createElement('custom');
     var custom = d3.select(customBase);
     var customPathBase = document.createElement('custompath');
     var customPath = d3.select(customPathBase);
     var i = 0,
-      duration = 750,
+      duration = 1000,
       root;
 
     // declares a tree layout and assigns the size
@@ -124,7 +124,6 @@ const FamilyTree = {
 
       // UPDATE
       var nodeUpdate = nodeEnter.merge(node)
-        .attr("fillStyle", d => d._children ? "#ff0000" : "#00ff00")
 
       // Transition to the proper position for the node
       nodeUpdate.transition()
@@ -137,8 +136,9 @@ const FamilyTree = {
       // Remove any exiting nodes
       var nodeExit = node.exit().transition()
         .duration(duration)
-        .attr("width", 0)
-        .attr("height", 0)
+        .attr("x", source.x)
+        .attr("y", source.y)
+
         .remove();
 
       // On exit reduce the node circles size to 0
@@ -158,10 +158,7 @@ const FamilyTree = {
       // Enter any new links at the parent's previous position.
       var linkEnter = link.enter().insert('custompath', "custom")
         .attr("class", "link")
-        .attr('d', function (d) {
-          var o = { x: source.x0, y: source.y0 }
-          return diagonal(o, o)
-        });
+
 
       // UPDATE
       var linkUpdate = linkEnter.merge(link);
@@ -169,15 +166,14 @@ const FamilyTree = {
       // Transition back to the parent element position
       linkUpdate.transition()
         .duration(duration)
-        .attr('d', function (d) { return diagonal(d, d.parent) });
+        .attr("x", d => d.x)
+        .attr("y", d => d.y)
 
       // Remove any exiting links
       var linkExit = link.exit().transition()
         .duration(duration)
-        .attr('d', function (d) {
-          var o = { x: source.x, y: source.y }
-          return diagonal(o, o)
-        })
+        .attr('x', source.x)
+        .attr('y', source.y)
         .remove();
 
       // Store the old positions for transition.
@@ -207,45 +203,60 @@ const FamilyTree = {
         }
         update(d);
       }
+      setTimeout(() => {
+        click(root)
+      }, 5000);
       draw();
     }
-    function innerDraw() {
-      context.clearRect(0, 0, width, height);
-
-      var elements = custom.selectAll('custom.node');
-      // Grab all elements you bound data to in the databind() function.
-      elements.each(function (d, i) { // For each virtual/custom element...
-        // This is each individual element in the loop. 
-
-        context.fillStyle = d.fillStyle;
-        // Here you retrieve the colour from the individual in-memory node and set the fillStyle for the canvas paint
-        context.fillRect(d.y, d.x, 10, 10);
-        // Here you retrieve the position of the node and apply it to the fillRect context function which will fill and paint the square.
-      }); // Loop through each element.
+    function innerDraw(paths, elements) {
+      ctx.clearRect(0, 0, width, height);
 
       var paths = customPath.selectAll("custompath.link");
-      paths.each(function (path, i) {
-        const sX = path.x
-        const sY = path.y
-        const pX = path.parent.x
-        const pY = path.parent.y
-        context.beginPath();
-        context.lineWidth = "2"
-        context.strokeStyle = "red"
-        context.moveTo(sY, sX)
-        context.bezierCurveTo((sY + pY) / 2, sX, (sY + pY) / 2, pX, pY, pX)
-        context.stroke();
+      paths.each(function (d, i) {
+        const path = d3.select(this)
+        const sX = path.attr("x")
+        const sY = path.attr("y")
+        const parent = d3.select(d.parent)
+        if (parent) {
+
+          const pX = parent.attr("x")
+          const pY = parent.attr("y")
+          ctx.beginPath();
+          ctx.lineWidth = "1"
+          ctx.strokeStyle = "#aaaaaa"
+          ctx.moveTo(sY, sX)
+          ctx.bezierCurveTo((sY + pY) / 2, sX, (sY + pY) / 2, pX, pY, pX)
+          ctx.stroke();
+        }
 
       })
+      var elements = custom.selectAll('custom.node');
+      // Grab all elements you bound data to in the databind() function.
+      // elements.filter((d, i) => i === 7).each((d, i) => console.log(d.x, d.y))
+      elements.each(function (d, i) { // For each virtual/custom element...
+        // This is each individual element in the loop. 
+        const node = d3.select(this)
+        ctx.lineWidth = "2"
+        ctx.strokeStyle = d._children ? "#ff0000" : "#AD2624"
+        ctx.fillStyle = "#eeeeee"
+        ctx.beginPath();
+        ctx.arc(node.attr("y"), node.attr("x"), 7, 0, 2 * Math.PI)
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "#222222"
+        ctx.fillText(d.data.name, node.attr("y"), node.attr("x"))
+        // Here you retrieve the position of the node and apply it to the fillRect ctx function which will fill and paint the square.
+      }); // Loop through each element.
+
     }
+    var j = 0;
     function draw() {
       var t = d3.timer(function (elapsed) {
+        j++;
         innerDraw();
-        if (elapsed > 300) t.stop();
+        if (elapsed > duration) { t.stop(); };
       });
-      setTimeout(() => {
-        t.stop()
-      }, 10000);
+
     }
     // FamilyTree.centerNode(initialCenterNode || root);
   }
