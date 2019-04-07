@@ -11,6 +11,7 @@ const FamilyTree = {
     var initialCenterNode;
     var x;
     var y;
+    window.treeNodes = [];
     const createNode = function (scroll) {
       const brother = brothers[scroll];
       const node = {
@@ -31,7 +32,7 @@ const FamilyTree = {
     var treeData = createNode(0);
     var totalNodes = 0;
     var margin = { top: 0, right: 0, bottom: 0, left: 0 }
-    var width = document.body.clientWidth * 10;
+    var width = document.body.clientWidth;
     var height = document.body.clientHeight - 50;
 
     // append the svg object to the body of the page
@@ -40,6 +41,19 @@ const FamilyTree = {
     var canvas = d3.select("#tree-container").append("canvas")
       .attr("width", width + margin.right + margin.left)
       .attr("height", height + margin.top + margin.bottom)
+
+    canvas.call(d3.zoom()
+      .scaleExtent([1 / 2, 4])
+      .on("zoom", zoomed));
+
+    function zoomed() {
+      ctx.save();
+      ctx.clearRect(0, 0, width, height);
+      ctx.translate(d3.event.transform.x, d3.event.transform.y);
+      ctx.scale(d3.event.transform.k, d3.event.transform.k);
+      draw()
+      ctx.restore();
+    }
     // .call(d3.zoom().on("zoom", function () {
     //   canvas.attr("transform", d3.event.transform)
     // }))
@@ -47,10 +61,7 @@ const FamilyTree = {
     // .attr("transform", "translate("
     //   + margin.left + "," + margin.top + ")");
     var ctx = canvas.node().getContext('2d')
-    var customBase = document.createElement('custom');
-    var custom = d3.select(customBase);
-    var customPathBase = document.createElement('custompath');
-    var customPath = d3.select(customPathBase);
+
     var i = 0,
       duration = 1000,
       root;
@@ -63,124 +74,116 @@ const FamilyTree = {
     root.x0 = height / 2;
     root.y0 = 0;
 
+    var treeData = treemap(root);
+    treeNodes = treeData.descendants();
+    treeNodes.forEach(function (d) {
+      d.x0 = height / 2;
+      d.y0 = 0;
+      d.x1 = d.x;
+      d.y1 = d.y = d.depth * 90;
+
+    });
+    window.clickn = function click(d) {
+      if (d.children) {
+        d.children.forEach(flagForRemoval)
+        d._children = d.children;
+        d.children = null;
+      } else {
+        d.children = d._children;
+        d._children = null;
+      }
+      update(d);
+    }
+    window.nodes = treeNodes
     // Collapse after the second level
     // root.children.forEach(collapse);
 
-    update(root);
+    // update(root);
+    animate();
 
+    function flagForRemoval(n) {
+      n.removed = true;
+      if (n.children) {
+        n.children.forEach(flagForRemoval)
+      }
+    }
 
     function update(source) {
-      var nodeSelection = custom.selectAll('custom.node').each(d => { [d.x0, d.y0] = [d.x, d.y] })
       // Assigns the x and y position for the nodes
-      var treeData = treemap(root);
+      treeNodes.forEach(function (d) {
+        d.y1 = d.y = d.depth * 90;
+      })
+      //   if (!d.x0) {
+      //     d.x0 = source.x;
+      //     d.y0 = source.y0 || source.y;
+      //   } else {
+      //     d.x0 = d.x || d.x0; d.y0 = d.y || d.y0;
+      //   }
+      //   //   // d.x0 = d.x;
+      //   //   // d.y0 = d.y;
+      //   //   // d.x1 = d.x;
+      //   //   // d.y1 = d.y;
 
+      // });
+      treeNodes.forEach(d => { d.x0 = d.removed ? source.x : d.x; d.y0 = d.removed ? source.y : d.y; d.removed = false; })
       // Compute the new tree layout.
-      var treeNodes = treeData.descendants();
+      treeNodes = treemap(root).descendants();
       // var links = treeData.descendants().slice(1);
 
-      // Normalize for fixed-depth.
       treeNodes.forEach(function (d) {
-        d.y = d.depth * 180;
-        // d.x0 = d.x;
-        // d.y0 = d.y;
-        // d.x1 = d.x;
-        // d.y1 = d.y;
+        d.y1 = d.y = d.depth * 90;
+        // if (!d.x0) {
+        //   d.x0 = source.x;
+        //   d.y0 = source.y;
+        // }
+        //   // d.x0 = d.x;
+        //   // d.y0 = d.y;
+        //   // d.x1 = d.x;
+        //   // d.y1 = d.y;
 
       });
-
-      // ****************** Nodes section ***************************
-
-      // Update the nodes...
-
-      nodeSelection.data(treeNodes, function (d) { return d.id || (d.id = ++i); });
-      // nodes.forEach(function (d) {
-      //   d.x0 = d.x;
-      //   d.y0 = d.y;
-      // });
-      // Enter any new modes at the parent's previous position.
-      var nodeEnter = nodeSelection.enter().append('custom')
-        .attr('class', 'node')
-      // .each(d => {
-      //   d.y0 = source.y;
-      //   d.x0 = source.x;
-      // })
+      treeNodes.forEach(d => { d.x1 = d.x; })
+      // Normalize for fixed-depth.
 
 
-      // // UPDATE
-      // var nodeUpdate = nodeEnter.merge(node).each(d => { d.x1 = d.x; d.y1 = d.y; })
-
-      // // Transition to the proper position for the node
-      // nodeUpdate
-
-      //   .attr("x1", d => d.x)
-      //   .attr("y1", d => d.y)
-
-
-
-      // // Remove any exiting nodes
-      // var nodeExit = node.exit().each(d => { d.x1 = source.x1; d.y1 = source.y1; })
-      nodeSelection.exit().remove()
 
 
 
       // Toggle children on click.
-      window.clickn = function click(d) {
-        if (d.children) {
-          d._children = d.children;
-          d.children = null;
-        } else {
-          d.children = d._children;
-          d._children = null;
-        }
-        update(d);
-      }
-      window.nodes = treeNodes
-      window.togglenodes = () => {
-        click(treeNodes[11])
-        click(treeNodes[8])
-      };
 
-      draw();
+
+
+      animate();
     }
-    var start = null;
-    function innerDraw(timestamp) {
-      if (!start) start = timestamp;
-      var progress = timestamp - start;
-      const t = Math.min(1, ease(progress / (duration + 100)))
+    function draw() {
       ctx.clearRect(0, 0, width, height);
 
-      var l = root.links();
-      for (let link of l) {
+      treeNodes.forEach(d => {
+        if (!d.parent) {
+          return
+        }
+        const sX = d.x
+        const sY = d.y
 
-        // const source = d3.select("#" + link.source.id)
-        // const target = d3.select("#" + link.target.id)
-        // const sX = source.attr("x")
-        // const sY = source.attr("y")
-
-
-        // const pX = target.attr("x")
-        // const pY = target.attr("y")
-        // ctx.beginPath();
-        // ctx.lineWidth = "1"
-        // ctx.strokeStyle = "#aaaaaa"
-        // ctx.moveTo(sY, sX)
-        // ctx.bezierCurveTo((sY + pY) / 2, sX, (sY + pY) / 2, pX, pY, pX)
-        // ctx.stroke();
-
-      }
-      var elements = custom.selectAll('custom.node');
+        const pX = d.parent.x
+        const pY = d.parent.y
+        ctx.beginPath();
+        ctx.lineWidth = "1"
+        ctx.strokeStyle = "#aaaaaa"
+        ctx.moveTo(sY, sX)
+        ctx.bezierCurveTo((sY + pY) / 2, sX, (sY + pY) / 2, pX, pY, pX)
+        ctx.stroke();
+      })
+      // var elements = custom.selectAll('custom.node');
       // Grab all elements you bound data to in the databind() function.
       // elements.filter((d, i) => i === 7).each((d, i) => console.log(d.x, d.y))
-      elements.each(function (d, i) { // For each virtual/custom element...
+      treeNodes.forEach(function (d, i) { // For each virtual/custom element...
         // This is each individual element in the loop. 
-
-        const node = d3.select(this)
-        ctx.fillStyle = node.attr("fillStyle")
+        // const node = d3.select(this)
+        ctx.fillStyle = "#eee"
         ctx.lineWidth = "2"
         ctx.strokeStyle = d._children ? "#ff0000" : "#AD2624"
         ctx.beginPath();
-        d.x = d.x0 * (1 - t) + d.x1 * t;
-        d.y = d.y0 * (1 - t) + d.y1 * t;
         // const x = node.attr("x0") * (1 - t) + node.attr("x1") * t;
         // const y = node.attr("y0") * (1 - t) + node.attr("y1") * t;
         ctx.arc(d.y, d.x, 7, 0, 2 * Math.PI)
@@ -193,16 +196,27 @@ const FamilyTree = {
 
         // Here you retrieve the position of the node and apply it to the fillRect ctx function which will fill and paint the square.
       }); // Loop through each element.
+    }
+    var start = null;
+    function drawStep(timestamp) {
+      if (!start) start = timestamp;
+      var progress = timestamp - start;
+      const t = Math.min(1, ease(progress / (duration + 100)))
+      treeNodes.forEach(function (d, i) {
+        d.x = d.x0 * (1 - t) + d.x1 * t;
+        d.y = d.y0 * (1 - t) + d.y1 * t;
+      })
+      draw()
 
       if (progress < duration + 100) {
-        requestAnimationFrame(innerDraw)
+        requestAnimationFrame(drawStep)
       }
     }
     var j = 0;
-    function draw() {
+    function animate() {
 
       start = null;
-      requestAnimationFrame(innerDraw);
+      requestAnimationFrame(drawStep);
 
 
     }

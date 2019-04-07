@@ -84,7 +84,7 @@
 
 <style type="text/css">
   #tree-container {
-    overflow: hidden;
+    /* overflow: hidden; */
     touch-action: none;
   }
   .node {
