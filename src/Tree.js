@@ -5,7 +5,7 @@ const FamilyTree = {
   tree: tree,
   render: function (brothers, center) {
 
-
+    const ease = d3.easeCubic;
     var node;
     var scale;
     var initialCenterNode;
@@ -68,123 +68,63 @@ const FamilyTree = {
 
     update(root);
 
-    // Collapse the node and all it's children
-    function collapse(d) {
-      if (d.children) {
-        d._children = d.children
-        d._children.forEach(collapse)
-        d.children = null
-      }
-    }
 
     function update(source) {
-
+      var nodeSelection = custom.selectAll('custom.node').each(d => { [d.x0, d.y0] = [d.x, d.y] })
       // Assigns the x and y position for the nodes
       var treeData = treemap(root);
 
       // Compute the new tree layout.
-      var nodes = treeData.descendants();
+      var treeNodes = treeData.descendants();
       // var links = treeData.descendants().slice(1);
 
       // Normalize for fixed-depth.
-      nodes.forEach(function (d) { d.y = d.depth * 180 });
+      treeNodes.forEach(function (d) {
+        d.y = d.depth * 180;
+        // d.x0 = d.x;
+        // d.y0 = d.y;
+        // d.x1 = d.x;
+        // d.y1 = d.y;
+
+      });
 
       // ****************** Nodes section ***************************
 
       // Update the nodes...
-      var node = custom.selectAll('custom.node')
-        .data(nodes, function (d) { return d.id || (d.id = ++i); });
 
+      nodeSelection.data(treeNodes, function (d) { return d.id || (d.id = ++i); });
+      // nodes.forEach(function (d) {
+      //   d.x0 = d.x;
+      //   d.y0 = d.y;
+      // });
       // Enter any new modes at the parent's previous position.
-      var nodeEnter = node.enter().append('custom')
+      var nodeEnter = nodeSelection.enter().append('custom')
         .attr('class', 'node')
-        .attr("y", source.y0)
-        .attr("x", source.x0);
+      // .each(d => {
+      //   d.y0 = source.y;
+      //   d.x0 = source.x;
       // })
-      // .on('click', click);
-
-      // // Add Circle for the nodes
-      // nodeEnter.append('circle')
-      //   .attr('class', 'node')
-      //   .attr('r', 1e-6)
-      //   .style("fill", function (d) {
-      //     return d._children ? "lightsteelblue" : "#fff";
-      //   });
-
-      // // Add labels for the nodes
-      // nodeEnter.append('text')
-      //   .attr("dy", ".35em")
-      //   .attr("x", function (d) {
-      //     return d.children || d._children ? -13 : 13;
-      //   })
-      //   .attr("text-anchor", function (d) {
-      //     return d.children || d._children ? "end" : "start";
-      //   })
-      //   .text(function (d) { return d.data.name; });
-
-      // UPDATE
-      var nodeUpdate = nodeEnter.merge(node)
-
-      // Transition to the proper position for the node
-      nodeUpdate.transition()
-        .duration(duration)
-        .attr("x", d => d.x)
-        .attr("y", d => d.y)
-
-
-
-      // Remove any exiting nodes
-      var nodeExit = node.exit().transition()
-        .duration(duration)
-        .attr("x", source.x)
-        .attr("y", source.y)
-
-        .remove();
-
-      // On exit reduce the node circles size to 0
-      // nodeExit.select('circle')
-      //   .attr('r', 1e-6);
-
-      // // On exit reduce the opacity of text labels
-      // nodeExit.select('text')
-      //   .style('fill-opacity', 1e-6);
-
-      // ****************** links section ***************************
-
-      // Update the links...
-      // var link = customPath.selectAll('custompath.link')
-      //   .data(links, function (d) { return d.id; });
-
-      // // Enter any new links at the parent's previous position.
-      // var linkEnter = link.enter().insert('custompath', "custom")
-      //   .attr("class", "link")
 
 
       // // UPDATE
-      // var linkUpdate = linkEnter.merge(link);
+      // var nodeUpdate = nodeEnter.merge(node).each(d => { d.x1 = d.x; d.y1 = d.y; })
 
-      // // Transition back to the parent element position
-      // linkUpdate.transition()
-      //   .duration(duration)
-      //   .attr("x", d => d.x)
-      //   .attr("y", d => d.y)
+      // // Transition to the proper position for the node
+      // nodeUpdate
 
-      // // Remove any exiting links
-      // var linkExit = link.exit().transition()
-      //   .duration(duration)
-      //   .attr('x', source.x)
-      //   .attr('y', source.y)
-      //   .remove();
+      //   .attr("x1", d => d.x)
+      //   .attr("y1", d => d.y)
 
-      // Store the old positions for transition.
-      nodes.forEach(function (d) {
-        d.x0 = d.x;
-        d.y0 = d.y;
-      });
+
+
+      // // Remove any exiting nodes
+      // var nodeExit = node.exit().each(d => { d.x1 = source.x1; d.y1 = source.y1; })
+      nodeSelection.exit().remove()
+
 
 
       // Toggle children on click.
-      function click(d) {
+      window.clickn = function click(d) {
         if (d.children) {
           d._children = d.children;
           d.children = null;
@@ -194,76 +134,73 @@ const FamilyTree = {
         }
         update(d);
       }
+      window.nodes = treeNodes
       window.togglenodes = () => {
-        click(nodes[11])
-        click(nodes[8])
+        click(treeNodes[11])
+        click(treeNodes[8])
       };
+
       draw();
     }
     var start = null;
     function innerDraw(timestamp) {
       if (!start) start = timestamp;
       var progress = timestamp - start;
+      const t = Math.min(1, ease(progress / (duration + 100)))
       ctx.clearRect(0, 0, width, height);
 
-      // var paths = customPath.selectAll("custompath.link");
-      // paths.each(function (d, i) {
-      //   const path = d3.select(this)
-      //   const sX = path.attr("x")
-      //   const sY = path.attr("y")
-      //   const parent = d3.select(d.parent)
-      //   if (parent) {
+      var l = root.links();
+      for (let link of l) {
 
-      //     const pX = parent.x
-      //     const pY = parent.y
-      //     ctx.beginPath();
-      //     ctx.lineWidth = "1"
-      //     ctx.strokeStyle = "#aaaaaa"
-      //     ctx.moveTo(sY, sX)
-      //     ctx.bezierCurveTo((sY + pY) / 2, sX, (sY + pY) / 2, pX, pY, pX)
-      //     ctx.stroke();
-      //   }
+        // const source = d3.select("#" + link.source.id)
+        // const target = d3.select("#" + link.target.id)
+        // const sX = source.attr("x")
+        // const sY = source.attr("y")
 
-      // })
+
+        // const pX = target.attr("x")
+        // const pY = target.attr("y")
+        // ctx.beginPath();
+        // ctx.lineWidth = "1"
+        // ctx.strokeStyle = "#aaaaaa"
+        // ctx.moveTo(sY, sX)
+        // ctx.bezierCurveTo((sY + pY) / 2, sX, (sY + pY) / 2, pX, pY, pX)
+        // ctx.stroke();
+
+      }
       var elements = custom.selectAll('custom.node');
       // Grab all elements you bound data to in the databind() function.
       // elements.filter((d, i) => i === 7).each((d, i) => console.log(d.x, d.y))
       elements.each(function (d, i) { // For each virtual/custom element...
         // This is each individual element in the loop. 
+
         const node = d3.select(this)
+        ctx.fillStyle = node.attr("fillStyle")
         ctx.lineWidth = "2"
         ctx.strokeStyle = d._children ? "#ff0000" : "#AD2624"
-        ctx.fillStyle = "#eeeeee"
         ctx.beginPath();
-        ctx.arc(node.attr("y"), node.attr("x"), 7, 0, 2 * Math.PI)
+        d.x = d.x0 * (1 - t) + d.x1 * t;
+        d.y = d.y0 * (1 - t) + d.y1 * t;
+        // const x = node.attr("x0") * (1 - t) + node.attr("x1") * t;
+        // const y = node.attr("y0") * (1 - t) + node.attr("y1") * t;
+        ctx.arc(d.y, d.x, 7, 0, 2 * Math.PI)
         ctx.fill();
         ctx.stroke();
         ctx.fillStyle = "#222222"
-        ctx.fillText(d.data.name, node.attr("y"), node.attr("x"))
+        ctx.fillText(d.data.name, d.y, d.x)
 
         //   const path = d3.select(this)
-        const pX = node.attr("x")
-        const pY = node.attr("y")
-        const parent = d.parent
-        if (parent) {
 
-          const sX = parent.x
-          const sY = parent.y
-          ctx.beginPath();
-          ctx.lineWidth = "1"
-          ctx.strokeStyle = "#aaaaaa"
-          ctx.moveTo(sY, sX)
-          ctx.bezierCurveTo((sY + pY) / 2, sX, (sY + pY) / 2, pX, pY, pX)
-          ctx.stroke();
-        }
         // Here you retrieve the position of the node and apply it to the fillRect ctx function which will fill and paint the square.
       }); // Loop through each element.
-      if (progress < duration) {
+
+      if (progress < duration + 100) {
         requestAnimationFrame(innerDraw)
       }
     }
     var j = 0;
     function draw() {
+
       start = null;
       requestAnimationFrame(innerDraw);
 
