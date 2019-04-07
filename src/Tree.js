@@ -31,7 +31,7 @@ const FamilyTree = {
     var treeData = createNode(0);
     var totalNodes = 0;
     var margin = { top: 0, right: 0, bottom: 0, left: 0 }
-    var width = document.body.clientWidth;
+    var width = document.body.clientWidth * 10;
     var height = document.body.clientHeight - 50;
 
     // append the svg object to the body of the page
@@ -84,7 +84,7 @@ const FamilyTree = {
 
       // Compute the new tree layout.
       var nodes = treeData.descendants();
-      var links = treeData.descendants().slice(1);
+      // var links = treeData.descendants().slice(1);
 
       // Normalize for fixed-depth.
       nodes.forEach(function (d) { d.y = d.depth * 180 });
@@ -152,29 +152,29 @@ const FamilyTree = {
       // ****************** links section ***************************
 
       // Update the links...
-      var link = customPath.selectAll('custompath.link')
-        .data(links, function (d) { return d.id; });
+      // var link = customPath.selectAll('custompath.link')
+      //   .data(links, function (d) { return d.id; });
 
-      // Enter any new links at the parent's previous position.
-      var linkEnter = link.enter().insert('custompath', "custom")
-        .attr("class", "link")
+      // // Enter any new links at the parent's previous position.
+      // var linkEnter = link.enter().insert('custompath', "custom")
+      //   .attr("class", "link")
 
 
-      // UPDATE
-      var linkUpdate = linkEnter.merge(link);
+      // // UPDATE
+      // var linkUpdate = linkEnter.merge(link);
 
-      // Transition back to the parent element position
-      linkUpdate.transition()
-        .duration(duration)
-        .attr("x", d => d.x)
-        .attr("y", d => d.y)
+      // // Transition back to the parent element position
+      // linkUpdate.transition()
+      //   .duration(duration)
+      //   .attr("x", d => d.x)
+      //   .attr("y", d => d.y)
 
-      // Remove any exiting links
-      var linkExit = link.exit().transition()
-        .duration(duration)
-        .attr('x', source.x)
-        .attr('y', source.y)
-        .remove();
+      // // Remove any exiting links
+      // var linkExit = link.exit().transition()
+      //   .duration(duration)
+      //   .attr('x', source.x)
+      //   .attr('y', source.y)
+      //   .remove();
 
       // Store the old positions for transition.
       nodes.forEach(function (d) {
@@ -182,15 +182,6 @@ const FamilyTree = {
         d.y0 = d.y;
       });
 
-      // Creates a curved (diagonal) path from parent to the child nodes
-      function diagonal(s, d) {
-
-        return `M ${s.y} ${s.x}
-            C ${(s.y + d.y) / 2} ${s.x},
-              ${(s.y + d.y) / 2} ${d.x},
-              ${d.y} ${d.x}`
-
-      }
 
       // Toggle children on click.
       function click(d) {
@@ -203,33 +194,37 @@ const FamilyTree = {
         }
         update(d);
       }
-      setTimeout(() => {
-        click(root)
-      }, 5000);
+      window.togglenodes = () => {
+        click(nodes[11])
+        click(nodes[8])
+      };
       draw();
     }
-    function innerDraw(paths, elements) {
+    var start = null;
+    function innerDraw(timestamp) {
+      if (!start) start = timestamp;
+      var progress = timestamp - start;
       ctx.clearRect(0, 0, width, height);
 
-      var paths = customPath.selectAll("custompath.link");
-      paths.each(function (d, i) {
-        const path = d3.select(this)
-        const sX = path.attr("x")
-        const sY = path.attr("y")
-        const parent = d3.select(d.parent)
-        if (parent) {
+      // var paths = customPath.selectAll("custompath.link");
+      // paths.each(function (d, i) {
+      //   const path = d3.select(this)
+      //   const sX = path.attr("x")
+      //   const sY = path.attr("y")
+      //   const parent = d3.select(d.parent)
+      //   if (parent) {
 
-          const pX = parent.attr("x")
-          const pY = parent.attr("y")
-          ctx.beginPath();
-          ctx.lineWidth = "1"
-          ctx.strokeStyle = "#aaaaaa"
-          ctx.moveTo(sY, sX)
-          ctx.bezierCurveTo((sY + pY) / 2, sX, (sY + pY) / 2, pX, pY, pX)
-          ctx.stroke();
-        }
+      //     const pX = parent.x
+      //     const pY = parent.y
+      //     ctx.beginPath();
+      //     ctx.lineWidth = "1"
+      //     ctx.strokeStyle = "#aaaaaa"
+      //     ctx.moveTo(sY, sX)
+      //     ctx.bezierCurveTo((sY + pY) / 2, sX, (sY + pY) / 2, pX, pY, pX)
+      //     ctx.stroke();
+      //   }
 
-      })
+      // })
       var elements = custom.selectAll('custom.node');
       // Grab all elements you bound data to in the databind() function.
       // elements.filter((d, i) => i === 7).each((d, i) => console.log(d.x, d.y))
@@ -245,17 +240,33 @@ const FamilyTree = {
         ctx.stroke();
         ctx.fillStyle = "#222222"
         ctx.fillText(d.data.name, node.attr("y"), node.attr("x"))
+
+        //   const path = d3.select(this)
+        const pX = node.attr("x")
+        const pY = node.attr("y")
+        const parent = d.parent
+        if (parent) {
+
+          const sX = parent.x
+          const sY = parent.y
+          ctx.beginPath();
+          ctx.lineWidth = "1"
+          ctx.strokeStyle = "#aaaaaa"
+          ctx.moveTo(sY, sX)
+          ctx.bezierCurveTo((sY + pY) / 2, sX, (sY + pY) / 2, pX, pY, pX)
+          ctx.stroke();
+        }
         // Here you retrieve the position of the node and apply it to the fillRect ctx function which will fill and paint the square.
       }); // Loop through each element.
-
+      if (progress < duration) {
+        requestAnimationFrame(innerDraw)
+      }
     }
     var j = 0;
     function draw() {
-      var t = d3.timer(function (elapsed) {
-        j++;
-        innerDraw();
-        if (elapsed > duration) { t.stop(); };
-      });
+      start = null;
+      requestAnimationFrame(innerDraw);
+
 
     }
     // FamilyTree.centerNode(initialCenterNode || root);
