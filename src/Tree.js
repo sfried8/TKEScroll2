@@ -41,10 +41,11 @@ const FamilyTree = {
     var canvas = d3.select("#tree-container").append("canvas")
       .attr("width", width + margin.right + margin.left)
       .attr("height", height + margin.top + margin.bottom)
-
-    canvas.call(d3.zoom()
+    const zoomBehavior = d3.zoom()
       .scaleExtent([1 / 4, 4])
-      .on("zoom", zoomed));
+      .on("zoom", zoomed);
+    canvas.call(zoomBehavior)
+    canvas.on("click", clicked)
 
     function zoomed() {
       ctx.save();
@@ -54,23 +55,47 @@ const FamilyTree = {
       draw()
       ctx.restore();
     }
-    // .call(d3.zoom().on("zoom", function () {
-    //   canvas.attr("transform", d3.event.transform)
-    // }))
-    // .append("g")
-    // .attr("transform", "translate("
-    //   + margin.left + "," + margin.top + ")");
+
+    function clicked() {
+      const currentZoomTransform = d3.zoomTransform(canvas.node())
+      const clickDistance = 14 * currentZoomTransform.k
+      const mousepoint = d3.mouse(this);
+      console.log(mousepoint)
+      let node;
+      let minDistance = Infinity;
+      treeNodes.forEach((d) => {
+        const dy0 = d.x - mousepoint[1] + 50
+        const dx0 = d.y - mousepoint[0];
+        const [dx, dy] = currentZoomTransform.apply([dx0, dy0]);
+        const distance = Math.sqrt((dx * dx) + (dy * dy));
+
+        // if (distance < d.r) {
+        // if (distance < minDistance) {
+        if (distance < minDistance && distance < clickDistance) {
+          // drawCircles(d);
+          minDistance = distance;
+          node = d;
+        }
+      });
+
+      if (node) {
+        const point = () => d3.zoomIdentity.translate(width / 2, height / 2).scale(1).translate(-node.y1, -node.x1)
+        canvas.transition().duration(duration).call(zoomBehavior.transform, point)
+        // zoomBehavior.translateTo(canvas, nx, ny)
+        // console.log("translating to ", ny, nx, "from", node.y1, node.x1)
+        clickn(node)
+      }
+    }
     var ctx = canvas.node().getContext('2d')
 
-    var i = 0,
-      duration = 1000,
+    var duration = 1000,
       root;
 
     // declares a tree layout and assigns the size
     var treemap = d3.tree().separation((a, b) => a.parent == b.parent ? 2 : 4).nodeSize([10, 10]);
 
     // Assigns parent, children, height, depth
-    root = d3.hierarchy(treeData, function (d) { return d.children; });
+    root = d3.hierarchy(treeData, d => d.children);
     root.x0 = height / 2;
     root.y0 = 0;
 
@@ -117,23 +142,11 @@ const FamilyTree = {
       treeNodes.forEach(d => { d.x0 = d.removed ? source.x : d.x; d.y0 = d.removed ? source.y : d.y; d.removed = false; })
       // Compute the new tree layout.
       treeNodes = treemap(root).descendants();
-      // var links = treeData.descendants().slice(1);
 
       treeNodes.forEach(function (d) {
         d.y1 = d.y = d.depth * 180;
-
-
       });
       treeNodes.forEach(d => { d.x1 = d.x; })
-      // Normalize for fixed-depth.
-
-
-
-
-
-      // Toggle children on click.
-
-
 
       animate();
     }
@@ -165,7 +178,7 @@ const FamilyTree = {
         if (!d.parent) {
           return
         }
-        ctx.fillStyle = "#eee"
+        ctx.fillStyle = "#fff"
         ctx.lineWidth = "2"
         ctx.strokeStyle = d._children ? "#ff0000" : "#AD2624"
         ctx.beginPath();
@@ -175,7 +188,9 @@ const FamilyTree = {
         ctx.fill();
         ctx.stroke();
         ctx.fillStyle = "#222222"
-        ctx.fillText(d.data.name, d.y, d.x)
+        ctx.textAlign = d.children || d._children ? "end" : "start";
+        const yoffset = d.children || d._children ? -13 : 13;
+        ctx.fillText(d.data.name, d.y + yoffset, d.x)
 
         //   const path = d3.select(this)
 
@@ -191,7 +206,14 @@ const FamilyTree = {
         d.x = d.x0 * (1 - t) + d.x1 * t;
         d.y = d.y0 * (1 - t) + d.y1 * t;
       })
+      const currentZoomTransform = d3.zoomTransform(canvas.node());
+      // console.log(currentZoomTransform)
+      ctx.save();
+      ctx.clearRect(0, 0, width, height);
+      ctx.translate(currentZoomTransform.x, currentZoomTransform.y);
+      ctx.scale(currentZoomTransform.k, currentZoomTransform.k);
       draw()
+      ctx.restore();
 
       if (progress < duration + 100) {
         requestAnimationFrame(drawStep)
