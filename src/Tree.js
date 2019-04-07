@@ -43,7 +43,7 @@ const FamilyTree = {
       .attr("height", height + margin.top + margin.bottom)
 
     canvas.call(d3.zoom()
-      .scaleExtent([1 / 2, 4])
+      .scaleExtent([1 / 4, 4])
       .on("zoom", zoomed));
 
     function zoomed() {
@@ -67,7 +67,7 @@ const FamilyTree = {
       root;
 
     // declares a tree layout and assigns the size
-    var treemap = d3.tree().size([height, width]);
+    var treemap = d3.tree().separation((a, b) => a.parent == b.parent ? 2 : 4).nodeSize([10, 10]);
 
     // Assigns parent, children, height, depth
     root = d3.hierarchy(treeData, function (d) { return d.children; });
@@ -80,7 +80,7 @@ const FamilyTree = {
       d.x0 = height / 2;
       d.y0 = 0;
       d.x1 = d.x;
-      d.y1 = d.y = d.depth * 90;
+      d.y1 = d.y = d.depth * 180;
 
     });
     window.clickn = function click(d) {
@@ -111,35 +111,17 @@ const FamilyTree = {
     function update(source) {
       // Assigns the x and y position for the nodes
       treeNodes.forEach(function (d) {
-        d.y1 = d.y = d.depth * 90;
+        d.y1 = d.y = d.depth * 180;
       })
-      //   if (!d.x0) {
-      //     d.x0 = source.x;
-      //     d.y0 = source.y0 || source.y;
-      //   } else {
-      //     d.x0 = d.x || d.x0; d.y0 = d.y || d.y0;
-      //   }
-      //   //   // d.x0 = d.x;
-      //   //   // d.y0 = d.y;
-      //   //   // d.x1 = d.x;
-      //   //   // d.y1 = d.y;
 
-      // });
       treeNodes.forEach(d => { d.x0 = d.removed ? source.x : d.x; d.y0 = d.removed ? source.y : d.y; d.removed = false; })
       // Compute the new tree layout.
       treeNodes = treemap(root).descendants();
       // var links = treeData.descendants().slice(1);
 
       treeNodes.forEach(function (d) {
-        d.y1 = d.y = d.depth * 90;
-        // if (!d.x0) {
-        //   d.x0 = source.x;
-        //   d.y0 = source.y;
-        // }
-        //   // d.x0 = d.x;
-        //   // d.y0 = d.y;
-        //   // d.x1 = d.x;
-        //   // d.y1 = d.y;
+        d.y1 = d.y = d.depth * 180;
+
 
       });
       treeNodes.forEach(d => { d.x1 = d.x; })
@@ -159,7 +141,7 @@ const FamilyTree = {
       ctx.clearRect(0, 0, width, height);
 
       treeNodes.forEach(d => {
-        if (!d.parent) {
+        if (!d.parent || !d.parent.parent) {
           return
         }
         const sX = d.x
@@ -180,6 +162,9 @@ const FamilyTree = {
       treeNodes.forEach(function (d, i) { // For each virtual/custom element...
         // This is each individual element in the loop. 
         // const node = d3.select(this)
+        if (!d.parent) {
+          return
+        }
         ctx.fillStyle = "#eee"
         ctx.lineWidth = "2"
         ctx.strokeStyle = d._children ? "#ff0000" : "#AD2624"
