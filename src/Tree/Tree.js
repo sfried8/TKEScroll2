@@ -1,47 +1,28 @@
 // Calculate total nodes, max label length
 import * as d3 from "d3"
+import TreeModel from "./TreeModel"
 var tree;
 const FamilyTree = {
   tree: tree,
   render: function (brothers, center) {
 
     const ease = d3.easeCubic;
-    var node;
-    var scale;
-    var initialCenterNode;
-    var x;
-    var y;
+
     var lastClick;
     window.treeNodes = [];
-    const createNode = function (scroll) {
-      const brother = brothers[scroll];
-      const node = {
-        name: brother.fname + " " + brother.lname,
-        children: []
-      };
-      (brother.littles || []).forEach(
-        l =>
-          l != scroll && (scroll != 0 || brothers[l].littles)
-            ? node.children.push(createNode(+l))
-            : null
-      );
-      if (scroll === center) {
-        initialCenterNode = node;
-      }
-      return node;
-    };
-    var treeData = createNode(0);
-    var totalNodes = 0;
+
+
+
     var margin = { top: 0, right: 0, bottom: 0, left: 0 }
     var width = document.body.clientWidth;
     var height = document.body.clientHeight - 50;
 
-    // append the svg object to the body of the page
-    // appends a 'group' element to 'svg'
-    // moves the 'group' element to the top left margin
+    const dpi = window.devicePixelRatio;
     var canvas = d3.select("#tree-container").append("canvas")
-      .attr("width", width + margin.right + margin.left)
-      .attr("height", height + margin.top + margin.bottom)
+      .attr("width", dpi * (width + margin.right + margin.left))
+      .attr("height", dpi * (height + margin.top + margin.bottom)).style("width", (width + margin.right + margin.left) + "px").style("height", (height + margin.top + margin.bottom) + "px")
+    var ctx = canvas.node().getContext('2d')
+    ctx.scale(dpi, dpi)
     const zoomBehavior = d3.zoom()
       .scaleExtent([1 / 4, 4])
       .on("zoom", zoomed);
@@ -57,64 +38,41 @@ const FamilyTree = {
       ctx.restore();
     }
 
+
     function clicked() {
       const currentZoomTransform = d3.zoomTransform(canvas.node())
       const clickDistance = 14 * currentZoomTransform.k
 
       let node;
       let minDistance = Infinity;
-      // let [cy,cx] = currentZoomTransform.apply([d3.event.pageY-50, d3.event.pageX]);
-      // lastClick = {x:cx,y:cy};
+      const [clickX, clickY] = currentZoomTransform.invert([d3.event.pageX, d3.event.pageY - 50])
       treeNodes.forEach((d) => {
-        const dy0 = d.x$ - d3.event.pageY + 50
-        const dx0 = d.y$ - d3.event.pageX;
-        
-        const [dx, dy] = currentZoomTransform.apply([dx0, dy0]);
+
+        const dy = d.y - clickY;
+        const dx = d.x - clickX;
+
         const distance = Math.sqrt((dx * dx) + (dy * dy));
 
-        // if (distance < d.r) {
-        // if (distance < minDistance) {
         if (distance < minDistance && distance < clickDistance) {
-          // drawCircles(d);
           minDistance = distance;
           node = d;
         }
       });
-
       if (node) {
-        const point = () => d3.zoomIdentity.translate(width / 2, height / 2).scale(1).translate(-node.y1, -node.x1)
+        const point = () => d3.zoomIdentity.translate(width / 2 - node.x1, height / 2 - node.y1)
         canvas.transition().duration(duration).call(zoomBehavior.transform, point)
-        // zoomBehavior.translateTo(canvas, nx, ny)
-        // console.log("translating to ", ny, nx, "from", node.y1, node.x1)
-        clickn(node)
+        clickNode(node)
       }
       // drawStep(1000)
     }
-    var ctx = canvas.node().getContext('2d')
 
-    var duration = 1000,
-      root;
 
-    // declares a tree layout and assigns the size
-    var treemap = d3.tree().separation((a, b) => a.parent == b.parent ? 2 : 4).nodeSize([10, 10]);
+    var duration = 1000
 
-    // Assigns parent, children, height, depth
-    root = d3.hierarchy(treeData, d => d.children);
-    root.x0 = height / 2;
-    root.y0 = 0;
 
-    var treeData = treemap(root);
-    treeNodes = treeData.descendants();
-    treeNodes.forEach(function (d) {
-      d.x0 = height / 2;
-      d.y0 = 0;
-      d.x$ = d.x;
-      d.y$ = d.y;
-      d.x1 = d.x$;
-      d.y1 = d.y$ = d.depth * 180;
+    var treeNodes = TreeModel.init(brothers);
 
-    });
-    window.clickn = function click(d) {
+    const clickNode = function click(d) {
       if (d.children) {
         d.children.forEach(flagForRemoval)
         d._children = d.children;
@@ -140,21 +98,8 @@ const FamilyTree = {
     }
 
     function update(source) {
-      // Assigns the x and y position for the nodes
-      treeNodes.forEach(function (d) {
-        d.y1 = d.y$ = d.depth * 180;
-      })
 
-      treeNodes.forEach(d => { d.x0 = d.removed ? source.x$ : d.x$; d.y0 = d.removed ? source.y$ : d.y$; d.removed = false; })
-      // Compute the new tree layout.
-      treeNodes = treemap(root).descendants();
-
-      treeNodes.forEach(function (d) {
-        d.x$ = d.x;
-        d.y$ = d.y;
-        d.y1 = d.y$ = d.depth * 180;
-      });
-      treeNodes.forEach(d => { d.x1 = d.x$; })
+      treeNodes = TreeModel.refreshTree(source);
 
       animate();
     }
@@ -165,16 +110,16 @@ const FamilyTree = {
         if (!d.parent || !d.parent.parent) {
           return
         }
-        const sX = d.x$
-        const sY = d.y$
+        const sX = d.x
+        const sY = d.y
 
-        const pX = d.parent.x$
-        const pY = d.parent.y$
+        const pX = d.parent.x
+        const pY = d.parent.y
         ctx.beginPath();
         ctx.lineWidth = "1"
         ctx.strokeStyle = "#aaaaaa"
-        ctx.moveTo(sY, sX)
-        ctx.bezierCurveTo((sY + pY) / 2, sX, (sY + pY) / 2, pX, pY, pX)
+        ctx.moveTo(sX, sY)
+        ctx.bezierCurveTo((sX + pX) / 2, sY, (sX + pX) / 2, pY, pX, pY)
         ctx.stroke();
       })
       // var elements = custom.selectAll('custom.node');
@@ -190,24 +135,20 @@ const FamilyTree = {
         ctx.lineWidth = "2"
         ctx.strokeStyle = d._children ? "#ff0000" : "#AD2624"
         ctx.beginPath();
-        // const x = node.attr("x0") * (1 - t) + node.attr("x1") * t;
-        // const y = node.attr("y0") * (1 - t) + node.attr("y1") * t;
-        ctx.arc(d.y$, d.x$, 7, 0, 2 * Math.PI)
+        ctx.arc(d.x, d.y, 7, 0, 2 * Math.PI)
         ctx.fill();
         ctx.stroke();
         ctx.fillStyle = "#222222"
         ctx.textAlign = d.children || d._children ? "end" : "start";
-        const yoffset = d.children || d._children ? -13 : 13;
-        ctx.fillText(`${d.data.name} (${d.x$.toFixed(2)},${d.y$.toFixed(2)})`, d.y$ + yoffset, d.x$)
-
-        //   const path = d3.select(this)
+        const xoffset = d.children || d._children ? -13 : 13;
+        ctx.fillText(d.data.name, d.x + xoffset, d.y)
 
         // Here you retrieve the position of the node and apply it to the fillRect ctx function which will fill and paint the square.
       }); // Loop through each element.
       if (lastClick) {
         ctx.fillStyle = "#00ff00"
         ctx.beginPath()
-        ctx.arc(lastClick.x,lastClick.y,5,0,2*Math.PI)
+        ctx.arc(lastClick.x, lastClick.y, 5, 0, 2 * Math.PI)
         ctx.fill();
       }
     }
@@ -217,8 +158,8 @@ const FamilyTree = {
       var progress = timestamp - start;
       const t = Math.min(1, ease(progress / (duration + 100)))
       treeNodes.forEach(function (d, i) {
-        d.x$ = d.x0 * (1 - t) + d.x1 * t;
-        d.y$ = d.y0 * (1 - t) + d.y1 * t;
+        d.x = d.x0 * (1 - t) + d.x1 * t;
+        d.y = d.y0 * (1 - t) + d.y1 * t;
       })
       const currentZoomTransform = d3.zoomTransform(canvas.node());
       // console.log(currentZoomTransform)

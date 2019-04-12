@@ -46,7 +46,7 @@
 </template>
 
 <script>
-  import Tree from "../Tree";
+  import Tree from "../Tree/Tree.js";
   import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
   export default {
     mixins: [BrotherInfoMixin],
