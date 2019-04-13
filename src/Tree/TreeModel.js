@@ -1,7 +1,6 @@
-import * as d3 from "d3";
+import { hierarchy, tree } from "d3";
 export default (function() {
   var treemap;
-  // .nodeSize([10, 70]);
   var treeNodes;
   var root;
   var allnodes = [];
@@ -21,18 +20,15 @@ export default (function() {
       return node;
     };
     var brotherData = createNode(0);
-    root = d3.hierarchy(brotherData, d => d.children);
+    root = hierarchy(brotherData, d => d.children);
     allnodes.push(...root.descendants());
     var longestName = [...allnodes].sort(
       (a, b) => b.data.name.length - a.data.name.length
     )[0];
     nodeWidth = 12 * longestName.data.name.length;
-    treemap = d3
-      .tree()
+    treemap = tree()
       .separation((a, b) => (a.parent == b.parent ? 2 : 4))
       .nodeSize([10, 10]);
-    // root.x0 = height / 2;
-    // root.y0 = 0;
     treeNodes = refreshTree();
     treeNodes.forEach(n => {
       n.x0 = 0;

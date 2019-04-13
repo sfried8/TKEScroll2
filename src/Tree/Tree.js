@@ -1,13 +1,10 @@
-// Calculate total nodes, max label length
 import * as d3 from "d3";
 import TreeModel from "./TreeModel";
 var tree;
 const FamilyTree = {
   tree: tree,
-  render: function(brothers, center) {
-    const ease = d3.easeCubic;
-    window.TreeModel = TreeModel;
-    window.treeNodes = [];
+  render: function(brothers) {
+    var treeNodes = [];
     var collapsing = [];
     var margin = { top: 0, right: 0, bottom: 0, left: 0 };
     var width = document.body.clientWidth;
@@ -26,7 +23,6 @@ const FamilyTree = {
     const zoomBehavior = d3
       .zoom()
       .scaleExtent([1 / 4, 4])
-      // .translateExtent([[-50,150,]])
       .on("zoom", zoomed)
       .interpolate(d3.interpolate);
     canvas.call(zoomBehavior);
@@ -55,7 +51,6 @@ const FamilyTree = {
       if (node) {
         if (rightclick) {
           d3.event.preventDefault();
-          console.log(node);
         } else {
           centerNode(node);
           clickNode(node);
@@ -78,7 +73,6 @@ const FamilyTree = {
     const centerNode = node => {
       const point = () =>
         d3.zoomIdentity.translate(width / 2 - node.x1, height / 2 - node.y1);
-      // .scale(d3.zoomTransform(canvas.node()).k);
       canvas
         .transition()
         .duration(duration)
@@ -176,14 +170,11 @@ const FamilyTree = {
       ctx.fillText(`${d.data.name}`, d.x + xoffset, d.y);
     };
     function draw(animationProgress) {
-      // console.log(d3.zoomTransform(canvas.node()));
       ctx.clearRect(0, 0, width, height);
       treeNodes.forEach(drawPath);
       collapsing.forEach(drawPath);
 
-      treeNodes.forEach(
-        d => drawNode(d) //, 1 - Math.abs(d.x1 - d.x) / Math.abs(d.x1 - d.x0))
-      );
+      treeNodes.forEach(d => drawNode(d));
       collapsing.forEach(d => drawNode(d, 1 - animationProgress));
     }
 
@@ -191,7 +182,7 @@ const FamilyTree = {
     function drawStep(timestamp) {
       if (!start) start = timestamp;
       var progress = timestamp - start;
-      const t = Math.min(1, ease(progress / (duration + 100)));
+      const t = Math.min(1, d3.easeCubic(progress / (duration + 100)));
       const interpolatePosition = d => {
         d.x = d.x0 * (1 - t) + d.x1 * t;
         d.y = d.y0 * (1 - t) + d.y1 * t;
@@ -199,7 +190,6 @@ const FamilyTree = {
       treeNodes.forEach(interpolatePosition);
       collapsing.forEach(interpolatePosition);
       const currentZoomTransform = d3.zoomTransform(canvas.node());
-      // console.log(currentZoomTransform)
       ctx.save();
       ctx.clearRect(0, 0, width, height);
       ctx.translate(currentZoomTransform.x, currentZoomTransform.y);
