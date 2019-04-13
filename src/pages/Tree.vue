@@ -58,22 +58,19 @@
     watch: {
       Brothers(val) {
         if (this.Brothers) {
-          this.$nextTick().then(() =>
-            Tree.render(
-              this.Brothers,
-              this.$route.query ? +this.$route.query.scroll : 0
-            )
-          );
+          this.$nextTick().then(() => {
+            Tree.render(this.Brothers);
+            const scroll = +this.$route.query.scroll;
+            console.log(scroll);
+            if (scroll) {
+              Tree.findNode(this.Brothers[scroll]);
+            }
+          });
         }
       },
       findTarget(val) {
         if (this.findTarget) {
-          const node = Tree.nodes.find(
-            n => n.name === val.fname + " " + val.lname
-          );
-          if (node) {
-            Tree.centerNode(node);
-          }
+          Tree.findNode(this.findTarget);
           this.findTarget = null;
         }
         // this.big = ""
@@ -84,7 +81,7 @@
 
 <style type="text/css">
   #tree-container {
-    /* overflow: hidden; */
+    overflow: hidden;
     touch-action: none;
   }
   .node {

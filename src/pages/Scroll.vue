@@ -101,10 +101,7 @@
       orderedBrothers() {
         return this.sortOption === "scrollasc"
           ? this.Brothers
-          : this.reversedBrothers;
-      },
-      reversedBrothers() {
-        this.Brothers.slice().reverse();
+          : this.Brothers.slice().reverse();
       }
     },
     methods: {
@@ -116,5 +113,4 @@
   };
 </script>
 
-<style lang="stylus">
-</style>
+<style lang="stylus"></style>
