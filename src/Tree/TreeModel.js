@@ -1,13 +1,11 @@
 import * as d3 from "d3";
 export default (function() {
-  var treemap = d3
-    .tree()
-    .separation((a, b) => (a.parent == b.parent ? 2 : 4))
-    .nodeSize([10, 10]);
+  var treemap;
+  // .nodeSize([10, 70]);
   var treeNodes;
   var root;
-  var expandedRoot;
   var allnodes = [];
+  var nodeWidth = 180;
   function init(brothers) {
     const createNode = function(scroll) {
       const brother = brothers[scroll];
@@ -25,6 +23,14 @@ export default (function() {
     var brotherData = createNode(0);
     root = d3.hierarchy(brotherData, d => d.children);
     allnodes.push(...root.descendants());
+    var longestName = [...allnodes].sort(
+      (a, b) => b.data.name.length - a.data.name.length
+    )[0];
+    nodeWidth = 12 * longestName.data.name.length;
+    treemap = d3
+      .tree()
+      .separation((a, b) => (a.parent == b.parent ? 2 : 4))
+      .nodeSize([10, 10]);
     // root.x0 = height / 2;
     // root.y0 = 0;
     treeNodes = refreshTree();
@@ -56,7 +62,7 @@ export default (function() {
     }
     treeNodes.forEach(n => {
       n.y1 = n.y = n.x;
-      n.x = n.x1 = n.depth * 180;
+      n.x = n.x1 = n.depth * nodeWidth;
     });
     return treeNodes;
   }

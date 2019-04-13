@@ -33,7 +33,7 @@ const FamilyTree = {
 
     const clicked = rightclick => _ => {
       const currentZoomTransform = d3.zoomTransform(canvas.node());
-      const clickDistance = 14 * currentZoomTransform.k;
+      const clickDistance = 26 * currentZoomTransform.k;
 
       let node;
       let minDistance = Infinity;
@@ -160,11 +160,11 @@ const FamilyTree = {
       if (!d.parent) {
         return;
       }
-      ctx.fillStyle = "rgba(255, 255, 255, " + alpha + ")";
+      ctx.fillStyle = d._children
+        ? "rgba(255, 137, 135, " + alpha + ")"
+        : "rgba(255, 255, 255, " + alpha + ")";
       ctx.lineWidth = "2";
-      ctx.strokeStyle = d._children
-        ? "rgba(255, 0, 0, " + alpha + ")"
-        : "rgba(173, 38, 36, " + alpha + ")";
+      ctx.strokeStyle = "rgba(173, 38, 36, " + alpha + ")";
       ctx.beginPath();
       ctx.arc(d.x, d.y, 7, 0, 2 * Math.PI);
       ctx.fill();
