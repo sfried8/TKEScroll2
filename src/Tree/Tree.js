@@ -103,11 +103,6 @@ const FamilyTree = {
 
     const clickNode = function click(d) {
       if (d.children) {
-        d.descendants().forEach(n => {
-          if (n !== d) {
-            n.removed = true;
-          }
-        });
         collapsing = d.descendants();
         d._children = d.children;
         d.children = null;
@@ -174,7 +169,7 @@ const FamilyTree = {
       treeNodes.forEach(drawPath);
       collapsing.forEach(drawPath);
 
-      treeNodes.forEach(d => drawNode(d));
+      treeNodes.forEach(d => drawNode(d, d.expanding ? animationProgress : 1));
       collapsing.forEach(d => drawNode(d, 1 - animationProgress));
     }
 
@@ -200,8 +195,10 @@ const FamilyTree = {
       if (progress < duration + 100) {
         requestAnimationFrame(drawStep);
       } else {
+        treeNodes.forEach(n => (n.expanding = false));
         if (collapsing.length) {
           collapsing = [];
+
           requestAnimationFrame(drawStep);
         }
       }

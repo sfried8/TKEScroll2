@@ -22,10 +22,12 @@ export default (function() {
     var brotherData = createNode(0);
     root = hierarchy(brotherData, d => d.children);
     allnodes.push(...root.descendants());
-    var longestName = [...allnodes].sort(
-      (a, b) => b.data.name.length - a.data.name.length
-    )[0];
-    nodeWidth = 12 * longestName.data.name.length;
+
+    const nameLengths = allnodes.map(n => n.data.name.length);
+    nameLengths.sort((a, b) => b - a);
+
+    nodeWidth = 12 * nameLengths[0];
+
     treemap = tree()
       .separation((a, b) => (a.parent == b.parent ? 2 : 4))
       .nodeSize([10, 10]);
@@ -46,14 +48,11 @@ export default (function() {
       });
     }
     treeNodes = treemap(root).descendants();
-    console.log(root);
-    if (source) {
-      console.log(source);
-    }
     if (source && source.children) {
-      source.descendants().forEach(n => {
+      descendantsFromChildren(source).forEach(n => {
         n.x0 = source.x0;
         n.y0 = source.y0;
+        n.expanding = true;
       });
     }
     treeNodes.forEach(n => {
@@ -74,5 +73,21 @@ export default (function() {
       });
   }
 
-  return { init, refreshTree, allnodes, expandAncestors };
+  /**
+   * Returns list of all node's descendants, excluding node itself
+   * @param {HierarchyNode} node
+   */
+  function descendantsFromChildren(node) {
+    if (!node) {
+      return [];
+    }
+    return node.descendants().filter(d => d !== node);
+  }
+  return {
+    init,
+    refreshTree,
+    allnodes,
+    expandAncestors,
+    descendantsFromChildren
+  };
 })();
