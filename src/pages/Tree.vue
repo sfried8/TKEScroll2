@@ -17,6 +17,7 @@
         </div>
         <p class="col-1 text-subtitle1">Pan around and pinch to zoom</p>
         <p class="col-1 text-subtitle1">Tap a brother to show/hide their littles</p>
+        <p class="col-1 text-subtitle1">Long press a brother to view their info</p>
         <p class="col-1 text-subtitle1">Search to find a brother in the tree</p>
       </div>
     </help-overlay>
@@ -59,7 +60,14 @@
       Brothers(val) {
         if (this.Brothers) {
           this.$nextTick().then(() => {
-            Tree.render(this.Brothers);
+            Tree.render(this.Brothers, node =>
+              this.$router.push(
+                "/brother/" +
+                  this.Brothers.find(
+                    b => b.fname + " " + b.lname === node.data.name
+                  ).scroll
+              )
+            );
             const scroll = +this.$route.query.scroll;
             console.log(scroll);
             if (scroll) {

@@ -51,8 +51,10 @@
   export default {
     components: { BrotherPageContent },
     mixins: [BrotherInfoMixin],
+
     data() {
       return {
+        bodyWidth: document.body.clientWidth,
         currentScroll: this.$route.params.scroll,
         showSwipe: true,
         cardPositionX: 0,
@@ -61,6 +63,9 @@
         isDragging: false,
         direction: 1
       };
+    },
+    mounted() {
+      this.bodyWidth = document.body.clientWidth;
     },
     methods: {
       panHandler(obj) {
@@ -71,10 +76,11 @@
         if (obj.isFirst) {
           this.startingPosition = obj.position;
         } else if (obj.isFinal) {
+          const dX = Math.abs(this.cardPositionX);
+          const vX = dX / +obj.duration;
           if (
             this.nextBrother &&
-            (Math.abs(this.cardPositionX) > 250 ||
-              (Math.abs(this.cardPositionX) > 100 && +obj.duration < 300))
+            (dX > this.bodyWidth / 2 || (dX > this.bodyWidth / 10 && vX > 0.5))
           ) {
             this.$router.push("/brother/" + this.nextBrother.scroll);
           } else {
@@ -107,7 +113,7 @@
           }px)`,
           opacity: Math.max(
             0,
-            1 - Math.max(Math.abs(this.cardPositionX) - 100, 0) / 150
+            1.25 - (2 * Math.abs(this.cardPositionX)) / this.bodyWidth
           )
         };
       },

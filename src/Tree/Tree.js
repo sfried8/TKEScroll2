@@ -3,7 +3,7 @@ import TreeModel from "./TreeModel";
 var tree;
 const FamilyTree = {
   tree: tree,
-  render: function(brothers) {
+  render: function(brothers, navigateFunction) {
     var treeNodes = [];
     var collapsing = [];
     var margin = { top: 0, right: 0, bottom: 0, left: 0 };
@@ -49,10 +49,11 @@ const FamilyTree = {
         }
       });
       if (node) {
+        centerNode(node);
         if (rightclick) {
           d3.event.preventDefault();
+          navigateFunction(node);
         } else {
-          centerNode(node);
           clickNode(node);
         }
       }
