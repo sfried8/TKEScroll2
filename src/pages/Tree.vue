@@ -1,25 +1,50 @@
 <template>
   <q-page>
     <help-overlay help-id="treePage">
-      <div
-        class="column justify-center items-center"
-        style="height:100%"
-      >
-        <div
-          class="col-2 row justify-center items-center"
-          style="width:100%;"
-        >
+      <template #mobile>
 
-          <img
-            src="~/assets/pinchzoomtouchmove.png"
-            style="height:100%;margin:auto"
-          />
+        <div
+          class="column justify-center items-center"
+          style="height:100%"
+        >
+          <div
+            class="col-2 row justify-center items-center"
+            style="width:100%;"
+          >
+
+            <img
+              src="~/assets/pinchzoomtouchmove.png"
+              style="height:100%;margin:auto"
+            />
+          </div>
+          <p class="col-1 text-subtitle1">Pan around and pinch to zoom</p>
+          <p class="col-1 text-subtitle1">Tap a brother to show/hide their littles</p>
+          <p class="col-1 text-subtitle1">Long press a brother to view their info</p>
+          <p class="col-1 text-subtitle1">Search to find a brother in the tree</p>
         </div>
-        <p class="col-1 text-subtitle1">Pan around and pinch to zoom</p>
-        <p class="col-1 text-subtitle1">Tap a brother to show/hide their littles</p>
-        <p class="col-1 text-subtitle1">Long press a brother to view their info</p>
-        <p class="col-1 text-subtitle1">Search to find a brother in the tree</p>
-      </div>
+      </template>
+      <template #desktop>
+
+        <div
+          class="column justify-center items-center"
+          style="height:100%"
+        >
+          <div
+            class="col-2 row justify-center items-center"
+            style="width:100%;"
+          >
+
+            <img
+              src="~/assets/pinchzoomtouchmove.png"
+              style="height:100%;margin:auto"
+            />
+          </div>
+          <p class="col-1 text-subtitle1">Pan around and pinch to zoom</p>
+          <p class="col-1 text-subtitle1">Tap a brother to show/hide their littles</p>
+          <p class="col-1 text-subtitle1">Long press a brother to view their info</p>
+          <p class="col-1 text-subtitle1">Search to find a brother in the tree</p>
+        </div>
+      </template>
     </help-overlay>
     <div
       id="tree-container"
@@ -91,6 +116,10 @@
   #tree-container {
     overflow: hidden;
     touch-action: none;
+    width: 100%;
+    max-width: initial;
+    position: absolute;
+    left: 0;
   }
   .node {
     cursor: pointer;

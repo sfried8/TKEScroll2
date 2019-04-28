@@ -11,11 +11,8 @@ import Util from "./Util";
 export default {
   _brothers: null,
   async addBrother(brother) {
-    const url = LocalStorage.getItem("role") === "GUEST" ? fakeurl : awsAddUrl
+    const url = LocalStorage.getItem("role") === "GUEST" ? fakeurl : awsAddUrl;
     await Util.throttle(
-
-
-
       fetch(url, {
         method: "POST", // *GET, PUT, DELETE, etc.
         body: JSON.stringify(brother), // must match 'Content-Type' header
@@ -59,20 +56,15 @@ export default {
         const password = LocalStorage.getItem("apiKey");
         let rawdata;
         if (password === "GUEST") {
-          rawdata = await fetch(fakeurl)
+          rawdata = await fetch(fakeurl);
         } else {
-          rawdata = await fetch(
-            awsGetUrl,
-            {
-              method: "GET", // *GET, PUT, DELETE, etc.
-              headers: new Headers({
-                Authorization: "key=" + password
-              })
-            }
-
-          );
+          rawdata = await fetch(awsGetUrl, {
+            method: "GET", // *GET, PUT, DELETE, etc.
+            headers: new Headers({
+              Authorization: "key=" + password
+            })
+          });
         }
-
 
         const data = await rawdata.json();
         if (data.error) {
@@ -113,14 +105,15 @@ export default {
     return this._brothers;
   },
   authenticate(password) {
+    if (!password) {
+      return Promise.resolve({ role: "GUEST" });
+    }
     return fetch(authenticateUrl, {
       method: "GET", // *GET, PUT, DELETE, etc.
       headers: new Headers({
         Authorization: "key=" + password
       })
-    }).then(data =>
-      data.json()
-    );
+    }).then(data => data.json());
   },
   clearCache() {
     LocalStorage.remove("brothers");

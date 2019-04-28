@@ -24,6 +24,7 @@
     <q-drawer
       side="left"
       v-model="left"
+      overlay
     >
       <q-list
         no-border
@@ -97,7 +98,7 @@
         <router-view /> component
         if using subRoutes
       -->
-    <q-page-container style="overflow:visible;">
+    <q-page-container :style="`overflow:visible; max-width:${$route.path === '/tree'?'initial':'700px'}; margin:auto;`">
 
       <router-view :key="$route.path" />
     </q-page-container>

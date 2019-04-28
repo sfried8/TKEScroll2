@@ -1,23 +1,44 @@
 <template>
   <div class="layout-padding">
     <help-overlay help-id="brotherPage">
+      <template #mobile>
 
-      <div
-        class="column justify-center items-center"
-        style="height:100%"
-      >
-        <img
-          class="col-3 self-center"
-          src="~/assets/swipe.png"
-        />
-        <p
-          class="col-2 self-center text-h5"
-          style="text-align:center"
+        <div
+          class="column justify-center items-center"
+          style="height:100%"
         >
-          Swipe left and right to navigate. It's just like Tinder!
+          <img
+            class="col-3 self-center"
+            src="~/assets/swipe.png"
+          />
+          <p
+            class="col-2 self-center text-h5"
+            style="text-align:center"
+          >
+            Swipe left and right to navigate. It's just like Tinder!
 
-        </p>
-      </div>
+          </p>
+        </div>
+      </template>
+      <template #desktop>
+
+        <div
+          class="column justify-center items-center"
+          style="height:100%"
+        >
+          <img
+            class="col-3 self-center"
+            src="~/assets/arrowkeys.png"
+          />
+          <p
+            class="col-2 self-center text-h5"
+            style="text-align:center"
+          >
+            Use left and right arrow keys to navigate!
+
+          </p>
+        </div>
+      </template>
     </help-overlay>
     <div
       id="nextBrotherContainer"
@@ -66,13 +87,15 @@
     },
     mounted() {
       this.bodyWidth = document.body.clientWidth;
+      window.addEventListener("keyup", this.arrowKeyHandler);
+    },
+    beforeDestroy() {
+      window.removeEventListener("keyup", this.arrowKeyHandler);
     },
     methods: {
       panHandler(obj) {
         this.isDragging = true;
-        // if (+obj.distance.x > 30 || +obj.distance.y > 30 || +obj.duration > 500) {
         obj.evt.preventDefault();
-        // }
         if (obj.isFirst) {
           this.startingPosition = obj.position;
         } else if (obj.isFinal) {
@@ -99,6 +122,24 @@
         }
         if (this.cardPositionX !== 0) {
           this.direction = this.cardPositionX < 0 ? 1 : -1;
+        }
+      },
+      arrowKeyHandler(event) {
+        if (event.keyCode === 37) {
+          this.navigate(false);
+          event.preventDefault();
+        } else if (event.keyCode === 39) {
+          this.navigate(true);
+          event.preventDefault();
+        }
+      },
+      navigate(forwards) {
+        if (forwards) {
+          if (this.Brothers[+this.currentScroll + 1]) {
+            this.$router.push("/brother/" + (+this.currentScroll + 1));
+          }
+        } else if (this.currentScroll > 1) {
+          this.$router.push("/brother/" + (+this.currentScroll - 1));
         }
       }
     },
@@ -154,7 +195,10 @@
     height: 80%;
     top: 10%;
     width: 80%;
-    left: 10%;
+    max-width: 500px;
+    left: 0;
+    right: 0;
+    margin: auto;
   }
 
   .brother-page-line {

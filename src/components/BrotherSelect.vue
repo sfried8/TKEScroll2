@@ -11,6 +11,7 @@
     input-debounce="200"
     :label="label"
     :options="options"
+    class="brother-select"
     @filter="filterFn"
   >
     <template v-slot:prepend>
@@ -122,7 +123,7 @@
   };
 </script>
 <style>
-  input {
+  .brother-select input {
     color: #000 !important;
   }
 </style>

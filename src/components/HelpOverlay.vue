@@ -4,8 +4,14 @@
     class="fullscreen help-overlay text-white column q-pa-xl"
   >
     <div class="col-10">
-
-      <slot></slot>
+      <slot
+        v-if="$q.platform.is.mobile"
+        name="mobile"
+      ></slot>
+      <slot
+        v-else
+        name="desktop"
+      ></slot>
     </div>
     <div class="row col justify-center items-center">
 
