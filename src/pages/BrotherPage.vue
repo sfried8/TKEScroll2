@@ -87,10 +87,19 @@
     },
     mounted() {
       this.bodyWidth = document.body.clientWidth;
-      window.addEventListener("keyup", this.arrowKeyHandler);
+      this.akh = event => {
+        if (event.keyCode === 37) {
+          this.navigate(false);
+          event.preventDefault();
+        } else if (event.keyCode === 39) {
+          this.navigate(true);
+          event.preventDefault();
+        }
+      };
+      window.addEventListener("keydown", this.akh);
     },
     beforeDestroy() {
-      window.removeEventListener("keyup", this.arrowKeyHandler);
+      window.removeEventListener("keydown", this.akh);
     },
     methods: {
       panHandler(obj) {
@@ -105,7 +114,7 @@
             this.nextBrother &&
             (dX > this.bodyWidth / 2 || (dX > this.bodyWidth / 10 && vX > 0.5))
           ) {
-            this.$router.push("/brother/" + this.nextBrother.scroll);
+            this.$router.replace("/brother/" + this.nextBrother.scroll);
           } else {
             this.isDragging = false;
           }
@@ -125,21 +134,15 @@
         }
       },
       arrowKeyHandler(event) {
-        if (event.keyCode === 37) {
-          this.navigate(false);
-          event.preventDefault();
-        } else if (event.keyCode === 39) {
-          this.navigate(true);
-          event.preventDefault();
-        }
+        console.log(event);
       },
       navigate(forwards) {
         if (forwards) {
           if (this.Brothers[+this.currentScroll + 1]) {
-            this.$router.push("/brother/" + (+this.currentScroll + 1));
+            this.$router.replace("/brother/" + (+this.currentScroll + 1));
           }
         } else if (this.currentScroll > 1) {
-          this.$router.push("/brother/" + (+this.currentScroll - 1));
+          this.$router.replace("/brother/" + (+this.currentScroll - 1));
         }
       }
     },

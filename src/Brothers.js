@@ -2,6 +2,7 @@ const localUrl = "http://localhost:3000";
 const awsUrl = "https://imm30g62kg.execute-api.us-east-1.amazonaws.com/dev";
 const awsGetUrl = awsUrl + "/brothers";
 const awsAddUrl = awsUrl + "/brothers/add";
+const awsDeleteUrl = awsUrl + "/brothers/delete";
 const awsAddOfficerUrl = awsUrl + "/brothers/addOfficer";
 const authenticateUrl = awsUrl + "/authenticate";
 const fakeurl =
@@ -24,6 +25,19 @@ export default {
       }).then(rawdata => rawdata.json()),
       500
     );
+  },
+  async deleteBrother(brother) {
+    const url =
+      LocalStorage.getItem("role") === "GUEST" ? fakeurl : awsDeleteUrl;
+    return fetch(url, {
+      method: "DELETE", // *GET, PUT, DELETE, etc.
+      body: JSON.stringify(brother), // must match 'Content-Type' header
+      headers: new Headers({
+        Accept: "application/json",
+        Authorization: "key=" + (LocalStorage.getItem("apiKey") || "GUEST"),
+        "content-type": "application/json"
+      })
+    }).then(rawdata => rawdata.json());
   },
   async addBrothers(brothers) {
     Loading.show();

@@ -2,11 +2,7 @@
   <div class="brother-page">
     <div class="brother-page-line">{{brother.scroll}}</div>
     <h5>{{brother.fname}} {{brother.lname}}</h5>
-    <div
-      v-if="brother.pc"
-      class="brother-page-line brother-link"
-      @click="$router.push('/pc/'+(brother.isZetaTau ? 'ZT':'')+brother.pc)"
-    >{{PC}}</div>
+    <div v-if="brother.pc"><a :href="'#/pc/'+(brother.isZetaTau ? 'ZT':'')+brother.pc">{{PC}}</a></div>
     <div
       v-else
       class="brother-page-line"
@@ -14,11 +10,8 @@
 
     </div><br>
     <div class="brother-page-line">{{brother.nickname}}</div><br>
-    <div
-      class="brother-page-line brother-link"
-      @click="$router.push('/brother/'+Big.scroll)"
-    >
-      <div>{{Big.fname}} {{Big.lname}}</div>
+    <div class="brother-page-line">
+      <a :href="'#/brother/'+Big.scroll">{{Big.fname}} {{Big.lname}}</a>
     </div><br>
     <div v-show="Littles.length > 0">
       <div class="brother-page-line">Littles: </div>
@@ -26,9 +19,8 @@
         <li
           class="brother-page-line brother-link"
           v-for="l in Littles"
-          @click="$router.push('/brother/'+l.scroll)"
           :key="l.scroll"
-        >{{l.fname}} {{l.lname}}</li>
+        ><a :href="'#/brother/'+l.scroll">{{l.fname}} {{l.lname}}</a></li>
       </ul>
     </div>
     <q-btn

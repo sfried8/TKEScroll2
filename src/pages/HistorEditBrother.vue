@@ -63,6 +63,11 @@
         color="positive"
         icon="add"
       >Update Brother</q-btn>
+      <q-btn
+        @click="deleteBrother"
+        color="negative"
+        icon="delete_forever"
+      >Delete Brother</q-btn>
       <br /><br />
     </div>
   </div>
@@ -106,6 +111,23 @@
           );
 
         // Brothers.addBrother(brother);
+      },
+      deleteBrother() {
+        this.$q
+          .dialog({
+            title: "Are you SURE?",
+            message:
+              "This action can NOT be undone. Only do this if you really know what you're doing!",
+            ok: "Delete",
+            cancel: "Never mind"
+          })
+          .onOk(() => {
+            this.$brothers.deleteBrother(this.currentBrother).then(() => {
+              this.$q.notify(`Deleted`);
+              this.currentBrother = null;
+            });
+          })
+          .onCancel(() => console.log("cancelled"));
       }
     },
     watch: {
