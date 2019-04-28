@@ -5,16 +5,8 @@
   </div>
 </template>
 
-<script lang='js'>
-import Vue from 'vue'
-import Component from 'vue-class-component'
-/*
- * Root component, but defined as a typescript decorated class
- */
-@Component({})
-export default class App extends Vue {
-
-}
+<script>
+  export default {};
 </script>
 
 <style>

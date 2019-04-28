@@ -77,66 +77,40 @@
 </template>
 
 <script>
-import Fuzzy from "fuzzy";
-import Vue from "vue";
-import Component from "vue-class-component";
-import Brothers from "../Brothers";
-import {
-  QBtn,
-  QList,
-  QItem,
-  QItemSection,
-  QItemLabel,
-  QPageScroller,
-  QPage,
-  QInput,
-  QMenu
-} from "quasar";
-
-@Component({
-  name: "scroll",
-  components: {
-    QBtn,
-    QPage,
-    QList,
-    QItem,
-    QItemSection,
-    QPageScroller,
-    QItemLabel,
-    QInput,
-    QMenu
-  }
-})
-export default class Index extends Vue {
-  _brothers = [];
-  _brothersReversed = [];
-  sortOption = "scrollasc";
-  currentFilter = "";
-  get filteredBrothers() {
-    if (!this.Brothers) {
-      return [];
+  import Fuzzy from "fuzzy";
+  import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
+  export default {
+    mixins: [BrotherInfoMixin],
+    data() {
+      return {
+        sortOption: "scrollasc",
+        currentFilter: ""
+      };
+    },
+    computed: {
+      filteredBrothers() {
+        if (!this.orderedBrothers) {
+          return [];
+        }
+        return Fuzzy.filter(this.currentFilter, this.orderedBrothers, {
+          pre: "<b>",
+          post: "</b>",
+          extract: el => el.fname + " " + el.lname
+        });
+      },
+      orderedBrothers() {
+        return this.sortOption === "scrollasc"
+          ? this.Brothers
+          : this.Brothers.slice().reverse();
+      }
+    },
+    methods: {
+      onGetBrothers() {
+        this.sortOption = "scrollasc";
+        this.Brothers = this.Brothers.filter(el => el.scroll > 0);
+      }
     }
-    return Fuzzy.filter(this.currentFilter, this.Brothers, {
-      pre: "<b>",
-      post: "</b>",
-      extract: el => el.fname + " " + el.lname
-    });
-  }
-  get Brothers() {
-    return this.sortOption === "scrollasc"
-      ? this._brothers
-      : this._brothersReversed;
-  }
-  mounted() {
-    Brothers.getBrothers().then(data => {
-      this._brothers = data.filter(el => el.scroll > 0);
-      this._brothersReversed = this._brothers.slice().reverse();
-      this.sortOption = "";
-      this.sortOption = "scrollasc";
-    });
-  }
-}
+  };
 </script>
 
-<style lang="stylus">
-</style>
+<style lang="stylus"></style>

@@ -24,6 +24,7 @@
     <q-drawer
       side="left"
       v-model="left"
+      overlay
     >
       <q-list
         no-border
@@ -97,105 +98,62 @@
         <router-view /> component
         if using subRoutes
       -->
-    <q-page-container style="overflow:visible;">
+    <q-page-container :style="`overflow:visible; max-width:${$route.path === '/tree'?'initial':'700px'}; margin:auto;`">
 
       <router-view :key="$route.path" />
     </q-page-container>
   </q-layout>
 </template>
 
-<script lang="js">
-import Vue from "vue";
-import Component from "vue-class-component";
-import Brothers from "../Brothers";
-import {
-    dom,
-    event,
-    openURL,
-    QLayout,
-    QHeader,
-    QDrawer,
-    QPageContainer,
-    QToolbar,
-    QToolbarTitle,
-    QBtn,
-    QIcon,
-    QList,
-    QItem,
-    QInput,
-    QItemLabel,
-    QItemSection,
-    // QSideLink,
-    LocalStorage
-} from "quasar";
+<script>
+  import { LocalStorage } from "quasar";
 
-@Component({
-    name: "main-view",
-    components: {
-        QLayout,
-        QToolbar,
-        QToolbarTitle,
-        QBtn,
-        QIcon,
-        QList,
-        QHeader,
-        QDrawer,
-        QPageContainer,
-        QItem,
-        QInput,
-        QItemLabel,
-        QItemSection,
-        // QSideLink,
-    }
-})
-export default class Index extends Vue {
-    left = true;
-    header = true;
-    showHistor = false;
-    goTo(page) {
-        console.log("going to " + page);
-        this.$refs.layout.toggleLeft(() => {
-            this.$router.push({ path: `/${page}` });
-        });
-    }
-    launch(url) {
-        openURL(url);
-    }
-    clearCache() {
-      LocalStorage.clear()
-        Brothers.clearCache();
+  export default {
+    data() {
+      return {
+        left: true,
+        header: true,
+        showHistor: false
+      };
+    },
+    methods: {
+      clearCache() {
+        LocalStorage.clear();
+        this.$brothers.clearCache();
         this.$router.push("/firsttime");
-    }
-    mounted() {
-          document.querySelector(".q-layout").style.minHeight = window.innerHeight+"px"
-    document.body.style.minHeight = window.innerHeight+"px"
+      }
+    },
 
-    }
+    mounted() {
+      document.querySelector(".q-layout").style.minHeight =
+        window.innerHeight + "px";
+      document.body.style.minHeight = window.innerHeight + "px";
+    },
     beforeMount() {
-        if (!LocalStorage.has("apiKey")) {
-            this.$router.push("/firsttime");
+      if (!LocalStorage.has("apiKey")) {
+        this.$router.push("/firsttime");
+      }
+      if (LocalStorage.has("role")) {
+        if (LocalStorage.getItem("role").toLowerCase() === "histor") {
+          this.showHistor = true;
         }
-        if (LocalStorage.has("role")) {
-          if (LocalStorage.getItem("role").toLowerCase() === "histor") {
-            this.showHistor = true;
-          }
-        }
+      }
     }
-}
+  };
 </script>
 
 <style lang="stylus">
-body {
-  background: #eee;
-}
-
-.brother-link {
-  color: blue;
-  text-decoration: underline;
-  cursor: pointer;
-
-  div {
-    width: 95%;
+  body {
+    background: #eee;
   }
-}
+
+  .brother-link {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+
+    div {
+      width: 95%;
+    }
+  }
 </style>

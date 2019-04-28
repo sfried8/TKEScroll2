@@ -55,33 +55,26 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import { QTabPanel, QTabPanels, QTabs, QTab, QPage, QSeparator } from "quasar";
-import HistorAddBrother from "./HistorAddBrother";
-import HistorEditBrother from "./HistorEditBrother";
-import HistorEboard from "./HistorEBoard";
-@Component({
-  name: "histor-base",
-  components: {
-    QTabs,
-    QTab,
-    QPage,
-    QTabPanel,
-    QSeparator,
-    QTabPanels,
-    HistorAddBrother,
-    HistorEditBrother,
-    HistorEboard
-  }
-})
-export default class Index extends Vue {
-  currentTab = "addbrother";
-}
+  import HistorAddBrother from "./HistorAddBrother";
+  import HistorEditBrother from "./HistorEditBrother";
+  import HistorEboard from "./HistorEBoard";
+
+  export default {
+    components: {
+      HistorAddBrother,
+      HistorEditBrother,
+      HistorEboard
+    },
+    data() {
+      return {
+        currentTab: "addbrother"
+      };
+    }
+  };
 </script>
 
 <style lang="css">
-.scroll {
-  overflow: visible;
-}
+  .scroll {
+    overflow: visible;
+  }
 </style>

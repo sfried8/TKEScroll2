@@ -81,115 +81,88 @@
   </div>
 </template>
 
-<script lang="js">
-import Vue from "vue";
-import Component from "vue-class-component";
-import Brothers from "../Brothers";
-import {
-    dom,
-    event,
-    openURL,
-    QLayout,
-    QToolbar,
-    QToolbarTitle,
-    QBtn,
-    QIcon,
-    QList,
-    QItem,
-    TouchSwipe
-} from "quasar";
+<script>
+  import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
+  export default {
+    mixins: [BrotherInfoMixin],
+    data() {
+      return {
+        Prytanis: null,
+        Epiprytanis: null,
+        Grammateus: null,
+        Crysophylos: null,
+        Histor: null,
+        Hypophetes: null,
+        Pylortes: null,
+        Hegemon: null
+      };
+    },
 
-@Component({
-    name: "eboard-page",
-    components: {
-        QLayout,
-        QToolbar,
-        QToolbarTitle,
-        QBtn,
-        QIcon,
-        QList,
-        QItem,
+    methods: {
+      onGetBrothers() {
+        const officers = this.Brothers.filter(el => !!el.officer);
+        const positions = [
+          "Prytanis",
+          "Epiprytanis",
+          "Grammateus",
+          "Crysophylos",
+          "Histor",
+          "Hypophetes",
+          "Pylortes",
+          "Hegemon"
+        ];
+        positions.forEach(
+          pos => (this[pos] = officers.find(o => o.officer === pos) || undefined)
+        );
+      }
     }
-})
-export default class Index extends Vue {
-    Brothers = [];
-    Prytanis = null;
-    Epiprytanis = null;
-    Grammateus = null;
-    Crysophylos = null;
-    Histor = null;
-    Hypophetes = null;
-    Pylortes = null;
-    Hegemon = null;
-    mounted() {
-        this.Brothers = [];
-        Brothers.getBrothers().then(data => {
-            this.Brothers = data;
-            const officers = this.Brothers.filter(el => !!el.officer);
-            const positions = [
-                "Prytanis",
-                "Epiprytanis",
-                "Grammateus",
-                "Crysophylos",
-                "Histor",
-                "Hypophetes",
-                "Pylortes",
-                "Hegemon"
-            ];
-            positions.forEach(
-                pos =>
-                    (this[pos] =
-                        officers.find(o => o.officer === pos) || undefined)
-            );
-        });
-    }
-}
+  };
 </script>
 
 <style lang="stylus" scoped>
-.eboard {
-  border-radius: 4px;
-  height: 200%;
-  padding: 40px;
-  box-shadow: 0px 4px 20px 0px #888888;
-  background-color: white;
-}
-
-img {
-  max-width: 75px;
-}
-
-.officer-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.jewel {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100px;
-}
-
-.officer {
-  margin: 10px;
-  font-weight: 300;
-  background-color: #eee;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 10px;
-  border-radius: 5px;
-  border: solid #c5c0c0 1px;
-  flex-basis: 400px;
-
-  div.name {
-    width: 70%;
-    font-weight: bolder;
-    text-align: center;
-    color: #444;
+  .eboard {
+    border-radius: 4px;
+    height: 200%;
+    padding: 40px;
+    box-shadow: 0px 4px 20px 0px #888888;
+    background-color: white;
   }
-}
+
+  img {
+    max-width: 75px;
+  }
+
+  .officer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .jewel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+  }
+
+  .officer {
+    margin: 10px;
+    font-weight: 300;
+    background-color: #eee;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    border: solid #c5c0c0 1px;
+    flex-basis: 400px;
+
+    div.name {
+      width: 70%;
+      font-weight: bolder;
+      text-align: center;
+      color: #444;
+    }
+  }
 </style>

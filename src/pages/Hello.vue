@@ -8,8 +8,59 @@
         Welcome to the scroll website for the Xi-Upsilon Chapter of Tau Kappa Epsilon!
       </p>
       <img src="~/assets/lem.png" />
+      <brother-select
+        @input="goToBrother"
+        label="Quick Look up"
+        outlined
+        class="bg-white"
+        style="margin:10px"
+        clear-after-select
+      >
+        <template #prepend>
+          <q-icon name="search"></q-icon>
+        </template>
+      </brother-select>
+      <div class="row">
+        <div class="col">
+          <div
+            class="home-link shadow-1"
+            @click="$router.push('/scroll')"
+          >
+            <p>Scroll</p>
+            <q-icon
+              size="36px"
+              name="group"
+            />
+          </div>
+        </div>
+        <div class="col">
+          <div
+            class="home-link shadow-1"
+            @click="$router.push('/eboard')"
+          >
+            <p>EBoard</p>
+            <q-icon
+              size="36px"
+              name="gavel"
+            />
+          </div>
+        </div>
+        <div class="col">
+          <div
+            class="home-link shadow-1"
+            @click="$router.push('/tree')"
+          >
+            <p>Tree</p>
+            <img
+              src="~/assets/familytreeicon.png"
+              style="height:36px;margin-bottom:-5px"
+            />
+          </div>
+        </div>
+
+      </div>
     </div>
-    <div class="absolute-bottom q-ma-xl">
+    <div class="q-ma-xl">
       <p>
         Something wrong?
       </p>
@@ -20,32 +71,44 @@
   </q-page>
 </template>
 
-<script lang="js">
-import Component from "vue-class-component";
-import Vue from "vue";
-import {QPage} from "quasar"
-@Component({
-    name: "hello-view",
-    components:{QPage}
-})
-export default class Index extends Vue {
-}
+<script>
+  export default {
+    methods: {
+      goToBrother(brother) {
+        if (brother && brother.scroll) {
+          this.$router.push("/brother/" + brother.scroll);
+        }
+      }
+    }
+  };
 </script>
 
 <style lang="stylus" scoped>
-.hello {
-  text-align: center;
-  height: 100%;
-  background-color: white;
-}
+  .hello {
+    text-align: center;
+    height: 100%;
+    background-color: white;
+  }
 
-.logo {
-  position: absolute;
-  transform-style: preserve-3d;
-}
+  .logo {
+    position: absolute;
+    transform-style: preserve-3d;
+  }
 
-img {
-  max-width: 50%;
-  max-height: 300px;
-}
+  img {
+    max-width: 50%;
+    max-height: 300px;
+  }
+
+  .home-link {
+    margin: 10px;
+    padding: 10px;
+    border: 1px lightgrey solid;
+    border-radius: 3px;
+
+    p {
+      margin: 5px;
+      font-size: 16pt;
+    }
+  }
 </style>

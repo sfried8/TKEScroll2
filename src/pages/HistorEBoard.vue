@@ -100,106 +100,96 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Component from "vue-class-component";
-import Brothers from "../Brothers";
-import Util from "../Util";
-import { QBtn } from "quasar";
-import BrotherSelect from "components/BrotherSelect";
+  export default {
+    data() {
+      return {
+        Prytanis: null,
+        Epiprytanis: null,
+        Grammateus: null,
+        Crysophylos: null,
+        Histor: null,
+        Hypophetes: null,
+        Pylortes: null,
+        Hegemon: null,
+        originalPrytanis: null,
+        originalEpiprytanis: null,
+        originalGrammateus: null,
+        originalCrysophylos: null,
+        originalHistor: null,
+        originalHypophetes: null,
+        originalPylortes: null,
+        originalHegemon: null
+      };
+    },
+    mounted() {
+      this.$brothers.getBrothers().then(b => {
+        const officers = b.filter(el => !!el.officer);
 
-@Component({
-  name: "histor-eboard",
-  components: {
-    QBtn,
-    BrotherSelect
-  }
-})
-export default class Index extends Vue {
-  Prytanis = null;
-  Epiprytanis = null;
-  Grammateus = null;
-  Crysophylos = null;
-  Histor = null;
-  Hypophetes = null;
-  Pylortes = null;
-  Hegemon = null;
-  originalPrytanis = null;
-  originalEpiprytanis = null;
-  originalGrammateus = null;
-  originalCrysophylos = null;
-  originalHistor = null;
-  originalHypophetes = null;
-  originalPylortes = null;
-  originalHegemon = null;
-
-  hasChanged(position) {
-    return this[position] !== this["original" + position];
-  }
-  mounted() {
-    Brothers.getBrothers().then(b => {
-      const officers = b.filter(el => !!el.officer);
-
-      const positions = [
-        "Prytanis",
-        "Epiprytanis",
-        "Grammateus",
-        "Crysophylos",
-        "Histor",
-        "Hypophetes",
-        "Pylortes",
-        "Hegemon"
-      ];
-      positions.forEach(pos => {
-        const p = officers.find(o => o.officer === pos) || undefined;
-        this["original" + pos] = p;
-        this[pos] = p;
+        const positions = [
+          "Prytanis",
+          "Epiprytanis",
+          "Grammateus",
+          "Crysophylos",
+          "Histor",
+          "Hypophetes",
+          "Pylortes",
+          "Hegemon"
+        ];
+        positions.forEach(pos => {
+          const p = officers.find(o => o.officer === pos) || undefined;
+          this["original" + pos] = p;
+          this[pos] = p;
+        });
       });
-    });
-  }
-  async submit() {
-    const positions = [
-      "Prytanis",
-      "Epiprytanis",
-      "Grammateus",
-      "Crysophylos",
-      "Histor",
-      "Hypophetes",
-      "Pylortes",
-      "Hegemon"
-    ];
-    const changedPositions = positions.filter(this.hasChanged);
+    },
+    methods: {
+      async submit() {
+        const positions = [
+          "Prytanis",
+          "Epiprytanis",
+          "Grammateus",
+          "Crysophylos",
+          "Histor",
+          "Hypophetes",
+          "Pylortes",
+          "Hegemon"
+        ];
+        const changedPositions = positions.filter(
+          position => this[position] !== this["original" + position]
+        );
 
-    for (const c of changedPositions) {
-      await Brothers.addOfficer({ title: c, current: this[c].scroll });
+        for (const c of changedPositions) {
+          await this.$brothers.addOfficer({ title: c, current: this[c].scroll });
+        }
+        this.$q.notify(
+          `Successfully updated ${this.$util.prettyJoinList(changedPositions)}`
+        );
+        for (const pos of positions) {
+          this["original" + pos] = this[pos];
+        }
+      }
     }
-    this.$q.notify(
-      `Successfully updated ${Util.prettyJoinList(changedPositions)}`
-    );
-    for (const pos of positions) {
-      this["original" + pos] = this[pos];
-    }
-  }
-}
+  };
 </script>
 
 <style scoped>
-#changeButton {
-  text-decoration: underline;
-  color: #444;
-  cursor: pointer;
-}
-h5 {
-  display: inline-block;
-}
-.changed::after {
-  color: red;
-  content: "*";
-}
-img {
-  max-width: 75px;
-  max-height: 50%;
-  margin-right: 18px;
-}
+  #changeButton {
+    text-decoration: underline;
+    color: #444;
+    cursor: pointer;
+  }
+  h5 {
+    display: inline-block;
+  }
+  .changed::after {
+    color: red;
+    content: "*";
+  }
+  img {
+    max-width: 75px;
+    max-height: 50%;
+    margin-right: 18px;
+  }
 </style>
 
 

@@ -9,6 +9,7 @@
  *
  * Boot files are your "main.js"
  **/
+import Vue from 'vue'
 import './import-quasar.js'
 
 
@@ -22,7 +23,7 @@ export default function () {
   // create store and router instances
   
   const router = typeof createRouter === 'function'
-    ? createRouter({})
+    ? createRouter({Vue, })
     : createRouter
   
 

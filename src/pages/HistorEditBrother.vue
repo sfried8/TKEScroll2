@@ -63,91 +63,99 @@
         color="positive"
         icon="add"
       >Update Brother</q-btn>
+      <q-btn
+        @click="deleteBrother"
+        color="negative"
+        icon="delete_forever"
+      >Delete Brother</q-btn>
       <br /><br />
     </div>
   </div>
 </template>
 
 <script>
-import Vue from "vue";
-import { Watch } from "vue-property-decorator";
-import Component from "vue-class-component";
-import BrotherSelect from "../components/BrotherSelect";
-import Brothers from "../Brothers";
+  import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
 
-import { QBtn, QInput, QToggle } from "quasar";
+  export default {
+    mixins: [BrotherInfoMixin],
+    data() {
+      return {
+        scroll: 0,
+        fname: "",
+        lname: "",
+        nickname: "",
+        pc: 0,
+        active: true,
+        big: null,
+        currentBrother: null
+      };
+    },
+    methods: {
+      submit() {
+        const brother = {
+          scroll: `${this.scroll}`,
+          fname: this.fname,
+          lname: this.lname,
+          pc: +this.pc,
+          nickname: this.nickname,
+          bigS: this.big.scroll,
+          active: this.active,
+          isZetaTau: false
+        };
+        this.$brothers
+          .addBrother(brother)
+          .then(
+            this.$q.notify(
+              `Successfully updated information for ${this.currentBrother}!`
+            )
+          );
 
-@Component({
-  name: "histor-edit-brother",
-  components: {
-    QBtn,
-    QInput,
-    QToggle,
-    BrotherSelect
-  }
-})
-export default class Index extends Vue {
-  scroll = 0;
-
-  fname = "";
-
-  lname = "";
-
-  nickname = "";
-
-  pc = 0;
-
-  active = true;
-
-  big = null;
-  currentBrother = null;
-  submit() {
-    const brother = {
-      scroll: `${this.scroll}`,
-      fname: this.fname,
-      lname: this.lname,
-      pc: +this.pc,
-      nickname: this.nickname,
-      bigS: this.big.scroll,
-      active: this.active,
-      isZetaTau: false
-    };
-    Brothers.addBrother(brother).then(
-      this.$q.notify(
-        `Successfully updated information for ${this.currentBrother}!`
-      )
-    );
-
-    // Brothers.addBrother(brother);
-  }
-  @Watch("currentBrother")
-  onCurrentBrotherChanged(val, oldVal) {
-    if (!val) {
-      return;
+        // Brothers.addBrother(brother);
+      },
+      deleteBrother() {
+        this.$q
+          .dialog({
+            title: "Are you SURE?",
+            message:
+              "This action can NOT be undone. Only do this if you really know what you're doing!",
+            ok: "Delete",
+            cancel: "Never mind"
+          })
+          .onOk(() => {
+            this.$brothers.deleteBrother(this.currentBrother).then(() => {
+              this.$q.notify(`Deleted`);
+              this.currentBrother = null;
+            });
+          })
+          .onCancel(() => console.log("cancelled"));
+      }
+    },
+    watch: {
+      currentBrother(val, oldVal) {
+        if (!val) {
+          return;
+        }
+        this.scroll = this.currentBrother.scroll;
+        this.fname = this.currentBrother.fname;
+        this.lname = this.currentBrother.lname;
+        this.nickname = this.currentBrother.nickname;
+        this.pc = this.currentBrother.pc;
+        this.active = this.currentBrother.active;
+        this.big = this.Brothers[this.currentBrother.big];
+      }
     }
-    this.scroll = this.currentBrother.scroll;
-    this.fname = this.currentBrother.fname;
-    this.lname = this.currentBrother.lname;
-    this.nickname = this.currentBrother.nickname;
-    this.pc = this.currentBrother.pc;
-    this.active = this.currentBrother.active;
-    this.big = this.brothers[this.currentBrother.big];
-  }
-  mounted() {
-    Brothers.getBrothers().then(b => (this.brothers = b));
-  }
-}
+  };
 </script>
 
 <style scoped>
-#changeButton {
-  text-decoration: underline;
-  color: #444;
-  margin-left: 10px;
-  cursor: pointer;
-}
-h5 {
-  display: inline-block;
-}
+  #changeButton {
+    text-decoration: underline;
+    color: #444;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  h5 {
+    display: inline-block;
+  }
 </style>
 

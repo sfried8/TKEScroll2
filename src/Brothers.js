@@ -2,22 +2,18 @@ const localUrl = "http://localhost:3000";
 const awsUrl = "https://imm30g62kg.execute-api.us-east-1.amazonaws.com/dev";
 const awsGetUrl = awsUrl + "/brothers";
 const awsAddUrl = awsUrl + "/brothers/add";
+const awsDeleteUrl = awsUrl + "/brothers/delete";
 const awsAddOfficerUrl = awsUrl + "/brothers/addOfficer";
 const authenticateUrl = awsUrl + "/authenticate";
 const fakeurl =
   "https://raw.githubusercontent.com/sfried8/BrotherAPI2/master/fakebrothers.json";
-require("isomorphic-fetch");
-// require("es6-promise").polyfill();
 import { LocalStorage, Notify, Loading } from "quasar";
 import Util from "./Util";
 export default {
   _brothers: null,
   async addBrother(brother) {
-    const url = LocalStorage.getItem("role") === "GUEST" ? fakeurl : awsAddUrl
+    const url = LocalStorage.getItem("role") === "GUEST" ? fakeurl : awsAddUrl;
     await Util.throttle(
-
-
-
       fetch(url, {
         method: "POST", // *GET, PUT, DELETE, etc.
         body: JSON.stringify(brother), // must match 'Content-Type' header
@@ -29,6 +25,19 @@ export default {
       }).then(rawdata => rawdata.json()),
       500
     );
+  },
+  async deleteBrother(brother) {
+    const url =
+      LocalStorage.getItem("role") === "GUEST" ? fakeurl : awsDeleteUrl;
+    return fetch(url, {
+      method: "DELETE", // *GET, PUT, DELETE, etc.
+      body: JSON.stringify(brother), // must match 'Content-Type' header
+      headers: new Headers({
+        Accept: "application/json",
+        Authorization: "key=" + (LocalStorage.getItem("apiKey") || "GUEST"),
+        "content-type": "application/json"
+      })
+    }).then(rawdata => rawdata.json());
   },
   async addBrothers(brothers) {
     Loading.show();
@@ -51,23 +60,6 @@ export default {
       500
     );
   },
-  getTreeString(scroll) {
-    const brother = this._brothers[scroll];
-    if (brother.treeString) {
-      return brother.treeString;
-    }
-    if (brother.big === 0) {
-      brother.treeString = "0." + brother.fname + " " + brother.lname;
-      return brother.treeString;
-    }
-    brother.treeString =
-      this.getTreeString(brother.big) +
-      "." +
-      brother.fname.replace(".", "") +
-      " " +
-      brother.lname.replace(".", "");
-    return brother.treeString;
-  },
   async getBrothers() {
     if (this._brothers == null) {
       Loading.show();
@@ -78,20 +70,15 @@ export default {
         const password = LocalStorage.getItem("apiKey");
         let rawdata;
         if (password === "GUEST") {
-          rawdata = await fetch(fakeurl)
+          rawdata = await fetch(fakeurl);
         } else {
-          rawdata = await fetch(
-            awsGetUrl,
-            {
-              method: "GET", // *GET, PUT, DELETE, etc.
-              headers: new Headers({
-                Authorization: "key=" + password
-              })
-            }
-
-          );
+          rawdata = await fetch(awsGetUrl, {
+            method: "GET", // *GET, PUT, DELETE, etc.
+            headers: new Headers({
+              Authorization: "key=" + password
+            })
+          });
         }
-
 
         const data = await rawdata.json();
         if (data.error) {
@@ -109,10 +96,6 @@ export default {
           }
           if (element.scroll !== element.big)
             this._brothers[+element.big].littles.push(element.scroll);
-        });
-        this._brothers.forEach(element => {
-          if (element.scroll !== element.big)
-            this.getTreeString(+element.scroll);
         });
         data.officers.forEach(element => {
           this._brothers[+element.current].officer = element.title;
@@ -136,14 +119,15 @@ export default {
     return this._brothers;
   },
   authenticate(password) {
+    if (!password) {
+      return Promise.resolve({ role: "GUEST" });
+    }
     return fetch(authenticateUrl, {
       method: "GET", // *GET, PUT, DELETE, etc.
       headers: new Headers({
         Authorization: "key=" + password
       })
-    }).then(data =>
-      data.json()
-    );
+    }).then(data => data.json());
   },
   clearCache() {
     LocalStorage.remove("brothers");

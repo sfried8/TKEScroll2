@@ -3,7 +3,7 @@
 module.exports = function (ctx) {
   return {
     // app plugins (/src/boot)
-    boot: [],
+    boot: ["customComponents"],
     css: ["app.styl"],
     extras: [
       "roboto-font",
@@ -37,19 +37,33 @@ module.exports = function (ctx) {
     // framework: 'all' --- includes everything; for dev only!
     framework: {
       components: [
-        "QLayout",
-        "QHeader",
+        "QBtn",
         "QDrawer",
-        "QPageContainer",
+        "QHeader",
+        "QIcon",
+        "QInput",
+        "QItem",
+        "QItemLabel",
+        "QItemSection",
+        "QLayout",
+        "QList",
+        "QMenu",
         "QPage",
+        "QPageContainer",
+        "QPageScroller",
+        "QPageSticky",
+        "QSelect",
+        "QSeparator",
+        "QTab",
+        "QTabPanel",
+        "QTabPanels",
+        "QTabs",
+        "QToggle",
         "QToolbar",
         "QToolbarTitle",
-        "QBtn",
-        "QIcon",
-        "QList",
-        "QItem",
+
       ],
-      directives: ["Ripple"],
+      directives: ["Ripple", "TouchPan"],
       // Quasar plugins
       plugins: ["Notify", "LocalStorage", "Loading", "Dialog"]
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
@@ -65,7 +79,7 @@ module.exports = function (ctx) {
       // workboxOptions: {},
       manifest: {
         name: 'TKE Scroll',
-        short_name: 'TKEScroll',
+        short_name: 'TKE Scroll',
         // description: 'Best PWA App in town!',
         display: "standalone",
         orientation: "portrait",
