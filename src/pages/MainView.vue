@@ -130,9 +130,6 @@
       document.body.style.minHeight = window.innerHeight + "px";
     },
     beforeMount() {
-      if (!LocalStorage.has("apiKey")) {
-        this.$router.push("/firsttime");
-      }
       if (LocalStorage.has("role")) {
         if (LocalStorage.getItem("role").toLowerCase() === "histor") {
           this.showHistor = true;
