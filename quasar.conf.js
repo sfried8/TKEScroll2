@@ -1,9 +1,9 @@
 // Configuration for your app
 
-module.exports = function (ctx) {
+module.exports = function(ctx) {
   return {
     // app plugins (/src/boot)
-    boot: ["customComponents"],
+    boot: ["customComponents", "routerAuthentication"],
     css: ["app.styl"],
     extras: [
       "roboto-font",
@@ -60,8 +60,7 @@ module.exports = function (ctx) {
         "QTabs",
         "QToggle",
         "QToolbar",
-        "QToolbarTitle",
-
+        "QToolbarTitle"
       ],
       directives: ["Ripple", "TouchPan"],
       // Quasar plugins
@@ -78,8 +77,8 @@ module.exports = function (ctx) {
       // workboxPluginMode: 'InjectManifest',
       // workboxOptions: {},
       manifest: {
-        name: 'TKE Scroll',
-        short_name: 'TKE Scroll',
+        name: "TKE Scroll",
+        short_name: "TKE Scroll",
         // description: 'Best PWA App in town!',
         display: "standalone",
         orientation: "portrait",
