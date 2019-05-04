@@ -1,46 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({
+          "gtm.start": new Date().getTime(),
+          event: "gtm.js"
+        });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-5WB5V3L");
+    </script>
+    <!-- End Google Tag Manager -->
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="format-detection" content="telephone=no">
-  <meta name="msapplication-tap-highlight" content="no">
-  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta
+      name="viewport"
+      content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"
+    />
 
-  <title>TKE Scroll</title>
-  <link rel="icon" type="image/png" sizes="192x192"
-    href="<%= htmlWebpackPlugin.files.publicPath %>statics/icons/favicon.png">
-  <link rel="manifest" href="<%= htmlWebpackPlugin.files.publicPath %>statics/manifest.json">
-  <!-- Add to home screen for Safari on iOS -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="white">
-  <meta name="apple-mobile-web-app-title" content="Quasar App">
-  <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>statics/icons/apple-icon-152x152.png">
-  <!-- Add to home screen for Windows -->
-  <meta name="msapplication-TileImage"
-    content="<%= htmlWebpackPlugin.files.publicPath %>statics/icons/ms-icon-144x144.png">
-  <meta name="msapplication-TileColor" content="#ffffff">
+    <title>TKE Scroll</title>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="<%= htmlWebpackPlugin.files.publicPath %>statics/icons/favicon.png"
+    />
+    <link
+      rel="manifest"
+      href="<%= htmlWebpackPlugin.files.publicPath %>statics/manifest.json"
+    />
+    <!-- Add to home screen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+    <meta name="apple-mobile-web-app-title" content="Quasar App" />
+    <link
+      rel="apple-touch-icon"
+      href="<%= htmlWebpackPlugin.files.publicPath %>statics/icons/apple-icon-152x152.png"
+    />
+    <!-- Add to home screen for Windows -->
+    <meta
+      name="msapplication-TileImage"
+      content="<%= htmlWebpackPlugin.files.publicPath %>statics/icons/ms-icon-144x144.png"
+    />
+    <meta name="msapplication-TileColor" content="#ffffff" />
 
-  <meta name="theme-color" content="#027be3">
+    <meta name="theme-color" content="#027be3" />
 
-  <% for (var chunk of webpack.chunks) {
-        for (var file of chunk.files) {
-          if (file.match(/\.(js|css)$/)) { %>
-  <link rel="<%= chunk.initial?'preload':'prefetch' %>" href="<%= htmlWebpackPlugin.files.publicPath + file %>"
-    as="<%= file.match(/\.css$/)?'style':'script' %>">
-  <% }}} %>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css">
-</head>
+    <% for (var chunk of webpack.chunks) { for (var file of chunk.files) { if
+    (file.match(/\.(js|css)$/)) { %>
+    <link
+      rel="<%= chunk.initial?'preload':'prefetch' %>"
+      href="<%= htmlWebpackPlugin.files.publicPath + file %>"
+      as="<%= file.match(/\.css$/)?'style':'script' %>"
+    />
+    <% }}} %>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css"
+    />
+  </head>
 
-<body>
-  <noscript>
-    This is your fallback content in case JavaScript fails to load.
-  </noscript>
-  <div id="q-app"></div>
-  <!-- Todo: only include in production -->
-  <%= htmlWebpackPlugin.options.serviceWorkerLoader %>
-  <!-- built files will be auto injected -->
-</body>
-
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5WB5V3L"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <div id="q-app"></div>
+    <!-- Todo: only include in production -->
+    <%= htmlWebpackPlugin.options.serviceWorkerLoader %>
+    <!-- built files will be auto injected -->
+  </body>
 </html>
