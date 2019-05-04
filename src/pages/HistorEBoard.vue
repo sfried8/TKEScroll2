@@ -161,6 +161,8 @@
         for (const c of changedPositions) {
           await this.$brothers.addOfficer({ title: c, current: this[c].scroll });
         }
+        this.$gtm.logEvent("Histor", "UpdateEBoard", "UpdateEBoard");
+
         this.$q.notify(
           `Successfully updated ${this.$util.prettyJoinList(changedPositions)}`
         );

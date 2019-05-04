@@ -118,6 +118,11 @@
     },
     methods: {
       clearCache() {
+        this.$gtm.logEvent(
+          "Authorization",
+          "Logout",
+          LocalStorage.getItem("role") + " Logged out"
+        );
         LocalStorage.clear();
         this.$brothers.clearCache();
         this.$router.push("/firsttime");

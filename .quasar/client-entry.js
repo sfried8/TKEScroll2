@@ -19,7 +19,10 @@ import '@quasar/extras/material-icons/material-icons.css'
 
 
 
-import 'quasar-styl'
+// We load Quasar stylus files
+import 'quasar/dist/quasar.styl'
+
+
 
 
 import 'src/css/app.styl'
@@ -31,7 +34,11 @@ import createApp from './app.js'
 
 
 
-import b_BootcustomComponents from 'boot/customComponents'
+import qboot_BootcustomComponents from 'boot/customComponents'
+
+import qboot_BootrouterAuthentication from 'boot/routerAuthentication'
+
+import qboot_Bootgtmboot from 'boot/gtm-boot'
 
 
 
@@ -56,8 +63,12 @@ const { app, router } = createApp()
 
 async function start () {
   
-  const bootFiles = [b_BootcustomComponents]
+  const bootFiles = [qboot_BootcustomComponents,qboot_BootrouterAuthentication,qboot_Bootgtmboot]
   for (let i = 0; i < bootFiles.length; i++) {
+    if (typeof bootFiles[i] !== 'function') {
+      continue
+    }
+
     try {
       await bootFiles[i]({
         app,

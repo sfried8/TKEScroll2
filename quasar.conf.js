@@ -3,7 +3,7 @@
 module.exports = function(ctx) {
   return {
     // app plugins (/src/boot)
-    boot: ["customComponents", "routerAuthentication"],
+    boot: ["customComponents", "routerAuthentication", "gtm-boot"],
     css: ["app.styl"],
     extras: [
       "roboto-font",
