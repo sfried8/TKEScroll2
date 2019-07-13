@@ -36,6 +36,10 @@ import createApp from './app.js'
 
 import qboot_BootcustomComponents from 'boot/customComponents'
 
+import qboot_BootrouterAuthentication from 'boot/routerAuthentication'
+
+import qboot_Bootgtmboot from 'boot/gtm-boot'
+
 
 
 
@@ -59,7 +63,8 @@ const { app, router } = createApp()
 
 async function start () {
   
-  const bootFiles = [qboot_BootcustomComponents]
+
+  const bootFiles = [qboot_BootcustomComponents,qboot_BootrouterAuthentication,qboot_Bootgtmboot]
   for (let i = 0; i < bootFiles.length; i++) {
     if (typeof bootFiles[i] !== 'function') {
       continue

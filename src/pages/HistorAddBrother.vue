@@ -90,6 +90,12 @@
               this.pendingBrothers.length > 1 ? "s" : ""
             }!`
           );
+          this.$gtm.logEvent(
+            "Histor",
+            "AddBrother",
+            "AddBrother",
+            this.pendingBrothers.length
+          );
           this.pendingBrothers = [];
         });
       },
@@ -106,21 +112,9 @@
         };
         this.pendingBrothers.push(brother);
         this.scroll++;
-        this.fname = DEBUG
-          ? Math.random()
-              .toString(36)
-              .substring(7)
-          : "";
-        this.lname = DEBUG
-          ? Math.random()
-              .toString(36)
-              .substring(7)
-          : "";
-        this.nickname = DEBUG
-          ? Math.random()
-              .toString(36)
-              .substring(7)
-          : "";
+        this.fname = "";
+        this.lname = "";
+        this.nickname = "";
         this.big = null;
 
         // Brothers.addBrother(brother);

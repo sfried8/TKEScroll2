@@ -34,17 +34,24 @@
   export default {
     props: { "help-id": String },
     data() {
-      return { shouldShow: false };
+      return { shouldShow: false, showTime: 0 };
     },
     mounted() {
       if (!LocalStorage.has("hasSeen" + this.helpId)) {
         this.shouldShow = true;
+        this.showTime = Date.now();
       }
     },
     methods: {
       dismiss() {
         this.shouldShow = false;
         LocalStorage.set("hasSeen" + this.helpId, true);
+        this.$gtm.logEvent(
+          "events",
+          "DismissOverlay",
+          "DismissOverlay",
+          Date.now() - this.showTime
+        );
       }
     }
   };

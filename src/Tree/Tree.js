@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 import TreeModel from "./TreeModel";
+import gtm from "../gtm";
 var tree;
 const FamilyTree = {
   tree: tree,
@@ -104,10 +105,17 @@ const FamilyTree = {
 
     const clickNode = function click(d) {
       if (d.children) {
+        gtm.logEvent(
+          "Tree",
+          "ExpandCollapse",
+          "Collapsed",
+          d.descendants().length
+        );
         collapsing = d.descendants();
         d._children = d.children;
         d.children = null;
       } else {
+        gtm.logEvent("Tree", "ExpandCollapse", "Expanded", null);
         d.children = d._children;
         d._children = null;
       }

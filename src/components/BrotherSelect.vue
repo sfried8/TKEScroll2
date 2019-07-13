@@ -69,8 +69,10 @@
         if (val) {
           if (val.value) {
             this.$emit("input", val.value);
+            this.$gtm.logEvent("events", "BrotherSelect", "Selected brother");
           } else {
             this.$emit("input", val);
+            this.$gtm.logEvent("events", "BrotherSelect", "Selected brother");
           }
           if (this.clearAfterSelect) {
             this.$nextTick().then(() => {

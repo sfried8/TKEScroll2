@@ -70,6 +70,7 @@
             cancel: true
           })
           .onOk(() => {
+            this.$gtm.logEvent("Authorization", "Login", "Login Guest");
             LocalStorage.set("apiKey", "GUEST");
             this.$router.push("/");
           })
@@ -83,6 +84,7 @@
           this.loading = false;
 
           if (data.error || data.role === "GUEST") {
+            this.$gtm.logEvent("Authorization", "Login", "Login Error");
             this.password = "";
             this.invalidPassword = true;
             this.$q.notify("Invalid password.");
@@ -90,8 +92,18 @@
             LocalStorage.set("role", data.role);
             LocalStorage.set("apiKey", this.password);
             if (data.role === "HISTOR") {
+              this.$gtm.logEvent(
+                "Authorization",
+                "Login",
+                "Histor Login Success"
+              );
               this.$router.push("/histor");
             } else {
+              this.$gtm.logEvent(
+                "Authorization",
+                "Login",
+                "Brother Login Success"
+              );
               this.$router.push("/home");
             }
           }

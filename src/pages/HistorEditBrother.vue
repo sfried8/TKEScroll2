@@ -102,6 +102,8 @@
           active: this.active,
           isZetaTau: false
         };
+        this.$gtm.logEvent("Histor", "EditBrother", "EditBrother");
+
         this.$brothers
           .addBrother(brother)
           .then(
@@ -122,6 +124,7 @@
             cancel: "Never mind"
           })
           .onOk(() => {
+            this.$gtm.logEvent("Histor", "DeleteBrother", "DeleteBrother");
             this.$brothers.deleteBrother(this.currentBrother).then(() => {
               this.$q.notify(`Deleted`);
               this.currentBrother = null;

@@ -114,6 +114,7 @@
             this.nextBrother &&
             (dX > this.bodyWidth / 2 || (dX > this.bodyWidth / 10 && vX > 0.5))
           ) {
+            this.$gtm.logEvent("events", "Swipe", "Swiped to brother");
             this.$router.replace("/brother/" + this.nextBrother.scroll);
           } else {
             this.isDragging = false;
