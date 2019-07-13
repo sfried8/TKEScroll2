@@ -89,6 +89,19 @@
         </template>
       </brother-select>
     </div>
+        <div class="row no-wrap q-col-gutter-lg">
+
+            <brother-select
+        class="col"
+        v-model="Recruitment"
+        label="Recruitment Chairman"
+      >
+        <template v-slot:prepend>
+          <img src="~assets/recruitmentchair.png" />
+        </template>
+      </brother-select>
+      <div class="col"></div>
+    </div>
     <q-btn
       color="positive"
       class="q-mt-lg"
@@ -111,6 +124,7 @@
         Hypophetes: null,
         Pylortes: null,
         Hegemon: null,
+        Recruitment:null,
         originalPrytanis: null,
         originalEpiprytanis: null,
         originalGrammateus: null,
@@ -118,7 +132,8 @@
         originalHistor: null,
         originalHypophetes: null,
         originalPylortes: null,
-        originalHegemon: null
+        originalHegemon: null,
+        originalRecruitment:null,
       };
     },
     mounted() {
@@ -133,7 +148,8 @@
           "Histor",
           "Hypophetes",
           "Pylortes",
-          "Hegemon"
+          "Hegemon",
+          "Recruitment"
         ];
         positions.forEach(pos => {
           const p = officers.find(o => o.officer === pos) || undefined;
@@ -152,7 +168,8 @@
           "Histor",
           "Hypophetes",
           "Pylortes",
-          "Hegemon"
+          "Hegemon",
+          "Recruitment"
         ];
         const changedPositions = positions.filter(
           position => this[position] !== this["original" + position]
