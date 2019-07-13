@@ -108,9 +108,11 @@
         },
 
         mounted() {
-            document.querySelector(".q-layout").style.minHeight =
-                window.innerHeight + "px";
-            document.body.style.minHeight = window.innerHeight + "px";
+            const layoutElement = document.querySelector(".q-layout");
+            window.addEventListener("resize", () => {
+                layoutElement.style.minHeight = window.innerHeight + "px";
+                document.body.style.minHeight = window.innerHeight + "px";
+            });
         },
         beforeMount() {
             if (LocalStorage.has("role")) {
