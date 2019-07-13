@@ -63,6 +63,7 @@ const { app, router } = createApp()
 
 async function start () {
   
+
   const bootFiles = [qboot_BootcustomComponents,qboot_BootrouterAuthentication,qboot_Bootgtmboot]
   for (let i = 0; i < bootFiles.length; i++) {
     if (typeof bootFiles[i] !== 'function') {
