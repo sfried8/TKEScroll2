@@ -1,6 +1,28 @@
-import * as d3 from "d3";
-import TreeModel from "./TreeModel";
-import gtm from "../gtm";
+import * as d3 from 'd3';
+import TreeModel from './TreeModel';
+import gtm from '../gtm';
+function debounce(func, wait, immediate) {
+  var timeout;
+
+  return function executedFunction() {
+    var context = this;
+    var args = arguments;
+
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+
+    var callNow = immediate && !timeout;
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(later, wait);
+
+    if (callNow) func.apply(context, args);
+  };
+}
+let resizeFunction;
 var tree;
 const FamilyTree = {
   tree: tree,
@@ -11,20 +33,20 @@ const FamilyTree = {
     var width = document.body.clientWidth;
     var height = document.body.clientHeight - 50;
 
-    const dpi = window.devicePixelRatio;
+    let dpi = window.devicePixelRatio;
     var canvas = d3
-      .select("#tree-container")
-      .append("canvas")
-      .attr("width", dpi * (width + margin.right + margin.left))
-      .attr("height", dpi * (height + margin.top + margin.bottom))
-      .style("width", width + margin.right + margin.left + "px")
-      .style("height", height + margin.top + margin.bottom + "px");
-    var ctx = canvas.node().getContext("2d");
+      .select('#tree-container')
+      .append('canvas')
+      .attr('width', dpi * (width + margin.right + margin.left))
+      .attr('height', dpi * (height + margin.top + margin.bottom))
+      .style('width', width + margin.right + margin.left + 'px')
+      .style('height', height + margin.top + margin.bottom + 'px');
+    var ctx = canvas.node().getContext('2d');
     ctx.scale(dpi, dpi);
     const zoomBehavior = d3
       .zoom()
       .scaleExtent([1 / 4, 4])
-      .on("zoom", zoomed)
+      .on('zoom', zoomed)
       .interpolate(d3.interpolate);
     canvas.call(zoomBehavior);
 
@@ -36,7 +58,7 @@ const FamilyTree = {
       let minDistance = Infinity;
       const [clickX, clickY] = currentZoomTransform.invert([
         d3.event.pageX,
-        d3.event.pageY - 50
+        d3.event.pageY - 50,
       ]);
       treeNodes.forEach(d => {
         const dy = d.y - clickY;
@@ -60,9 +82,28 @@ const FamilyTree = {
       }
     };
 
-    canvas.on("click", clicked(false));
-    canvas.on("contextmenu", clicked(true));
+    canvas.on('click', clicked(false));
+    canvas.on('contextmenu', clicked(true));
+    resizeFunction = debounce(() => {
+      width = document.body.clientWidth;
+      height = document.body.clientHeight - 50;
+      dpi = window.devicePixelRatio;
 
+      canvas
+        .attr('width', Math.floor(dpi * (width + margin.right + margin.left)))
+        .attr('height', Math.floor(dpi * (height + margin.top + margin.bottom)))
+        .style('width', width + margin.right + margin.left + 'px')
+        .style('height', height + margin.top + margin.bottom + 'px');
+      ctx.scale(dpi, dpi);
+      ctx.save();
+      ctx.clearRect(0, 0, width, height);
+      const currentZoomTransform = d3.zoomTransform(canvas.node());
+      ctx.translate(currentZoomTransform.x, currentZoomTransform.y);
+      ctx.scale(currentZoomTransform.k, currentZoomTransform.k);
+      draw();
+      ctx.restore();
+    }, 100);
+    window.addEventListener('resize', resizeFunction);
     function zoomed() {
       ctx.save();
       ctx.clearRect(0, 0, width, height);
@@ -85,7 +126,7 @@ const FamilyTree = {
       if (!brother) {
         return;
       }
-      const name = brother.fname + " " + brother.lname;
+      const name = brother.fname + ' ' + brother.lname;
       TreeModel.expandAncestors(name);
       update();
       const node = treeNodes.find(x => x.data.name === name);
@@ -106,16 +147,16 @@ const FamilyTree = {
     const clickNode = function click(d) {
       if (d.children) {
         gtm.logEvent(
-          "Tree",
-          "ExpandCollapse",
-          "Collapsed",
+          'Tree',
+          'ExpandCollapse',
+          'Collapsed',
           d.descendants().length
         );
         collapsing = d.descendants();
         d._children = d.children;
         d.children = null;
       } else {
-        gtm.logEvent("Tree", "ExpandCollapse", "Expanded", null);
+        gtm.logEvent('Tree', 'ExpandCollapse', 'Expanded', null);
         d.children = d._children;
         d._children = null;
       }
@@ -148,8 +189,8 @@ const FamilyTree = {
       const pX = d.parent.x;
       const pY = d.parent.y;
       ctx.beginPath();
-      ctx.lineWidth = "1";
-      ctx.strokeStyle = "#aaaaaa";
+      ctx.lineWidth = '1';
+      ctx.strokeStyle = '#aaaaaa';
       ctx.moveTo(sX, sY);
       ctx.bezierCurveTo((sX + pX) / 2, sY, (sX + pX) / 2, pY, pX, pY);
       ctx.stroke();
@@ -159,18 +200,18 @@ const FamilyTree = {
         return;
       }
       ctx.fillStyle = d._children
-        ? "rgba(255, 137, 135, " + alpha + ")"
-        : "rgba(255, 255, 255, " + alpha + ")";
-      ctx.lineWidth = "2";
-      ctx.strokeStyle = "rgba(173, 38, 36, " + alpha + ")";
+        ? 'rgba(255, 137, 135, ' + alpha + ')'
+        : 'rgba(255, 255, 255, ' + alpha + ')';
+      ctx.lineWidth = '2';
+      ctx.strokeStyle = 'rgba(173, 38, 36, ' + alpha + ')';
       ctx.beginPath();
       ctx.arc(d.x, d.y, 7, 0, 2 * Math.PI);
       ctx.fill();
       ctx.stroke();
-      ctx.fillStyle = "rgba(34, 34, 34, " + alpha + ")";
-      ctx.textAlign = d.children || d._children ? "end" : "start";
+      ctx.fillStyle = 'rgba(34, 34, 34, ' + alpha + ')';
+      ctx.textAlign = d.children || d._children ? 'end' : 'start';
       const xoffset = d.children || d._children ? -13 : 13;
-      ctx.font = "12px Arial";
+      ctx.font = '12px Arial';
       ctx.fillText(`${d.data.name}`, d.x + xoffset, d.y);
     };
     function draw(animationProgress) {
@@ -217,7 +258,7 @@ const FamilyTree = {
       start = null;
       requestAnimationFrame(drawStep);
     }
-  }
+  },
 };
 window.FamilyTree = FamilyTree;
 export default FamilyTree;
