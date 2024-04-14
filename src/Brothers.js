@@ -1,5 +1,5 @@
 const localUrl = 'http://localhost:3000';
-const awsUrl = 'https://imm30g62kg.execute-api.us-east-1.amazonaws.com/dev';
+const awsUrl = 'https://7h03kudf2b.execute-api.us-east-1.amazonaws.com';
 const awsGetUrl = awsUrl + '/brothers';
 const awsAddUrl = awsUrl + '/brothers/add';
 const awsDeleteUrl = awsUrl + '/brothers/delete';
