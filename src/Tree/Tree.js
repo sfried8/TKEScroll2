@@ -8,7 +8,7 @@ function debounce(func, wait, immediate) {
     var context = this;
     var args = arguments;
 
-    var later = function() {
+    var later = function () {
       timeout = null;
       if (!immediate) func.apply(context, args);
     };
@@ -26,7 +26,7 @@ let resizeFunction;
 var tree;
 const FamilyTree = {
   tree: tree,
-  render: function(brothers, navigateFunction) {
+  render: function (brothers, navigateFunction) {
     var treeNodes = [];
     var collapsing = [];
     var margin = { top: 0, right: 0, bottom: 0, left: 0 };
@@ -50,15 +50,15 @@ const FamilyTree = {
       .interpolate(d3.interpolate);
     canvas.call(zoomBehavior);
 
-    const clicked = rightclick => _ => {
+    const clicked = rightclick => (event) => {
       const currentZoomTransform = d3.zoomTransform(canvas.node());
       const clickDistance = 26 * currentZoomTransform.k;
 
       let node;
       let minDistance = Infinity;
       const [clickX, clickY] = currentZoomTransform.invert([
-        d3.event.pageX,
-        d3.event.pageY - 50,
+        event.pageX,
+        event.pageY - 50,
       ]);
       treeNodes.forEach(d => {
         const dy = d.y - clickY;
@@ -74,7 +74,7 @@ const FamilyTree = {
       if (node) {
         centerNode(node);
         if (rightclick) {
-          d3.event.preventDefault();
+          event.preventDefault();
           navigateFunction(node);
         } else {
           clickNode(node);
@@ -104,11 +104,11 @@ const FamilyTree = {
       ctx.restore();
     }, 100);
     window.addEventListener('resize', resizeFunction);
-    function zoomed() {
+    function zoomed(event) {
       ctx.save();
       ctx.clearRect(0, 0, width, height);
-      ctx.translate(d3.event.transform.x, d3.event.transform.y);
-      ctx.scale(d3.event.transform.k, d3.event.transform.k);
+      ctx.translate(event.transform.x, event.transform.y);
+      ctx.scale(event.transform.k, event.transform.k);
       draw();
       ctx.restore();
     }

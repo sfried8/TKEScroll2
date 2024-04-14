@@ -3,18 +3,9 @@
     <help-overlay help-id="brotherPage">
       <template #mobile>
 
-        <div
-          class="column justify-center items-center"
-          style="height:100%"
-        >
-          <img
-            class="col-3 self-center"
-            src="~/assets/swipe.png"
-          />
-          <p
-            class="col-2 self-center text-h5"
-            style="text-align:center"
-          >
+        <div class="column justify-center items-center" style="height:100%">
+          <img class="col-3 self-center" src="~/assets/swipe.png" />
+          <p class="col-2 self-center text-h5" style="text-align:center">
             Swipe left and right to navigate. It's just like Tinder!
 
           </p>
@@ -22,157 +13,132 @@
       </template>
       <template #desktop>
 
-        <div
-          class="column justify-center items-center"
-          style="height:100%"
-        >
-          <img
-            class="col-3 self-center"
-            src="~/assets/arrowkeys.png"
-          />
-          <p
-            class="col-2 self-center text-h5"
-            style="text-align:center"
-          >
+        <div class="column justify-center items-center" style="height:100%">
+          <img class="col-3 self-center" src="~/assets/arrowkeys.png" />
+          <p class="col-2 self-center text-h5" style="text-align:center">
             Use left and right arrow keys to navigate!
 
           </p>
         </div>
       </template>
     </help-overlay>
-    <div
-      id="nextBrotherContainer"
-      :class="cardClass"
-      v-if="nextBrother"
-    >
-      <brother-page-content
-        :brothers="Brothers"
-        :brother="nextBrother"
-      />
+    <div id="nextBrotherContainer" :class="cardClass" v-if="nextBrother">
+      <brother-page-content :brothers="Brothers" :brother="nextBrother" />
     </div>
-    <div
-      id="draggableWrapper"
-      :class="cardClass"
-      :style="cardPositioning"
-      v-if="currentBrother"
-      v-touch-pan.mightPrevent="panHandler"
-    >
-      <brother-page-content
-        :brothers="Brothers"
-        :brother="currentBrother"
-      />
+    <div id="draggableWrapper" :class="cardClass" :style="cardPositioning" v-if="currentBrother"
+      v-touch-pan.mightPrevent="panHandler">
+      <brother-page-content :brothers="Brothers" :brother="currentBrother" />
     </div>
 
   </div>
 </template>
 
 <script>
-  import BrotherPageContent from "./BrotherPageContent";
-  import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
-  export default {
-    components: { BrotherPageContent },
-    mixins: [BrotherInfoMixin],
+import BrotherPageContent from "./BrotherPageContent";
+import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
+export default {
+  components: { BrotherPageContent },
+  mixins: [BrotherInfoMixin],
 
-    data() {
-      return {
-        bodyWidth: document.body.clientWidth,
-        currentScroll: this.$route.params.scroll,
-        showSwipe: true,
-        cardPositionX: 0,
-        cardPositionY: 0,
-        startingPosition: { top: 0, left: 0 },
-        isDragging: false,
-        direction: 1
-      };
-    },
-    mounted() {
-      this.bodyWidth = document.body.clientWidth;
-      this.akh = event => {
-        if (event.keyCode === 37) {
-          this.navigate(false);
-          event.preventDefault();
-        } else if (event.keyCode === 39) {
-          this.navigate(true);
-          event.preventDefault();
-        }
-      };
-      window.addEventListener("keydown", this.akh);
-    },
-    beforeDestroy() {
-      window.removeEventListener("keydown", this.akh);
-    },
-    methods: {
-      panHandler(obj) {
-        this.isDragging = true;
-        obj.evt.preventDefault();
-        if (obj.isFirst) {
-          this.startingPosition = obj.position;
-        } else if (obj.isFinal) {
-          const dX = Math.abs(this.cardPositionX);
-          const vX = dX / +obj.duration;
-          if (
-            this.nextBrother &&
-            (dX > this.bodyWidth / 2 || (dX > this.bodyWidth / 10 && vX > 0.5))
-          ) {
-            this.$gtm.logEvent("events", "Swipe", "Swiped to brother");
-            this.$router.replace("/brother/" + this.nextBrother.scroll);
-          } else {
-            this.isDragging = false;
-          }
-          this.cardPositionX = 0;
-          this.cardPositionY = 0;
+  data() {
+    return {
+      bodyWidth: document.body.clientWidth,
+      currentScroll: this.$route.params.scroll,
+      showSwipe: true,
+      cardPositionX: 0,
+      cardPositionY: 0,
+      startingPosition: { top: 0, left: 0 },
+      isDragging: false,
+      direction: 1
+    };
+  },
+  mounted() {
+    this.bodyWidth = document.body.clientWidth;
+    this.akh = event => {
+      if (event.keyCode === 37) {
+        this.navigate(false);
+        event.preventDefault();
+      } else if (event.keyCode === 39) {
+        this.navigate(true);
+        event.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", this.akh);
+  },
+  beforeUnmount() {
+    window.removeEventListener("keydown", this.akh);
+  },
+  methods: {
+    panHandler(obj) {
+      this.isDragging = true;
+      obj.evt.preventDefault();
+      if (obj.isFirst) {
+        this.startingPosition = obj.position;
+      } else if (obj.isFinal) {
+        const dX = Math.abs(this.cardPositionX);
+        const vX = dX / +obj.duration;
+        if (
+          this.nextBrother &&
+          (dX > this.bodyWidth / 2 || (dX > this.bodyWidth / 10 && vX > 0.5))
+        ) {
+          this.$gtm.logEvent("events", "Swipe", "Swiped to brother");
+          this.$router.replace("/brother/" + this.nextBrother.scroll);
         } else {
-          this.cardPositionX = obj.position.left - this.startingPosition.left;
-          this.cardPositionY =
-            100 *
-              this.$util.sigmoid(
-                (obj.position.top - this.startingPosition.top) / 100
-              ) -
-            50;
+          this.isDragging = false;
         }
-        if (this.cardPositionX !== 0) {
-          this.direction = this.cardPositionX < 0 ? 1 : -1;
-        }
-      },
-      arrowKeyHandler(event) {
-        console.log(event);
-      },
-      navigate(forwards) {
-        if (forwards) {
-          if (this.Brothers[+this.currentScroll + 1]) {
-            this.$router.replace("/brother/" + (+this.currentScroll + 1));
-          }
-        } else if (this.currentScroll > 1) {
-          this.$router.replace("/brother/" + (+this.currentScroll - 1));
-        }
+        this.cardPositionX = 0;
+        this.cardPositionY = 0;
+      } else {
+        this.cardPositionX = obj.position.left - this.startingPosition.left;
+        this.cardPositionY =
+          100 *
+          this.$util.sigmoid(
+            (obj.position.top - this.startingPosition.top) / 100
+          ) -
+          50;
+      }
+      if (this.cardPositionX !== 0) {
+        this.direction = this.cardPositionX < 0 ? 1 : -1;
       }
     },
-    computed: {
-      currentBrother() {
-        return this.Brothers[this.currentScroll];
-      },
-      cardPositioning() {
-        return {
-          transform: `translate(calc(0% + ${this.cardPositionX}px),${
-            this.cardPositionY
-          }px)`,
-          opacity: Math.max(
-            0,
-            1.25 - (2 * Math.abs(this.cardPositionX)) / this.bodyWidth
-          )
-        };
-      },
-      cardClass() {
-        return (this.isDragging ? "" : "return-to-origin") + " card-container";
-      },
-      nextBrother() {
-        return this.currentBrother &&
-          +this.currentBrother.scroll + this.direction > 0
-          ? this.Brothers[+this.currentBrother.scroll + this.direction]
-          : null;
+    arrowKeyHandler(event) {
+      console.log(event);
+    },
+    navigate(forwards) {
+      if (forwards) {
+        if (this.Brothers[+this.currentScroll + 1]) {
+          this.$router.replace("/brother/" + (+this.currentScroll + 1));
+        }
+      } else if (this.currentScroll > 1) {
+        this.$router.replace("/brother/" + (+this.currentScroll - 1));
       }
     }
-  };
+  },
+  computed: {
+    currentBrother() {
+      return this.Brothers[this.currentScroll];
+    },
+    cardPositioning() {
+      return {
+        transform: `translate(calc(0% + ${this.cardPositionX}px),${this.cardPositionY
+          }px)`,
+        opacity: Math.max(
+          0,
+          1.25 - (2 * Math.abs(this.cardPositionX)) / this.bodyWidth
+        )
+      };
+    },
+    cardClass() {
+      return (this.isDragging ? "" : "return-to-origin") + " card-container";
+    },
+    nextBrother() {
+      return this.currentBrother &&
+        +this.currentBrother.scroll + this.direction > 0
+        ? this.Brothers[+this.currentBrother.scroll + this.direction]
+        : null;
+    }
+  }
+};
 </script>
 
 <style lang="stylus">
