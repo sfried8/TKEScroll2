@@ -1,5 +1,5 @@
 <template>
-    <q-layout view="hHh Lpr fff" :left-class="{'bg-grey-2': true}">
+    <q-layout view="hHh Lpr fff" :left-class="{ 'bg-grey-2': true }">
         <q-header v-model="header" :reveal="true">
             <q-toolbar>
                 <q-btn flat @click.native="left = !left">
@@ -59,7 +59,7 @@
                         <q-item-label caption>Add/Edit brothers and officers</q-item-label>
                     </q-item-section>
                 </q-item>
-                <q-item @click.native="clearCache">
+                <q-item :clickable="true" @click="clearCache">
                     <q-item-section avatar>
                         <q-icon name="exit_to_app" />
                     </q-item-section>
@@ -76,52 +76,51 @@
         if using subRoutes
         -->
         <q-page-container
-            :style="`overflow:visible; max-width:${$route.path === '/tree'?'initial':'700px'}; margin:auto;`"
-        >
+            :style="`overflow:visible; max-width:${$route.path === '/tree' ? 'initial' : '700px'}; margin:auto;`">
             <router-view :key="$route.path" />
         </q-page-container>
     </q-layout>
 </template>
 
 <script>
-    import { LocalStorage } from "quasar";
+import { LocalStorage } from "quasar";
 
-    export default {
-        data() {
-            return {
-                left: true,
-                header: true,
-                showHistor: false
-            };
-        },
-        methods: {
-            clearCache() {
-                this.$gtm.logEvent(
-                    "Authorization",
-                    "Logout",
-                    LocalStorage.getItem("role") + " Logged out"
-                );
-                LocalStorage.clear();
-                this.$brothers.clearCache();
-                this.$router.push("/firsttime");
-            }
-        },
+export default {
+    data() {
+        return {
+            left: false,
+            header: true,
+            showHistor: false
+        };
+    },
+    methods: {
+        clearCache() {
+            this.$gtm.logEvent(
+                "Authorization",
+                "Logout",
+                LocalStorage.getItem("role") + " Logged out"
+            );
+            LocalStorage.clear();
+            this.$brothers.clearCache();
+            this.$router.push("/firsttime");
+        }
+    },
 
-        mounted() {
-            const layoutElement = document.querySelector(".q-layout");
-            window.addEventListener("resize", () => {
-                layoutElement.style.minHeight = window.innerHeight + "px";
-                document.body.style.minHeight = window.innerHeight + "px";
-            });
-        },
-        beforeMount() {
-            if (LocalStorage.has("role")) {
-                if (LocalStorage.getItem("role").toLowerCase() === "histor") {
-                    this.showHistor = true;
-                }
+    mounted() {
+        const layoutElement = document.querySelector(".q-layout");
+        window.addEventListener("resize", () => {
+            layoutElement.style.minHeight = window.innerHeight + "px";
+            document.body.style.minHeight = window.innerHeight + "px";
+        });
+    },
+    beforeMount() {
+        if (LocalStorage.has("role")) {
+            if (LocalStorage.getItem("role").toLowerCase() === "histor") {
+                this.showHistor = true;
             }
         }
-    };
+    }
+};
 </script>
 
 <style lang="stylus">

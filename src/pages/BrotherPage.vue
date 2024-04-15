@@ -136,7 +136,7 @@ export default {
     },
     nextBrother() {
       return this.currentBrother &&
-        this.actualIndex + this.direction > 0
+        this.actualIndex + this.direction >= 0
         ? this.SanitizedBrothersList[this.actualIndex + this.direction]
         : null;
     }
