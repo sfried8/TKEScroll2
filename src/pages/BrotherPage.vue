@@ -105,18 +105,21 @@ export default {
       console.log(event);
     },
     navigate(forwards) {
-      if (forwards) {
-        if (this.Brothers[+this.currentScroll + 1]) {
-          this.$router.replace("/brother/" + (+this.currentScroll + 1));
-        }
-      } else if (this.currentScroll > 1) {
-        this.$router.replace("/brother/" + (+this.currentScroll - 1));
+      const nextBrother = this.SanitizedBrothersList[this.actualIndex + (forwards ? 1 : -1)]
+      if (nextBrother) {
+        this.$router.replace("/brother/" + nextBrother.scroll);
       }
     }
   },
   computed: {
     currentBrother() {
       return this.Brothers[this.currentScroll];
+    },
+    actualIndex() {
+      if (this.currentBrother) {
+        return this.SanitizedBrothersList.findIndex(b => b.scroll === this.currentScroll)
+      }
+      return 0
     },
     cardPositioning() {
       return {
@@ -133,8 +136,8 @@ export default {
     },
     nextBrother() {
       return this.currentBrother &&
-        +this.currentBrother.scroll + this.direction > 0
-        ? this.Brothers[+this.currentBrother.scroll + this.direction]
+        this.actualIndex + this.direction > 0
+        ? this.SanitizedBrothersList[this.actualIndex + this.direction]
         : null;
     }
   }
