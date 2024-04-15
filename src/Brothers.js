@@ -91,11 +91,15 @@ export default {
         });
 
         this._brothers.forEach(element => {
+          if (!this._brothers[+element.big]) {
+            element.big = 0
+          }
           if (!this._brothers[+element.big].littles) {
             this._brothers[+element.big].littles = [];
           }
           if (element.scroll !== element.big)
             this._brothers[+element.big].littles.push(element.scroll);
+
         });
         data.officers.forEach(element => {
           this._brothers[+element.current].officer = element.title;

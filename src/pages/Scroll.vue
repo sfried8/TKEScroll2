@@ -54,14 +54,13 @@ export default {
         },
         orderedBrothers() {
             return this.sortOption === "scrollasc"
-                ? this.Brothers
-                : this.Brothers.slice().reverse();
+                ? this.SanitizedBrothersList
+                : this.SanitizedBrothersList.slice().reverse();
         }
     },
     methods: {
         onGetBrothers() {
             this.sortOption = "scrollasc";
-            this.Brothers = this.Brothers.filter(el => el.scroll > 0);
         }
     }
 };

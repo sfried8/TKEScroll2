@@ -54,7 +54,7 @@ export default {
                     Tree.render(this.Brothers, node =>
                         this.$router.push(
                             "/brother/" +
-                            this.Brothers.find(
+                            this.SanitizedBrothersList.find(
                                 b =>
                                     b && b.fname + " " + b.lname ===
                                     node.data.name
@@ -63,7 +63,7 @@ export default {
                     );
                     const scroll = +this.$route.query.scroll;
                     console.log(scroll);
-                    if (scroll) {
+                    if (scroll && this.Brothers[scroll]) {
                         Tree.findNode(this.Brothers[scroll]);
                     }
                 });

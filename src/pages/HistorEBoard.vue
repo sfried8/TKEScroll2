@@ -93,7 +93,7 @@ export default {
   },
   mounted() {
     this.$brothers.getBrothers().then(b => {
-      const officers = b.filter(el => !!el.officer);
+      const officers = b.filter(el => !!el?.officer);
 
       const positions = [
         "Prytanis",

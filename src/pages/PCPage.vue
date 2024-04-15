@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     PBros() {
-      return this.Brothers.filter(
+      return this.SanitizedBrothersList.filter(
         el => el.pc === this.pc && el.isZetaTau === this.isZT
       );
     },

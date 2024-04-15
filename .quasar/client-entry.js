@@ -39,12 +39,14 @@ import createQuasarApp from './app.js'
 import quasarUserOptions from './quasar-user-options.js'
 
 
+import 'app/src-pwa/register-service-worker'
 
 
 
 
-console.info('[Quasar] Running SPA.')
 
+console.info('[Quasar] Running PWA.')
+console.info('[Quasar] PWA: Use devtools > Application > "Bypass for network" to not break Hot Module Replacement while developing.')
 
 
 const publicPath = ``
