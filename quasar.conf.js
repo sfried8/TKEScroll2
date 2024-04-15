@@ -84,7 +84,7 @@ module.exports = function (ctx) {
       pwa: false,
     },
     pwa: {
-      // workboxPluginMode: 'InjectManifest',
+      workboxPluginMode: 'GenerateSW',
       workboxOptions: {
         skipWaiting: true,
         clientsClaim: true,

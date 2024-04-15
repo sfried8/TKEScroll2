@@ -39,11 +39,10 @@ import createQuasarApp from './app.js'
 import quasarUserOptions from './quasar-user-options.js'
 
 
+import 'app/src-pwa/register-service-worker'
 
 
 
-
-console.info('[Quasar] Running SPA.')
 
 
 
