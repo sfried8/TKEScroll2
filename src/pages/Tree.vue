@@ -26,8 +26,8 @@
         </help-overlay>
         <div id="tree-container" class="bg-white">
             <q-page-sticky position="top-left" class="q-ma-lg">
-                <brother-select @input="(target) => findTarget = target" label="Find brother" outlined class="bg-white"
-                    clear-after-select>
+                <brother-select @update:modelValue="(target) => findTarget = target" label="Find brother" outlined
+                    class="bg-white" clear-after-select>
                     <template #prepend>
                         <q-icon name="search"></q-icon>
                     </template>

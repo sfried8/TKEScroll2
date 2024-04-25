@@ -5,7 +5,7 @@
         Welcome to the scroll website for the Xi-Upsilon Chapter of Tau Kappa Epsilon!
       </p>
       <img src="~/assets/lem.png" />
-      <brother-select @input="goToBrother" label="Quick Look up" outlined class="bg-white" style="margin:10px"
+      <brother-select @update:modelValue="goToBrother" label="Quick Look up" outlined class="bg-white" style="margin:10px"
         clear-after-select>
         <template #prepend>
           <q-icon name="search"></q-icon>

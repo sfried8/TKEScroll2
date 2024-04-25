@@ -1,9 +1,10 @@
 <template>
-  <q-select v-model="selected" ref="qbs" use-input hide-dropdown-icon hide-selected :outlined="outlined"
+  <q-select v-model="selected" ref="qbs" use-input hide-dropdown-icon :outlined="outlined" :emit-value="true"
     :rounded="rounded" input-debounce="200" :label="label" :options="options" class="brother-select" @filter="filterFn">
     <template v-slot:prepend>
       <slot name="prepend"></slot>
     </template>
+
     <template v-slot:append>
       <q-icon v-if="selected !== null" class="cursor-pointer" name="clear" @click.stop="selected = null" />
     </template>
@@ -24,7 +25,7 @@ export default {
   mixins: [BrotherInfoMixin],
   props: {
     "clear-after-select": Boolean,
-    value: Object,
+    modelValue: Object,
     label: String,
     outlined: Boolean,
     rounded: Boolean
@@ -37,12 +38,12 @@ export default {
     };
   },
   watch: {
-    value(val, oldVal) {
+    modelValue(val, oldVal) {
       this.$nextTick().then(() => {
-        this.selected = this.value
+        this.selected = this.modelValue
           ? {
-            label: this.value.fname + " " + this.value.lname,
-            value: this.value
+            label: this.modelValue.fname + " " + this.modelValue.lname,
+            value: this.modelValue
           }
           : null;
         this.selected && (this.$refs.qbs.inputValue = this.selected.label);
@@ -51,10 +52,10 @@ export default {
     selected(val, oldVal) {
       if (val) {
         if (val.value) {
-          this.$emit("input", val.value);
+          this.$emit("update:modelValue", val.value);
           this.$gtm.logEvent("events", "BrotherSelect", "Selected brother");
         } else {
-          this.$emit("input", val);
+          this.$emit("update:modelValue", val);
           this.$gtm.logEvent("events", "BrotherSelect", "Selected brother");
         }
         if (this.clearAfterSelect) {
@@ -64,7 +65,7 @@ export default {
           });
         }
       } else if (!this.clearAfterSelect) {
-        this.$emit("input", null);
+        this.$emit("update:modelValue", null);
       }
     }
   },
@@ -77,13 +78,13 @@ export default {
       }));
       this.options = this.allOptions
       this.$nextTick().then(() => {
-        this.selected = this.value
+        this.selected = this.modelValue
           ? {
-            label: this.value.fname + " " + this.value.lname,
-            value: this.value
+            label: this.modelValue.fname + " " + this.modelValue.lname,
+            value: this.modelValue
           }
           : null;
-        this.selected && (this.$refs.qbs.inputValue = this.selected.label);
+        // this.selected && (this.$refs.qbs.inputValue = this.selected.label);
       });
     },
     filterFn(val, update, abort) {

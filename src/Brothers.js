@@ -30,7 +30,7 @@ export default {
     const url =
       LocalStorage.getItem('role') === 'GUEST' ? fakeurl : awsDeleteUrl;
     return fetch(url, {
-      method: 'DELETE', // *GET, PUT, DELETE, etc.
+      method: 'POST', // *GET, PUT, DELETE, etc.
       body: JSON.stringify(brother), // must match 'Content-Type' header
       headers: new Headers({
         'Accept': 'application/json',
@@ -87,6 +87,7 @@ export default {
         }
         this._brothers = [];
         data.brothers.forEach(element => {
+          element.active = element.active && (element.active == 1 || element.active == "true")
           this._brothers[+element.scroll] = element;
         });
 
