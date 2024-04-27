@@ -30,8 +30,9 @@ const FamilyTree = {
     var treeNodes = [];
     var collapsing = [];
     var margin = { top: 0, right: 0, bottom: 0, left: 0 };
+    const yOffset = document.querySelector('header.q-header')?.getBoundingClientRect().height ?? 0;
     var width = document.body.clientWidth;
-    var height = document.body.clientHeight - 50;
+    var height = document.body.clientHeight - yOffset;
 
     let dpi = window.devicePixelRatio;
     var canvas = d3
@@ -49,7 +50,6 @@ const FamilyTree = {
       .on('zoom', zoomed)
       .interpolate(d3.interpolate);
     canvas.call(zoomBehavior);
-
     const clicked = rightclick => (event) => {
       const currentZoomTransform = d3.zoomTransform(canvas.node());
       const clickDistance = 26 * currentZoomTransform.k;
@@ -58,7 +58,7 @@ const FamilyTree = {
       let minDistance = Infinity;
       const [clickX, clickY] = currentZoomTransform.invert([
         event.pageX,
-        event.pageY - 50,
+        event.pageY - yOffset,
       ]);
       treeNodes.forEach(d => {
         const dy = d.y - clickY;
@@ -86,7 +86,7 @@ const FamilyTree = {
     canvas.on('contextmenu', clicked(true));
     resizeFunction = debounce(() => {
       width = document.body.clientWidth;
-      height = document.body.clientHeight - 50;
+      height = document.body.clientHeight - yOffset;
       dpi = window.devicePixelRatio;
 
       canvas
