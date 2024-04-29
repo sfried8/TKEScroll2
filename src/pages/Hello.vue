@@ -1,86 +1,62 @@
 <template>
-  <q-page
-    padding
-    class="hello"
-  >
+  <q-page padding class="hello">
     <div>
       <p>
         Welcome to the scroll website for the Xi-Upsilon Chapter of Tau Kappa Epsilon!
       </p>
       <img src="~/assets/lem.png" />
-      <brother-select
-        @input="goToBrother"
-        label="Quick Look up"
-        outlined
-        class="bg-white"
-        style="margin:10px"
-        clear-after-select
-      >
+      <brother-select @update:modelValue="goToBrother" label="Quick Look up" outlined class="bg-white" style="margin:10px"
+        clear-after-select>
         <template #prepend>
           <q-icon name="search"></q-icon>
         </template>
       </brother-select>
       <div class="row">
         <div class="col">
-          <div
-            class="home-link shadow-1"
-            @click="$router.push('/scroll')"
-          >
+          <div class="home-link shadow-1" @click="$router.push('/scroll')">
             <p>Scroll</p>
-            <q-icon
-              size="36px"
-              name="group"
-            />
+            <q-icon size="36px" name="group" />
           </div>
         </div>
         <div class="col">
-          <div
-            class="home-link shadow-1"
-            @click="$router.push('/eboard')"
-          >
+          <div class="home-link shadow-1" @click="$router.push('/eboard')">
             <p>EBoard</p>
-            <q-icon
-              size="36px"
-              name="gavel"
-            />
+            <q-icon size="36px" name="gavel" />
           </div>
         </div>
         <div class="col">
-          <div
-            class="home-link shadow-1"
-            @click="$router.push('/tree')"
-          >
+          <div class="home-link shadow-1" @click="$router.push('/tree')">
             <p>Tree</p>
-            <img
-              src="~/assets/familytreeicon.png"
-              style="height:36px;margin-bottom:-5px"
-            />
+            <img src="~/assets/familytreeicon.png" style="height:36px;margin-bottom:-5px" />
           </div>
         </div>
 
       </div>
     </div>
     <div class="q-ma-xl">
+      <p>Website by Sam Friedman</p>
       <p>
         Something wrong?
       </p>
       <p>
-        Contact the Histor with any corrections to the brothers' information. For any issues/bugs with the website itself, <a href="https://github.com/sfried8/TKEScroll2/issues">submit an issue on GitHub</a> or send me an email at sfried8@gmail.com
+        Contact the Histor with any corrections to the brothers' information. For any issues/bugs with the website itself,
+        <a href="https://github.com/sfried8/TKEScroll2/issues">submit an issue on GitHub</a> or send Sam an email at
+        sam@friedman.in
       </p>
     </div>
   </q-page>
 </template>
 
 <script>
-  export default {
-    methods: {
-      goToBrother(brother) {
-        if (brother && brother.scroll) {
-          this.$router.push("/brother/" + brother.scroll);
-        }
+export default {
+  methods: {
+    goToBrother(brother) {
+      if (brother && brother.scroll) {
+        this.$router.push("/brother/" + brother.scroll);
       }
     }
-  };
+  }
+};
 </script>
 
 <style lang="stylus" scoped>

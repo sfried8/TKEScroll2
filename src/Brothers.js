@@ -1,5 +1,5 @@
 const localUrl = 'http://localhost:3000';
-const awsUrl = 'https://imm30g62kg.execute-api.us-east-1.amazonaws.com/dev';
+const awsUrl = 'https://7h03kudf2b.execute-api.us-east-1.amazonaws.com';
 const awsGetUrl = awsUrl + '/brothers';
 const awsAddUrl = awsUrl + '/brothers/add';
 const awsDeleteUrl = awsUrl + '/brothers/delete';
@@ -30,7 +30,7 @@ export default {
     const url =
       LocalStorage.getItem('role') === 'GUEST' ? fakeurl : awsDeleteUrl;
     return fetch(url, {
-      method: 'DELETE', // *GET, PUT, DELETE, etc.
+      method: 'POST', // *GET, PUT, DELETE, etc.
       body: JSON.stringify(brother), // must match 'Content-Type' header
       headers: new Headers({
         'Accept': 'application/json',
@@ -87,15 +87,20 @@ export default {
         }
         this._brothers = [];
         data.brothers.forEach(element => {
+          element.active = element.active && (element.active == 1 || element.active == "true")
           this._brothers[+element.scroll] = element;
         });
 
         this._brothers.forEach(element => {
+          if (!this._brothers[+element.big]) {
+            element.big = 0
+          }
           if (!this._brothers[+element.big].littles) {
             this._brothers[+element.big].littles = [];
           }
           if (element.scroll !== element.big)
             this._brothers[+element.big].littles.push(element.scroll);
+
         });
         data.officers.forEach(element => {
           this._brothers[+element.current].officer = element.title;

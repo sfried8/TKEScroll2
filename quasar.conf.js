@@ -1,6 +1,6 @@
 // Configuration for your app
-
-module.exports = function(ctx) {
+const ESLintPlugin = require('eslint-webpack-plugin')
+module.exports = function (ctx) {
   return {
     // app plugins (/src/boot)
     boot: ['customComponents', 'routerAuthentication', 'gtm-boot'],
@@ -20,14 +20,11 @@ module.exports = function(ctx) {
       // gzip: true,
       // analyze: true,
       // extractCSS: false,
-      extendWebpack(cfg) {
-        cfg.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules|quasar)/,
-        });
-      },
+      chainWebpack(chain) {
+        chain
+          .plugin('eslint-webpack-plugin')
+          .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
+      }
     },
     devServer: {
       // https: true,
@@ -67,6 +64,19 @@ module.exports = function(ctx) {
       plugins: ['Notify', 'LocalStorage', 'Loading', 'Dialog'],
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
       // lang: 'de' // Quasar language
+      config:
+      {
+        brand: {
+          primary: "#AD2624",
+          secondary: "#26A69A",
+          accent: "#555",
+          neutral: "#E0E1E2",
+          positive: "#21BA45",
+          negative: "#DB2828",
+          info: "#31CCEC",
+          warning: "#F2C037",
+        }
+      }
     },
     // animations: 'all' --- includes all animations
     animations: [],
@@ -74,7 +84,7 @@ module.exports = function(ctx) {
       pwa: false,
     },
     pwa: {
-      // workboxPluginMode: 'InjectManifest',
+      workboxPluginMode: 'GenerateSW',
       workboxOptions: {
         skipWaiting: true,
         clientsClaim: true,
@@ -89,27 +99,27 @@ module.exports = function(ctx) {
         theme_color: '#AD2624',
         icons: [
           {
-            src: 'statics/icons/icon-128x128.png',
+            src: 'icons/icon-128x128.png',
             sizes: '128x128',
             type: 'image/png',
           },
           {
-            src: 'statics/icons/icon-192x192.png',
+            src: 'icons/icon-192x192.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: 'statics/icons/icon-256x256.png',
+            src: 'icons/icon-256x256.png',
             sizes: '256x256',
             type: 'image/png',
           },
           {
-            src: 'statics/icons/icon-384x384.png',
+            src: 'icons/icon-384x384.png',
             sizes: '384x384',
             type: 'image/png',
           },
           {
-            src: 'statics/icons/icon-512x512.png',
+            src: 'icons/icon-512x512.png',
             sizes: '512x512',
             type: 'image/png',
           },

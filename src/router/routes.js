@@ -23,17 +23,13 @@ const routes = [
       },
       { path: "/eboard", component: () => import("pages/Eboard") },
       { path: "/tree", component: () => import("pages/Tree") }
-    ]
+    ],
   }, // Default
-  { path: "*", redirect: "/home" } // Not found,
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/home'
+  }
 ];
 
-// Always leave this as last one
-if (process.env.MODE !== "ssr") {
-  routes.push({
-    path: "*",
-    component: () => import("pages/Error404.vue")
-  });
-}
 
 export default routes;
