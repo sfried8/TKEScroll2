@@ -23,11 +23,11 @@
       </template>
     </help-overlay>
     <div id="nextBrotherContainer" :class="cardClass" v-if="nextBrother">
-      <brother-page-content :brothers="Brothers" :brother="nextBrother" />
+      <brother-page-content :brothers="Brothers" :others="Others" :brother="nextBrother" />
     </div>
     <div id="draggableWrapper" :class="cardClass" :style="cardPositioning" v-if="currentBrother"
       v-touch-pan.mightPrevent="panHandler">
-      <brother-page-content :brothers="Brothers" :brother="currentBrother" />
+      <brother-page-content :brothers="Brothers" :others="Others" :brother="currentBrother" />
     </div>
 
   </div>

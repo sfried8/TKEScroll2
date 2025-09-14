@@ -1,14 +1,24 @@
 export default {
     data() {
         return {
-            Brothers: []
+            Brothers: [],
+            Others: null,
         }
     },
     methods: {
+        async onMountedAsync() {
+            const brothers = await this.$brothers.getBrothers()
+            const others = await this.$brothers.getOthers()
+
+            this.Brothers = brothers;
+            this.Others = others;
+            this.onGetBrothers();
+
+        },
         onGetBrothers() { }
     },
     mounted() {
-        this.$brothers.getBrothers().then(data => { this.Brothers = data; this.onGetBrothers(); })
+        this.onMountedAsync();
     },
     computed: {
         SanitizedBrothersList() {
