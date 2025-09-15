@@ -10,16 +10,18 @@
 
         <q-input v-model="currentFilter" type="text" debounce="350" label="filter" />
         <q-list style="background:white" separator padding>
-            <q-item v-for="b in filteredBrothers" :key="b.original.scroll" :to="`/brother/${b.original.scroll}`">
-                <q-item-section side>{{ b.original.scroll }}</q-item-section>
-                <q-item-section>
-                    <q-item-label>
-                        <span v-html="b.string"></span>
-                    </q-item-label>
-                    <q-item-label v-if="b.original.officer" caption>{{ b.original.officer + (b.original.officer ===
-                        "Recruitment" ? " Chairman" : "") }}</q-item-label>
-                </q-item-section>
-            </q-item>
+            <q-intersection v-for="b in filteredBrothers" :key="b.original.id" style="height:50px">
+                <q-item :to="`/brother/${b.original.id}`">
+                    <q-item-section side>{{ b.original.scroll }}</q-item-section>
+                    <q-item-section>
+                        <q-item-label>
+                            <span v-html="b.string"></span>
+                        </q-item-label>
+                        <q-item-label v-if="b.original.currentOfficer" caption>{{ officerLabel(b.original)
+                            }}</q-item-label>
+                    </q-item-section>
+                </q-item>
+            </q-intersection>
             <q-item v-if="filteredBrothers.length == 0">
                 <q-item-label>No Results Found!</q-item-label>
             </q-item>
@@ -33,6 +35,7 @@
 <script>
 import Fuzzy from "fuzzy";
 import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
+import { getOfficerName } from "../model/Enums.js";
 export default {
     mixins: [BrotherInfoMixin],
     data() {
@@ -61,6 +64,12 @@ export default {
     methods: {
         onGetBrothers() {
             this.sortOption = "scrollasc";
+        },
+        officerLabel(brother) {
+            if (!brother.currentOfficer) {
+                return "";
+            }
+            return getOfficerName(brother.currentOfficer);
         }
     }
 };

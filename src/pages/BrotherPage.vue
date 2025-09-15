@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       bodyWidth: document.body.clientWidth,
-      currentScroll: this.$route.params.scroll,
+      currentId: this.$route.params.scroll,
       showSwipe: true,
       cardPositionX: 0,
       cardPositionY: 0,
@@ -82,7 +82,7 @@ export default {
           (dX > this.bodyWidth / 2 || (dX > this.bodyWidth / 10 && vX > 0.5))
         ) {
           this.$gtm.logEvent("events", "Swipe", "Swiped to brother");
-          this.$router.replace("/brother/" + this.nextBrother.scroll);
+          this.$router.replace("/brother/" + this.nextBrother.id);
         } else {
           this.isDragging = false;
         }
@@ -107,17 +107,17 @@ export default {
     navigate(forwards) {
       const nextBrother = this.SanitizedBrothersList[this.actualIndex + (forwards ? 1 : -1)]
       if (nextBrother) {
-        this.$router.replace("/brother/" + nextBrother.scroll);
+        this.$router.replace("/brother/" + nextBrother.id);
       }
     }
   },
   computed: {
     currentBrother() {
-      return this.Brothers[this.currentScroll];
+      return this.People[this.currentId];
     },
     actualIndex() {
       if (this.currentBrother) {
-        return this.SanitizedBrothersList.findIndex(b => b.scroll === this.currentScroll)
+        return this.SanitizedBrothersList.findIndex(b => b.id === this.currentId)
       }
       return 0
     },

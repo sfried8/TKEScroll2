@@ -40,6 +40,7 @@
 <script>
 import Tree from "../Tree/Tree.js";
 import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
+import { TYPES } from "../model/Enums.js";
 export default {
     mixins: [BrotherInfoMixin],
     data() {
@@ -51,20 +52,21 @@ export default {
         Brothers(val) {
             if (this.Brothers) {
                 this.$nextTick().then(() => {
-                    Tree.render(this.Brothers, node =>
-                        this.$router.push(
-                            "/brother/" +
-                            this.SanitizedBrothersList.find(
-                                b =>
-                                    b && b.fname + " " + b.lname ===
-                                    node.data.name
-                            ).scroll
+                    Tree.render(this.People, node => {
+                        const person = Object.values(this.People).find(
+                            p => p?.displayNameWithBadge === node.data.name
                         )
+                        this.$router.push(
+                            (person.type === TYPES.BROTHER ? "/brother/" : "/brother/") +
+                            person.id
+                        )
+                    }
+
                     );
-                    const scroll = +this.$route.query.scroll;
-                    console.log(scroll);
-                    if (scroll && this.Brothers[scroll]) {
-                        Tree.findNode(this.Brothers[scroll]);
+                    const id = this.$route.query.scroll;
+                    console.log(id);
+                    if (id && this.People[id]) {
+                        Tree.findNode(this.People[id]);
                     }
                 });
             }

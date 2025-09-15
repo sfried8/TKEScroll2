@@ -1,3 +1,5 @@
+import { TYPES } from "./model/Enums";
+
 export default {
   prettyJoinList: function (list) {
     if (list.length < 1) {
@@ -26,6 +28,18 @@ export default {
       return "Zeta Tau Founder" + (plural ? "s" : "")
     }
     return (isZetaTau ? "Zeta Tau " : "") + "Pledge Class " + pc;
+  },
+  typeBadge: (type) => {
+    const cleanType = type.replace(/[^a-zA-Z]/g, '').toUpperCase();
+    return {
+
+      [TYPES.LITTLESISTER]: '♥️',
+      [TYPES.SWEETHEART]: '♥️',
+      [TYPES.HONORARY]: '🎖️',
+      [TYPES.BROTHER]: '',
+      [TYPES.ALL]: '',
+
+    }[cleanType]
   },
   stableSort: (arr, compare) => arr
     .map((item, index) => ({ item, index }))

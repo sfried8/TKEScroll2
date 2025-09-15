@@ -1,25 +1,26 @@
 import { hierarchy, tree } from "d3";
-export default (function() {
+import { TYPES } from "../model/Enums";
+export default (function () {
   var treemap;
   var treeNodes;
   var root;
   var allnodes = [];
   var nodeWidth = 180;
-  function init(brothers) {
-    const createNode = function(scroll) {
-      const brother = brothers[scroll];
+  function init(people) {
+    const createNode = function (id) {
+      const brother = people[id];
       const node = {
-        name: brother.fname + " " + brother.lname,
+        name: brother.displayNameWithBadge,
         children: []
       };
-      (brother.littles || []).forEach(l =>
-        l != scroll && (scroll != 0 || brothers[l].littles)
-          ? node.children.push(createNode(+l))
+      (brother.littlesByTypes(TYPES.ALL)).forEach(l =>
+        l.id !== '0'
+          ? node.children.push(createNode(l.id))
           : null
       );
       return node;
     };
-    var brotherData = createNode(0);
+    var brotherData = createNode('0');
     root = hierarchy(brotherData, d => d.children);
     allnodes.push(...root.descendants());
 

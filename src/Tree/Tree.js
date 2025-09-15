@@ -26,7 +26,7 @@ let resizeFunction;
 var tree;
 const FamilyTree = {
   tree: tree,
-  render: function (brothers, navigateFunction) {
+  render: function (people, navigateFunction) {
     var treeNodes = [];
     var collapsing = [];
     var margin = { top: 0, right: 0, bottom: 0, left: 0 };
@@ -142,7 +142,7 @@ const FamilyTree = {
     };
     var duration = 1000;
 
-    var treeNodes = TreeModel.init(brothers);
+    var treeNodes = TreeModel.init(people);
 
     const clickNode = function click(d) {
       if (d.children) {
