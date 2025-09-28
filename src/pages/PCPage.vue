@@ -3,18 +3,18 @@
     <div class="pc-page">
       <h4>{{ PCName }}</h4><br>
 
-      <div class="pc-page-line brother-link" v-for="pb in PBros" @click="$router.push('/brother/' + pb.scroll)"
-        :key="pb.scroll">{{ pb.scroll }}. {{ pb.fname }} {{ pb.lname }}</div>
+      <div class="pc-page-line brother-link" v-for="pb in PBros" @click="$router.push('/brother/' + pb.id)"
+        :key="pb.id">{{ pb.scroll }}. {{ pb.displayName }}</div>
 
     </div>
   </div>
 </template>
 
 <script>
-import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
+import DataMixin from "../mixins/DataMixin.js";
 
 export default {
-  mixins: [BrotherInfoMixin],
+  mixins: [DataMixin],
   data() {
     return {
       pc: 0,
@@ -33,9 +33,9 @@ export default {
   },
   computed: {
     PBros() {
-      return this.SanitizedBrothersList.filter(
+      return Object.values(this.Members).filter(
         el => el.pc == this.pc && el.isZetaTau == this.isZT
-      );
+      ).sort((a, b) => a.scroll - b.scroll);
     },
     PCName() {
       return this.$util.pledgeClassName(this.pc, this.isZT, true);

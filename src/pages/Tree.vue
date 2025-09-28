@@ -39,41 +39,40 @@
 
 <script>
 import Tree from "../Tree/Tree.js";
-import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
+import DataMixin from "../mixins/DataMixin.js";
 import { TYPES } from "../model/Enums.js";
 export default {
-    mixins: [BrotherInfoMixin],
+    mixins: [DataMixin],
     data() {
         return {
             findTarget: null
         };
     },
-    watch: {
-        Brothers(val) {
-            if (this.Brothers) {
-                this.$nextTick().then(() => {
-                    Tree.render(this.People, node => {
-                        const person = Object.values(this.People).find(
-                            p => p?.displayNameWithBadge === node.data.name
-                        )
-                        this.$router.push(
-                            (person.type === TYPES.BROTHER ? "/brother/" : "/brother/") +
-                            person.id
-                        )
-                    }
+    methods: {
+        onGetData() {
+            this.$nextTick().then(() => {
+                Tree.render(this.Members, node => {
+                    const person = Object.values(this.Members).find(
+                        p => p?.displayNameWithBadge === node.data.name
+                    )
+                    this.$router.push(
+                        "/brother/" +
+                        person.id
+                    )
+                }
 
-                    );
-                    const id = this.$route.query.scroll;
-                    console.log(id);
-                    if (id && this.People[id]) {
-                        Tree.findNode(this.People[id]);
-                    }
-                });
-            }
-        },
+                );
+                const id = this.$route.query.id;
+                if (id && this.Members[id]) {
+                    Tree.findNode(this.Members[id]);
+                }
+            });
+        }
+    },
+    watch: {
         findTarget(val) {
             if (this.findTarget) {
-                if (this.findTarget.scroll) {
+                if (this.findTarget.id) {
                     Tree.findNode(this.findTarget);
                 }
                 this.findTarget = null;

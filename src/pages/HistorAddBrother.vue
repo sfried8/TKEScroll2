@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     addAll() {
-      this.$brothers.addBrothers(this.pendingBrothers).then(() => {
+      this.$members.addBrothers(this.pendingBrothers).then(() => {
         this.$q.notify(
           `Successfully added ${this.pendingBrothers.length} Brother${this.pendingBrothers.length > 1 ? "s" : ""
           }!`
@@ -81,7 +81,7 @@ export default {
     }
   },
   mounted() {
-    this.$brothers.getBrothers().then(brothers => {
+    this.$members.getScroll().then(brothers => {
       const highestScroll = Math.max(...brothers.map(b => +(b?.scroll ?? 0)));
       const highestPC = Math.max(...brothers.map(b => (b && b.pc < 999 ? b.pc : 0)));
       this.scroll = highestScroll + 1;

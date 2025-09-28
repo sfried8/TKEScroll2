@@ -2,21 +2,19 @@ import Util from "../Util";
 import { TYPES, OFFICERS } from "./Enums";
 
 
-export default class Person {
+export default class Member {
     type;
     id;
     fname;
     lname;
     typeBadge;
-    /** @type {Person[]} */
+    /** @type {Member[]} */
     littles;
-    /** @type {Person[]} */
-    otherLittles;
-    /** @type {boolean} */
+    /** @type {Member[]} */
     active;
     /** @type {string} */
     bigId;
-    /** @type {Person} */
+    /** @type {Member} */
     big;
     nickname;
     scroll;
@@ -27,6 +25,7 @@ export default class Person {
     currentOfficer;
     /** @type {Array<keyof OFFICERS>} */
     pastOfficers;
+    isZetaTau;
     /**
      * 
      * @param {Object} properties
@@ -42,14 +41,13 @@ export default class Person {
      * @param {number|undefined} properties.year
      * @param {Array<keyof ACHIEVEMENTS>} properties.achievements
      */
-    constructor({ id, type: types, fname, lname, active, bigId, nickname, scroll, pc, year, achievements }) {
+    constructor({ id, type: types, fname, lname, active, bigId, nickname, scroll, pc, year, achievements, isZetaTau }) {
         this.type = (Array.isArray(types) ? types[0] : types) || TYPES.BROTHER;
         this.id = id;
         this.fname = fname;
         this.lname = lname;
         this.typeBadge = Util.typeBadge(this.type);
         this.littles = [];
-        this.otherLittles = [];
         this.bigId = bigId;
         this.active = active;
         this.nickname = nickname;
@@ -59,6 +57,7 @@ export default class Person {
         this.achievements = achievements;
         this.currentOfficer = undefined;
         this.pastOfficers = [];
+        this.isZetaTau = isZetaTau
     }
     get displayName() {
         return this.fname + ' ' + this.lname;
@@ -69,24 +68,8 @@ export default class Person {
     get badgePrefix() {
         return this.typeBadge.length > 0 ? this.typeBadge + ' ' : '';
     }
-    /**
-     * 
-     * @param {keyof TYPES|Array<keyof TYPES>|undefined} types 
-     * @returns 
-     */
-    littlesByTypes(types) {
-        /** @type {Person[]} */
-        const allLittles = [...new Set(this.littles.concat(this.otherLittles))];
-        if (!types) {
-            return allLittles;
-        }
-        if (!Array.isArray(types)) {
-            types = [types];
-        }
-        if (types.includes(TYPES.ALL)) {
-            return allLittles;
-        }
-        return allLittles.filter(little => types.includes(little.type));
+    addLittle(little) {
+        this.littles = Util.sortMembers([...this.littles, little]);
     }
     toJSON() {
         const j = {
@@ -118,5 +101,5 @@ export default class Person {
         return j
     }
 }
-export const UNKNOWN = new Person({ id: '0', type: [TYPES.ALL], fname: 'Unknown', lname: '', active: false, bigId: '0' });
+export const UNKNOWN = new Member({ id: '0', type: [TYPES.ALL], fname: 'Unknown', lname: '', active: false, bigId: '0' });
 UNKNOWN.big = null;

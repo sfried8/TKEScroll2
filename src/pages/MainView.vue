@@ -101,7 +101,7 @@ export default {
                 LocalStorage.getItem("role") + " Logged out"
             );
             LocalStorage.clear();
-            this.$brothers.clearCache();
+            this.$members.clearCache();
             this.$router.push("/firsttime");
         }
     },

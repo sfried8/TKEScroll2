@@ -13,7 +13,7 @@ export default (function () {
         name: brother.displayNameWithBadge,
         children: []
       };
-      (brother.littlesByTypes(TYPES.ALL)).forEach(l =>
+      (brother.littles).forEach(l =>
         l.id !== '0'
           ? node.children.push(createNode(l.id))
           : null
@@ -63,7 +63,7 @@ export default (function () {
     return treeNodes;
   }
   function expandAncestors(name) {
-    allnodes
+    window.nodes
       .find(x => x.data.name === name)
       .ancestors()
       .forEach(d => {

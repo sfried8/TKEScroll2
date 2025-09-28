@@ -126,7 +126,7 @@ const FamilyTree = {
       if (!brother) {
         return;
       }
-      const name = brother.fname + ' ' + brother.lname;
+      const name = brother.displayNameWithBadge;
       TreeModel.expandAncestors(name);
       update();
       const node = treeNodes.find(x => x.data.name === name);

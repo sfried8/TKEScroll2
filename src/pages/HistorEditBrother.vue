@@ -30,10 +30,10 @@
 </template>
 
 <script>
-import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
+import DataMixin from "../mixins/DataMixin.js";
 
 export default {
-  mixins: [BrotherInfoMixin],
+  mixins: [DataMixin],
   data() {
     return {
       scroll: 0,
@@ -60,7 +60,7 @@ export default {
       };
       this.$gtm.logEvent("Histor", "EditBrother", "EditBrother");
 
-      this.$brothers
+      this.$members
         .addBrother(brother)
         .then(
           this.$q.notify(
@@ -81,7 +81,7 @@ export default {
         })
         .onOk(() => {
           this.$gtm.logEvent("Histor", "DeleteBrother", "DeleteBrother");
-          this.$brothers.deleteBrother(this.currentBrother).then(() => {
+          this.$members.deleteBrother(this.currentBrother).then(() => {
             this.$q.notify(`Deleted`);
             this.currentBrother = null;
           });
@@ -118,4 +118,3 @@ h5 {
   display: inline-block;
 }
 </style>
-

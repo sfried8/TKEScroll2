@@ -92,8 +92,8 @@ export default {
     };
   },
   mounted() {
-    this.$brothers.getBrothers().then(b => {
-      const officers = b.filter(el => !!el?.officer);
+    this.$members.getScroll().then(b => {
+      const officers = b.filter(el => !!el?.currentOfficer);
 
       const positions = [
         "Prytanis",
@@ -107,7 +107,7 @@ export default {
         "Recruitment"
       ];
       positions.forEach(pos => {
-        const p = officers.find(o => o.officer === pos) || undefined;
+        const p = officers.find(o => o.currentOfficer.toUpperCase() === pos.toUpperCase()) || undefined;
         this["original" + pos] = p;
         this[pos] = p;
       });
@@ -131,7 +131,7 @@ export default {
       );
 
       for (const c of changedPositions) {
-        await this.$brothers.addOfficer({ title: c, current: this[c].scroll });
+        await this.$members.addOfficer({ title: c, current: this[c].scroll });
       }
       this.$gtm.logEvent("Histor", "UpdateEBoard", "UpdateEBoard");
 
@@ -168,5 +168,3 @@ img {
   margin-right: 18px;
 }
 </style>
-
-

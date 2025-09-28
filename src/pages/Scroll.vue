@@ -18,7 +18,7 @@
                             <span v-html="b.string"></span>
                         </q-item-label>
                         <q-item-label v-if="b.original.currentOfficer" caption>{{ officerLabel(b.original)
-                            }}</q-item-label>
+                        }}</q-item-label>
                     </q-item-section>
                 </q-item>
             </q-intersection>
@@ -34,10 +34,10 @@
 
 <script>
 import Fuzzy from "fuzzy";
-import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
+import DataMixin from "../mixins/DataMixin.js";
 import { getOfficerName } from "../model/Enums.js";
 export default {
-    mixins: [BrotherInfoMixin],
+    mixins: [DataMixin],
     data() {
         return {
             sortOption: "scrollasc",
@@ -57,12 +57,12 @@ export default {
         },
         orderedBrothers() {
             return this.sortOption === "scrollasc"
-                ? this.SanitizedBrothersList
-                : this.SanitizedBrothersList.slice().reverse();
+                ? this.Scroll
+                : this.Scroll.slice().reverse();
         }
     },
     methods: {
-        onGetBrothers() {
+        onGetData() {
             this.sortOption = "scrollasc";
         },
         officerLabel(brother) {

@@ -2,27 +2,20 @@ const localUrl = 'http://localhost:3000';
 const awsProdUrl = 'https://7h03kudf2b.execute-api.us-east-1.amazonaws.com';
 const awsStageUrl = 'https://9r2c5g4m8g.execute-api.us-east-1.amazonaws.com'
 const awsUrl = window.location.href.includes('stage--') || window.location.href.includes('localhost') ? awsStageUrl : awsProdUrl
-const awsGetUrl = awsUrl + '/brothers';
-const awsAddUrl = awsUrl + '/brothers/add';
-const awsAddOtherUrl = awsUrl + '/brothers/addOther';
-const awsDeleteUrl = awsUrl + '/brothers/delete';
-const awsDeleteOtherUrl = awsUrl + '/brothers/deleteOther';
-const awsAddOfficerUrl = awsUrl + '/brothers/addOfficer';
+const awsGetUrl = awsUrl + '/members';
+const awsAddUrl = awsUrl + '/members/add';
+const awsDeleteUrl = awsUrl + '/members/delete';
+const awsAddOfficerUrl = awsUrl + '/members/addOfficer';
 const authenticateUrl = awsUrl + '/authenticate';
 const fakeurl =
   'https://raw.githubusercontent.com/sfried8/BrotherAPI2/master/fakebrothers.json';
 import { LocalStorage, Notify, Loading } from 'quasar';
 import Util from './Util';
-import Brother from './model/Brother';
 import { ROLES, TYPES } from './model/Enums';
-import Person, { UNKNOWN } from './model/Person';
+import Member, { UNKNOWN } from './model/Member';
 export default {
-  /** @type {Brother[]|null} */
-  _brothers: null,
-  /** @type {Person[]|null} */
-  _others: null,
-  /** @type {Record<string, Person>} */
-  _people: {},
+  /** @type {Record<string, Member>} */
+  _members: {},
   _fetchDataPromise: null,
   async addBrother(brother) {
     const url = LocalStorage.getItem('role') === ROLES.GUEST ? fakeurl : awsAddUrl;
@@ -45,34 +38,6 @@ export default {
     return fetch(url, {
       method: 'POST', // *GET, PUT, DELETE, etc.
       body: JSON.stringify(brother), // must match 'Content-Type' header
-      headers: new Headers({
-        'Accept': 'application/json',
-        'Authorization': 'key=' + (LocalStorage.getItem('apiKey') || 'GUEST'),
-        'content-type': 'application/json',
-      }),
-    }).then(rawdata => rawdata.json());
-  },
-  async addOther(other) {
-    const url = LocalStorage.getItem('role') === ROLES.GUEST ? fakeurl : awsAddOtherUrl;
-    await Util.throttle(
-      fetch(url, {
-        method: 'POST', // *GET, PUT, DELETE, etc.
-        body: JSON.stringify(other), // must match 'Content-Type' header
-        headers: new Headers({
-          'Accept': 'application/json',
-          'Authorization': 'key=' + (LocalStorage.getItem('apiKey') || 'GUEST'),
-          'content-type': 'application/json',
-        }),
-      }).then(rawdata => rawdata.json()),
-      500
-    );
-  },
-  async deleteOther(other) {
-    const url =
-      LocalStorage.getItem('role') === ROLES.GUEST ? fakeurl : awsDeleteOtherUrl;
-    return fetch(url, {
-      method: 'POST', // *GET, PUT, DELETE, etc.
-      body: JSON.stringify(other), // must match 'Content-Type' header
       headers: new Headers({
         'Accept': 'application/json',
         'Authorization': 'key=' + (LocalStorage.getItem('apiKey') || 'GUEST'),
@@ -109,12 +74,12 @@ export default {
   },
   async fetchData() {
     Loading.show();
-    if (LocalStorage.has('brothers')) {
-      this._brothers = LocalStorage.getItem('brothers').map(b => new Brother(b));
+    if (LocalStorage.has('members')) {
+      const membersArray = LocalStorage.getItem('members').map(m => new Member(m));
+      for (const m of membersArray) {
+        this._members[m.id] = m;
+      }
 
-    }
-    if (LocalStorage.has('others')) {
-      this._others = LocalStorage.getItem('others').map(o => new Person(o));
     }
     try {
       const password = LocalStorage.getItem('apiKey');
@@ -135,47 +100,28 @@ export default {
         console.log(data);
         throw 'Invalid Password';
       }
-      this._brothers = [];
-      this._others = [];
-      this._brothers.push(UNKNOWN)
-      this._people['0'] = UNKNOWN
-      data.brothers.forEach(element => {
-        element.active = element.active && (element.active == 1 || element.active == "true")
-        if (element.id === undefined) {
-          element.id = element.scroll
-        }
-        element.bigId = element.bigId || element.big
-        const newBrother = new Brother(element);
-        this._brothers.push(newBrother);
-        this._people[newBrother.id] = newBrother;
-      });
-      data.others.forEach(element => {
-        element.active = element.active && (element.active == 1 || element.active == "true")
-        element.bigId = element.bigId || element.big
-        const newOther = new Person(element);
-        this._others.push(newOther);
-        this._people[newOther.id] = newOther;
+      this._members = {};
+      this._members['0'] = UNKNOWN
+      data.members.forEach(element => {
+        const newMember = new Member(element);
+        this._members[newMember.id] = newMember;
       });
 
-      Object.values(this._people).forEach(element => {
-        if (!this._people[element.bigId]) {
+      Object.values(this._members).forEach(element => {
+        if (!this._members[element.bigId]) {
           element.big = UNKNOWN
         } else {
-          element.big = this._people[element.bigId]
+          element.big = this._members[element.bigId]
         }
         if (element !== UNKNOWN) {
-          if (element.type === TYPES.BROTHER) {
-            element.big.littles.push(element);
-          } else {
-            element.big.otherLittles.push(element);
-          }
+          element.big.addLittle(element);
         }
       });
 
       data.officers.forEach(element => {
-        this._people[element.current].currentOfficer = element.title.toUpperCase();
+        this._members[element.current].currentOfficer = element.title.toUpperCase();
         for (const p of element.past) {
-          const oldOfficer = this._people[p];
+          const oldOfficer = this._members[p];
           if (!oldOfficer) {
             continue;
           }
@@ -183,15 +129,14 @@ export default {
         }
       });
       if (password !== 'GUEST') {
-        LocalStorage.set('brothers', this._brothers.map(b => b.toJSON()));
-        LocalStorage.set('others', this._others.map(o => o.toJSON()));
+        LocalStorage.set('members', Object.values(this._members).map(o => o.toJSON()));
       }
     } catch (error) {
       console.log(error);
       if (error === 'Invalid Password') {
         Notify.create('Invalid Password.');
       }
-      if (this._brothers.length > 0) {
+      if (Object.keys(this._members).length > 0) {
         Notify.create('Error retrieving brothers. Falling back to cache');
       } else {
         Notify.create('Error retrieving brothers. Go online first.');
@@ -199,33 +144,30 @@ export default {
     }
     Loading.hide();
   },
-  async getBrothers() {
+  async getMembers() {
     await this.fetchDataPromise();
-    return this._brothers;
+    return this._members;
   },
-  async getOthers() {
+  async getScroll() {
     await this.fetchDataPromise();
-    return this._others;
-  },
-  async getPeople() {
-    await this.fetchDataPromise();
-    return this._people;
+    return Object.values(this._members).filter(m => m.type === TYPES.BROTHER && m.scroll > 0).sort((a, b) => a.scroll - b.scroll);
   },
 
-  authenticate(password) {
+  async authenticate(password) {
     if (!password) {
-      return Promise.resolve({ role: 'GUEST' });
+      return { role: 'GUEST' };
     }
-    return fetch(authenticateUrl, {
+    const data = await fetch(authenticateUrl, {
       method: 'GET', // *GET, PUT, DELETE, etc.
       headers: new Headers({
         Authorization: 'key=' + password,
       }),
-    }).then(data => data.json());
+    });
+    return await data.json();
   },
   clearCache() {
-    LocalStorage.remove('brothers');
+    LocalStorage.remove('members');
     LocalStorage.remove('apiKey');
-    this._brothers = null;
+    this._members = null;
   },
 };

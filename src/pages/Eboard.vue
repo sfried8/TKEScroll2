@@ -71,10 +71,10 @@
 </template>
 
 <script>
-import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
+import DataMixin from "../mixins/DataMixin.js";
 import { OFFICERS } from "../model/Enums.js";
 export default {
-    mixins: [BrotherInfoMixin],
+    mixins: [DataMixin],
     data() {
         return {
             PRYTANIS: null,
@@ -90,13 +90,13 @@ export default {
     },
 
     methods: {
-        onGetBrothers() {
-            const officers = this.Brothers.filter(el => !!el?.currentOfficer);
+        onGetData() {
+            const officers = Object.values(this.Members).filter(el => !!el?.currentOfficer);
             const positions = Object.values(OFFICERS);
             positions.forEach(
                 pos =>
                 (this[pos] =
-                    officers.find(o => o.currentOfficer === pos) || undefined)
+                    officers.find(o => o.currentOfficer.toUpperCase() === pos) || undefined)
             );
         }
     }

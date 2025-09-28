@@ -20,9 +20,9 @@
 
 <script>
 import Fuzzy from "fuzzy";
-import BrotherInfoMixin from "../mixins/BrotherInfoMixin";
+import DataMixin from "../mixins/DataMixin";
 export default {
-  mixins: [BrotherInfoMixin],
+  mixins: [DataMixin],
   props: {
     "clear-after-select": Boolean,
     modelValue: Object,
@@ -42,7 +42,7 @@ export default {
       this.$nextTick().then(() => {
         this.selected = this.modelValue
           ? {
-            label: this.modelValue.fname + " " + this.modelValue.lname,
+            label: this.modelValue.displayNameWithBadge,
             value: this.modelValue
           }
           : null;
@@ -71,16 +71,16 @@ export default {
   },
 
   methods: {
-    onGetBrothers() {
-      this.allOptions = this.SanitizedBrothersList.map(o => ({
-        label: o.fname + " " + o.lname,
+    onGetData() {
+      this.allOptions = Object.values(this.Members).map(o => ({
+        label: o.displayNameWithBadge,
         value: o
       }));
       this.options = this.allOptions
       this.$nextTick().then(() => {
         this.selected = this.modelValue
           ? {
-            label: this.modelValue.fname + " " + this.modelValue.lname,
+            label: this.modelValue.displayNameWithBadge,
             value: this.modelValue
           }
           : null;

@@ -23,11 +23,11 @@
       </template>
     </help-overlay>
     <div id="nextBrotherContainer" :class="cardClass" v-if="nextBrother">
-      <brother-page-content :brothers="Brothers" :others="Others" :brother="nextBrother" />
+      <brother-page-content :member="nextBrother" />
     </div>
     <div id="draggableWrapper" :class="cardClass" :style="cardPositioning" v-if="currentBrother"
       v-touch-pan.mightPrevent="panHandler">
-      <brother-page-content :brothers="Brothers" :others="Others" :brother="currentBrother" />
+      <brother-page-content :member="currentBrother" />
     </div>
 
   </div>
@@ -35,10 +35,10 @@
 
 <script>
 import BrotherPageContent from "./BrotherPageContent";
-import BrotherInfoMixin from "../mixins/BrotherInfoMixin.js";
+import DataMixin from "../mixins/DataMixin.js";
 export default {
   components: { BrotherPageContent },
-  mixins: [BrotherInfoMixin],
+  mixins: [DataMixin],
 
   data() {
     return {
@@ -105,7 +105,7 @@ export default {
       console.log(event);
     },
     navigate(forwards) {
-      const nextBrother = this.SanitizedBrothersList[this.actualIndex + (forwards ? 1 : -1)]
+      const nextBrother = this.Scroll[this.actualIndex + (forwards ? 1 : -1)]
       if (nextBrother) {
         this.$router.replace("/brother/" + nextBrother.id);
       }
@@ -113,11 +113,11 @@ export default {
   },
   computed: {
     currentBrother() {
-      return this.People[this.currentId];
+      return this.Members[this.currentId];
     },
     actualIndex() {
       if (this.currentBrother) {
-        return this.SanitizedBrothersList.findIndex(b => b.id === this.currentId)
+        return this.Scroll.findIndex(b => b.id === this.currentId)
       }
       return 0
     },
@@ -137,7 +137,7 @@ export default {
     nextBrother() {
       return this.currentBrother &&
         this.actualIndex + this.direction >= 0
-        ? this.SanitizedBrothersList[this.actualIndex + this.direction]
+        ? this.Scroll[this.actualIndex + this.direction]
         : null;
     }
   }

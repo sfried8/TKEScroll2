@@ -5,8 +5,8 @@
         Welcome to the scroll website for the Xi-Upsilon Chapter of Tau Kappa Epsilon!
       </p>
       <img src="~/assets/lem.png" />
-      <brother-select @update:modelValue="goToBrother" label="Quick Look up" outlined class="bg-white" style="margin:10px"
-        clear-after-select>
+      <brother-select @update:modelValue="goToBrother" label="Quick Look up" outlined class="bg-white"
+        style="margin:10px" clear-after-select>
         <template #prepend>
           <q-icon name="search"></q-icon>
         </template>
@@ -39,7 +39,8 @@
         Something wrong?
       </p>
       <p>
-        Contact the Histor with any corrections to the brothers' information. For any issues/bugs with the website itself,
+        Contact the Histor with any corrections to the brothers' information. For any issues/bugs with the website
+        itself,
         <a href="https://github.com/sfried8/TKEScroll2/issues">submit an issue on GitHub</a> or send Sam an email at
         sam@friedman.in
       </p>
@@ -51,8 +52,8 @@
 export default {
   methods: {
     goToBrother(brother) {
-      if (brother && brother.scroll) {
-        this.$router.push("/brother/" + brother.scroll);
+      if (brother && brother.id) {
+        this.$router.push("/brother/" + brother.id);
       }
     }
   }
