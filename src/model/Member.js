@@ -101,5 +101,5 @@ export default class Member {
         return j
     }
 }
-export const UNKNOWN = new Member({ id: '0', type: [TYPES.ALL], fname: 'Unknown', lname: '', active: false, bigId: '0' });
+export const UNKNOWN = new Member({ id: '0', type: [TYPES.BROTHER], fname: 'Unknown', lname: '', active: false, bigId: '0' });
 UNKNOWN.big = null;

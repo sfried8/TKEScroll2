@@ -7,8 +7,14 @@
 
       <div class="row no-wrap q-col-gutter-lg">
 
+        <q-select v-model="type" class="col" label="Member Type" :options="memberTypes" />
+      </div>
+
+      <div class="row no-wrap q-col-gutter-lg">
+
         <q-input v-model="scroll" class="col" label="Scroll" type="number" />
         <q-input v-model="pc" class="col" label="Pledge Class" type="number" />
+        <q-input v-model="year" class="col" label="Year" type="number" />
       </div>
 
       <div class="row no-wrap q-col-gutter-lg">
@@ -21,6 +27,7 @@
         <brother-select class="col" v-model="big" label="Big Brother" />
       </div>
       <q-toggle v-model="active" label="Active" />
+      <q-select v-model="achievements" multiple class="col" label="Achievements" :options="achievementTypes" />
       <br /><br /><br />
       <q-btn @click="submit" color="positive" icon="add">Update Brother</q-btn>
       <q-btn @click="deleteBrother" color="negative" icon="delete_forever">Delete Brother</q-btn>
@@ -31,11 +38,15 @@
 
 <script>
 import DataMixin from "../mixins/DataMixin.js";
+import { ACHIEVEMENTS, PrettyAchievement, PrettyType } from "../model/Enums.js";
 
 export default {
   mixins: [DataMixin],
   data() {
     return {
+      type: "",
+      year: null,
+      achievements: [],
       scroll: 0,
       fname: "",
       lname: "",
@@ -46,16 +57,34 @@ export default {
       currentBrother: null
     };
   },
+  computed: {
+    memberTypes() {
+      return Object.keys(PrettyType).map(k => ({
+        label: PrettyType[k],
+        value: k
+      }));
+    },
+    achievementTypes() {
+      return Object.keys(PrettyAchievement).map(k => ({
+        label: PrettyAchievement[k],
+        value: k
+      }));
+    }
+  },
   methods: {
     submit() {
       const brother = {
-        scroll: `${this.scroll}`,
+        id: this.currentBrother.id,
+        type: this.type.value,
+        year: this.year,
+        scroll: this.scroll,
         fname: this.fname,
         lname: this.lname,
-        pc: +this.pc,
+        pc: this.pc != undefined ? +this.pc : undefined,
         nickname: this.nickname,
-        bigS: this.big?.scroll,
+        bigId: this.big?.id,
         active: this.active,
+        achievements: this.achievements.map(a => a.value),
         isZetaTau: false
       };
       this.$gtm.logEvent("Histor", "EditBrother", "EditBrother");
@@ -95,12 +124,17 @@ export default {
         return;
       }
       this.scroll = this.currentBrother.scroll;
+      this.type = { label: PrettyType[this.currentBrother.type], value: this.currentBrother.type };
+      this.achievements = this.currentBrother.achievements.map(a => ({
+        label: PrettyAchievement[a], value: a
+      }));
       this.fname = this.currentBrother.fname;
       this.lname = this.currentBrother.lname;
       this.nickname = this.currentBrother.nickname;
       this.pc = this.currentBrother.pc;
       this.active = this.currentBrother.active;
-      this.big = this.Brothers[this.currentBrother.big];
+      this.big = this.currentBrother.big;
+      this.year = this.currentBrother.year;
     }
   }
 };

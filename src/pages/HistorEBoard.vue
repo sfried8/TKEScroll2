@@ -129,9 +129,11 @@ export default {
       const changedPositions = positions.filter(
         position => this[position] !== this["original" + position]
       );
-
+      const Members = await this.$members.getMembers();
       for (const c of changedPositions) {
-        await this.$members.addOfficer({ title: c, current: this[c].scroll });
+        const past = Object.values(Members).filter(m => m.pastOfficers?.includes(c.toUpperCase())).map(m => m.id);
+        past.push(this["original" + c]?.id);
+        await this.$members.addOfficer({ title: c, current: this[c].id, past });
       }
       this.$gtm.logEvent("Histor", "UpdateEBoard", "UpdateEBoard");
 

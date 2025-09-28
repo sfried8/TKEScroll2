@@ -37,7 +37,6 @@ export default {
       [TYPES.SWEETHEART]: '♥️',
       [TYPES.HONORARY]: '🎖️',
       [TYPES.BROTHER]: '',
-      [TYPES.ALL]: '',
 
     }[cleanType]
   },
@@ -74,5 +73,5 @@ export default {
       }
       return a.displayName.localeCompare(b.displayName);
     });
-  }
+  },
 };

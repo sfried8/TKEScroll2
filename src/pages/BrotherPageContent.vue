@@ -17,12 +17,19 @@
           l.displayNameWithBadge }}</a></li>
       </ul>
     </div>
-
+    <div v-show="Achievements.length > 0">
+      <div class="brother-page-line">Achievements: </div>
+      <ul>
+        <li class="brother-page-line" v-for="a in Achievements" :key="a">
+          {{ a }}</li>
+      </ul>
+    </div>
     <q-btn color="positive" icon-right="send" @click="viewInTree(member)">View in tree</q-btn>
   </div>
 </template>
 
 <script>
+import { getOfficerName, PrettyAchievement } from '../model/Enums';
 import Member from '../model/Member';
 
 export default {
@@ -31,7 +38,7 @@ export default {
   },
   computed: {
     Big() {
-      return this.member?.big ?? {};
+      return this.member?.big && this.member.big.id !== '0' ? this.member.big : {};
     },
     Littles() {
       return this.member?.littles ?? []
@@ -44,6 +51,12 @@ export default {
         this.member.pc,
         this.member.isZetaTau
       );
+    },
+    Achievements() {
+      const achievements = this.member?.achievements ?? [];
+      const pastOfficers = this.member?.pastOfficers ?? [];
+      const all = achievements.map(a => PrettyAchievement[a]).concat(pastOfficers.map(o => 'Past ' + getOfficerName(o)));
+      return all
     }
   },
   methods: {

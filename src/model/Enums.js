@@ -1,11 +1,15 @@
 export const TYPES = {
-    ALL: "ALL",
     BROTHER: "BROTHER",
     SWEETHEART: "SWEETHEART",
     LITTLESISTER: "LITTLESISTER",
     HONORARY: "HONORARY"
 };
-
+export const PrettyType = {
+    [TYPES.BROTHER]: "Brother",
+    [TYPES.SWEETHEART]: "Sweetheart",
+    [TYPES.LITTLESISTER]: "Little Sister",
+    [TYPES.HONORARY]: "Honorary"
+};
 export const ROLES = {
     BROTHER: "BROTHER",
     HISTOR: "HISTOR",
@@ -32,4 +36,8 @@ export const ACHIEVEMENTS = {
     KNIGHT: "KNIGHT",
     ORDER: "ORDER",
 
+}
+export const PrettyAchievement = {
+    [ACHIEVEMENTS.KNIGHT]: "Knight of Classic Lore",
+    [ACHIEVEMENTS.ORDER]: "Order of the Founders"
 }
